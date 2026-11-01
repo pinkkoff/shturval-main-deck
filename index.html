@@ -1,0 +1,2067 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Штурвал – Kubernetes-платформа Enterprise-уровня</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+/* Шрифты – локальные файлы, чтобы презентация и PDF не зависели от интернета */
+@font-face { font-family: "Montserrat"; font-weight: 500; font-style: normal; src: url("assets/fonts/Montserrat-Medium.woff2") format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 700; font-style: normal; src: url("assets/fonts/Montserrat-Bold.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("assets/fonts/JetBrainsMono-400-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("assets/fonts/JetBrainsMono-400-cyrillic.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+/* Стиль – по сайту «Штурвал ML/AI», версия с акцентами: чёрный фон, Montserrat 500/700,
+   один продуктовый цвет #1cf2de и его прозрачности, матовое стекло карточек, восьмигранники.
+   Слайд 1920×1080, масштабируется под окно. Тема одна – тёмная, как задаёт брендбук. */
+:root {
+  color-scheme: dark;
+  --black: #000; --white: #fff;
+  --shturval: #1cf2de;
+  --tint: rgba(28, 242, 222, .08);
+  --tint-2: rgba(28, 242, 222, .16);
+  --mid: rgba(28, 242, 222, .55);
+  --low: rgba(28, 242, 222, .28);
+  --raised: #171717; --frame: #252525;
+  --ink: #fff; --muted: #b9b9b9; --guide: #9c9c9c; --line: #454545;
+  --f-sans: "Montserrat", Verdana, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --oct: polygon(29.3% 0, 70.7% 0, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0 70.7%, 0 29.3%);
+  --oct-dot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolygon fill='%231cf2de' points='2.93,0 7.07,0 10,2.93 10,7.07 7.07,10 2.93,10 0,7.07 0,2.93'/%3E%3C/svg%3E");
+  --glass-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .5 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+  --glass-fill: linear-gradient(150deg, rgba(255,255,255,.13) 0%, rgba(255,255,255,.045) 100%);
+  --glass-ring: inset 0 0 0 1px rgba(255,255,255,.11), inset 0 1px 0 rgba(255,255,255,.17);
+  --tint-fill: linear-gradient(150deg, rgba(28,242,222,.17) 0%, rgba(28,242,222,.05) 100%);
+  --tint-ring: inset 0 0 0 1px rgba(28,242,222,.24), inset 0 1px 0 rgba(255,255,255,.18);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--black); }
+body { color: var(--ink); font-family: var(--f-sans); font-weight: 500; -webkit-font-smoothing: antialiased; overflow: hidden; }
+h1, h2, h3, h4, p { margin: 0; }
+h1, h2, h3, h4 { font-weight: 700; text-wrap: balance; }
+ul { margin: 0; padding: 0; list-style: none; }
+b { font-weight: 700; }
+.hl { color: var(--shturval); }
+.mono { font-family: var(--f-mono); }
+
+/* ===== Сцена и масштаб ===== */
+.stage { position: fixed; inset: 0; overflow: hidden; }
+.deck { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; transform: translate(-50%, -50%); }
+.slide { position: absolute; inset: 0; overflow: hidden; isolation: isolate; background: var(--black);
+  padding: 96px 120px 88px; display: flex; flex-direction: column;
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
+.slide.active { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+html.js .slide .rv { opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease; transition-delay: var(--d, 0ms); }
+html.js .slide.active .rv { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .slide, html.js .slide .rv { transition: none !important; } }
+
+/* Фоны: свечение из угла, точечный принт, полоса */
+.slide::before { content: ""; position: absolute; z-index: -2; inset: 0; pointer-events: none; }
+.g-tl::before { background: radial-gradient(circle 760px at 0 0, rgba(28,242,222,.22), rgba(28,242,222,0)); }
+.g-br::before { background: radial-gradient(circle 820px at 100% 100%, rgba(28,242,222,.2), rgba(28,242,222,0)); }
+.g-r::before { background: radial-gradient(circle 700px at 100% 30%, rgba(28,242,222,.18), rgba(28,242,222,0)), radial-gradient(circle 520px at 0 100%, rgba(38,104,255,.13), rgba(38,104,255,0)); }
+.g-blue::before { background: radial-gradient(circle 640px at 100% 0, rgba(38,104,255,.16), rgba(38,104,255,0)), radial-gradient(circle 760px at 0 100%, rgba(28,242,222,.16), rgba(28,242,222,0)); }
+.band { background: var(--raised); }
+/* Фон-контур: два восьмигранника знака в углу, вектор без размытия */
+.oct-bg::after { content: ""; position: absolute; z-index: -1; right: -260px; bottom: -300px; width: 900px; height: 900px; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%230f3d39' stroke-width='.35'%3E%3Cpolygon points='29.3,1 70.7,1 99,29.3 99,70.7 70.7,99 29.3,99 1,70.7 1,29.3'/%3E%3Cpolygon points='35.5,16 64.5,16 84,35.5 84,64.5 64.5,84 35.5,84 16,64.5 16,35.5'/%3E%3Cpolygon points='41.7,31 58.3,31 69,41.7 69,58.3 58.3,69 41.7,69 31,58.3 31,41.7'/%3E%3C/svg%3E") center / contain no-repeat; }
+
+/* Шапка и подвал слайда */
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 44px; min-height: 36px; }
+.eyebrow { font-size: 24px; line-height: 1.2; letter-spacing: .02em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 18px; }
+.eyebrow .n { color: var(--shturval); font-weight: 700; padding-left: 28px; background: var(--oct-dot) left center / 14px no-repeat; }
+.logo { height: 34px; width: auto; opacity: .95; }
+.foot { position: absolute; left: 120px; right: 120px; bottom: 36px; display: flex; justify-content: space-between; font-size: 16px; color: var(--guide); }
+.foot .pg { font-variant-numeric: tabular-nums; }
+
+.h1 { font-size: 92px; line-height: .98; text-transform: uppercase; letter-spacing: .01em; }
+.h2 { font-size: 62px; line-height: 1.08; max-width: 26ch; }
+.lead { margin-top: 24px; font-size: 26px; line-height: 1.45; color: var(--muted); max-width: 62ch; }
+.lead b { color: var(--ink); }
+.small { font-size: 17px; line-height: 1.45; color: var(--guide); }
+.body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.mt-auto { margin-top: auto; }
+
+/* Карточки: матовое стекло; .t – бирюзовое стекло */
+.card { position: relative; border-radius: 24px; padding: 32px; background: var(--glass-noise), var(--glass-fill); background-color: rgba(36,36,36,.46); box-shadow: var(--glass-ring); -webkit-backdrop-filter: blur(40px) saturate(160%); backdrop-filter: blur(40px) saturate(160%); }
+.card.t { background: var(--glass-noise), var(--tint-fill); background-color: rgba(28,242,222,.035); box-shadow: var(--tint-ring); }
+.card h3 { font-size: 28px; line-height: 1.22; }
+.card p { font-size: 20px; line-height: 1.45; color: var(--muted); }
+.card p b { color: var(--ink); }
+.k { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--shturval); }
+.oct-n { width: 56px; height: 56px; display: grid; place-items: center; background: var(--shturval); color: var(--black); clip-path: var(--oct); font-weight: 700; font-size: 20px; flex: none; }
+.oct-o { width: 56px; height: 56px; display: grid; place-items: center; flex: none; position: relative; color: var(--shturval); font-weight: 700; font-size: 20px; }
+.oct-o::before { content: ""; position: absolute; inset: 0; background: var(--shturval); clip-path: var(--oct); }
+.oct-o::after { content: ""; position: absolute; inset: 2px; background: #0b1a19; clip-path: var(--oct); }
+.oct-o span { position: relative; z-index: 1; }
+.chip { display: inline-block; font-size: 17px; padding: 7px 13px; border-radius: 8px; background: rgba(255,255,255,.08); color: var(--muted); white-space: nowrap; }
+.chip.on { background: var(--tint-2); color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.grid { display: grid; gap: 24px; }
+
+/* Большие цифры */
+.stat { font-size: 84px; line-height: 1; font-weight: 700; letter-spacing: -.01em; }
+.stat small { font-size: .5em; }
+.stat-l { font-size: 20px; line-height: 1.4; color: var(--muted); margin-top: 12px; }
+.stat-l b { color: var(--ink); display: block; font-size: 22px; }
+
+/* Баннер-вывод (как правило TCO на сайте) */
+.rule { border-radius: 28px; padding: 36px 44px; font-size: 30px; line-height: 1.3; font-weight: 700;
+  background: radial-gradient(90% 140% at 100% 0%, rgba(28,242,222,.30) 0%, rgba(28,242,222,0) 60%), radial-gradient(70% 120% at 0% 100%, rgba(28,242,222,.10) 0%, rgba(28,242,222,0) 60%), linear-gradient(135deg, #07302e 0%, #031817 52%, #010a0a 100%);
+  box-shadow: inset 0 0 0 1px rgba(28,242,222,.24), inset 0 1px 0 rgba(255,255,255,.14), 0 36px 80px -48px rgba(28,242,222,.4); }
+.rule p + p { margin-top: 10px; font-size: 21px; font-weight: 500; line-height: 1.45; color: rgba(255,255,255,.72); }
+
+/* ===== 1. Обложка ===== */
+.cover { padding-top: 72px; }
+.cover .art { position: absolute; z-index: -1; right: -60px; top: 50%; width: 900px; transform: translateY(-48%); filter: drop-shadow(0 0 60px rgba(28,242,222,.25)); }
+.cover .art-glow { position: absolute; z-index: -2; right: 80px; top: 200px; width: 640px; height: 640px; background: var(--shturval); clip-path: var(--oct); filter: blur(140px); opacity: .22; }
+.cover .badge { display: inline-flex; align-items: center; gap: 14px; align-self: flex-start; font-size: 18px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 12px 20px; border-radius: 14px; background: var(--tint-2); }
+.cover .badge i { width: 12px; height: 12px; background: var(--shturval); clip-path: var(--oct); }
+.cover .h1 { margin-top: 44px; max-width: 13ch; }
+.cover .h1 em { font-style: normal; color: var(--shturval); display: block; }
+.cover .lead { max-width: 44ch; margin-top: 36px; font-size: 28px; }
+.cover .facts { display: grid; grid-template-columns: repeat(3, 300px); gap: 16px; margin-top: auto; }
+.cover .facts .card { padding: 24px 26px; border-radius: 18px; }
+.cover .facts b { display: block; font-size: 36px; line-height: 1.1; }
+.cover .facts span { display: block; margin-top: 8px; font-size: 18px; line-height: 1.4; color: var(--muted); }
+.cover .brandline { position: absolute; left: 120px; right: 120px; top: 64px; display: flex; justify-content: space-between; align-items: center; }
+.cover .brandline img { height: 40px; }
+
+/* ===== 2. Тезисы ===== */
+.theses { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; margin-top: 52px; flex: 1; }
+.theses .card { display: grid; grid-template-rows: auto auto 1fr; gap: 16px; padding: 34px; text-decoration: none; color: inherit; cursor: pointer; transition: background-color .2s; }
+.theses .card:hover { background-color: rgba(52,52,52,.5); }
+.theses .num { font-size: 22px; font-weight: 700; color: var(--shturval); padding-left: 28px; background: var(--oct-dot) left center / 14px no-repeat; }
+.theses h3 { font-size: 32px; }
+
+/* ===== 3. Четыре свойства ===== */
+.props { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: auto; }
+.props .card { display: grid; grid-template-rows: auto auto auto 1fr; gap: 16px; align-content: start; padding: 30px 30px 28px; }
+.props .card h3 { font-size: 28px; }
+.props .card p { font-size: 19px; }
+.props .why { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); font-size: 17px; line-height: 1.45; color: var(--guide); align-self: end; }
+.props .why b { color: var(--shturval); }
+
+/* ===== 4. Архитектура ===== */
+.arch { display: grid; grid-template-columns: 640px minmax(0, 1fr); gap: 64px; flex: 1; margin-top: 8px; }
+.list { display: grid; gap: 0; border-top: 1px solid var(--line); align-content: start; }
+.list li { padding: 20px 0; border-bottom: 1px solid var(--line); font-size: 21px; line-height: 1.45; color: var(--muted); }
+.list li b { color: var(--ink); display: block; font-size: 23px; margin-bottom: 4px; }
+.diagram { position: relative; }
+.diagram svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.diagram text { font-family: var(--f-sans); }
+
+/* ===== 5. Масштаб ===== */
+.scale { display: grid; grid-template-columns: minmax(0, 1fr) 760px; gap: 56px; flex: 1; margin-top: 40px; }
+.scale .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-content: start; }
+.scale .stats .card { padding: 30px 32px; }
+.scale .growth { margin-top: 20px; display: grid; gap: 14px; }
+.growth-row { display: grid; grid-template-columns: 230px minmax(0, 1fr) 130px; gap: 20px; align-items: center; font-size: 20px; }
+.growth-row .bar { height: 14px; border-radius: 7px; background: rgba(255,255,255,.08); position: relative; overflow: hidden; }
+.growth-row .bar i { position: absolute; inset: 0 auto 0 0; border-radius: 7px; background: linear-gradient(90deg, var(--low), var(--shturval)); }
+.growth-row .v { text-align: right; font-weight: 700; font-size: 24px; }
+.growth-row .nm { color: var(--muted); }
+.chart-card { display: flex; flex-direction: column; padding: 32px 36px 28px; }
+.chart-card .cap { font-size: 17px; color: var(--guide); margin-top: 14px; }
+
+/* ===== 6. Почта Банк ===== */
+.ops { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 52px; }
+.ops .card { padding: 34px 32px 32px; }
+.ops .stat { color: var(--shturval); font-size: 104px; }
+.ops .stat small { font-size: 36px; color: var(--ink); margin-left: 6px; }
+.ops .stat-l { font-size: 22px; color: var(--ink); }
+.ctx { display: grid; grid-template-columns: 360px minmax(0, 1fr) 560px; gap: 24px; margin-top: auto; }
+.ctx .fte { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 20px; }
+.ctx .fte b { font-size: 76px; line-height: 1; color: var(--shturval); }
+.ctx .fte span { font-size: 20px; line-height: 1.35; color: var(--ink); }
+.ctx .card.st { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; align-items: start; align-content: center; gap: 24px; }
+.ctx .card.st b { display: block; font-size: 40px; line-height: 1.1; }
+.ctx .card.st span { display: block; font-size: 17px; color: var(--muted); margin-top: 6px; }
+.quote { font-size: 26px; line-height: 1.35; font-weight: 700; padding: 34px 40px; }
+.quote q { quotes: "«" "»"; }
+.quote q::before, .quote q::after { color: var(--shturval); }
+.quote-by { display: block; margin-top: 12px; font-size: 18px; font-weight: 500; color: var(--muted); }
+
+/* ===== 7. Автоматизации ===== */
+.auto { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 48px; flex: 1; margin-top: 8px; }
+.auto-side { display: flex; flex-direction: column; gap: 24px; }
+.auto-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 14px; }
+.auto-grid .card { padding: 22px 24px; border-radius: 18px; display: grid; gap: 8px; align-content: start; }
+.auto-grid h4 { font-size: 21px; line-height: 1.25; display: flex; gap: 12px; align-items: center; }
+.auto-grid h4::before { content: ""; width: 12px; height: 12px; flex: none; background: var(--shturval); clip-path: var(--oct); }
+.auto-grid p { font-size: 17px; line-height: 1.42; color: var(--muted); }
+.auto-grid .was { font-size: 15px; color: var(--guide); }
+.auto-grid .was s { text-decoration-color: rgba(28,242,222,.7); text-decoration-thickness: 2px; }
+
+/* ===== 8. Обновления и уязвимости ===== */
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 36px; }
+.two .card { padding: 30px 36px; display: grid; gap: 18px; align-content: start; }
+.two .card h3 { font-size: 34px; display: flex; gap: 18px; align-items: center; }
+.ticks { display: grid; gap: 14px; }
+.ticks li { position: relative; padding-left: 34px; font-size: 20px; line-height: 1.45; color: var(--muted); }
+.ticks li::before { content: ""; position: absolute; left: 0; top: 10px; width: 14px; height: 14px; background: var(--shturval); clip-path: var(--oct); }
+.ticks li b { color: var(--ink); }
+.big-in { display: flex; align-items: baseline; gap: 18px; }
+.big-in .stat { color: var(--shturval); font-size: 64px; }
+.two .ticks { gap: 10px; }
+
+/* ===== 9. TCO ===== */
+.tco { display: grid; grid-template-columns: minmax(0, 1fr) 860px; gap: 64px; flex: 1; margin-top: 8px; }
+.tco-chart { padding: 36px 40px 30px; display: flex; flex-direction: column; }
+.tco-chart h4 { font-size: 22px; color: var(--muted); font-weight: 500; }
+.bars { flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; align-items: end; margin-top: 28px; border-bottom: 1px solid var(--line); padding: 0 20px; position: relative; }
+.bars .b { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.bars .b .val { font-size: 34px; font-weight: 700; margin-bottom: 14px; white-space: nowrap; }
+.bars .b .val small { font-size: 20px; color: var(--muted); font-weight: 500; }
+.bars .b i { display: block; width: 100%; max-width: 170px; border-radius: 14px 14px 0 0; background: linear-gradient(180deg, #4a4a4a, #2a2a2a); height: var(--h); transform-origin: bottom; transition: transform .8s cubic-bezier(.2,.7,.2,1) .2s; }
+.bars .b.sh i { background: linear-gradient(180deg, var(--shturval), rgba(28,242,222,.55)); box-shadow: 0 24px 48px -24px rgba(28,242,222,.5); }
+.bars .b.sh .val { color: var(--shturval); }
+html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
+.bar-names { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; padding: 14px 20px 0; text-align: center; font-size: 18px; color: var(--muted); }
+.bar-names .sh { color: var(--shturval); font-weight: 700; }
+.costs { display: grid; gap: 14px; margin-top: 40px; }
+.costs .card { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 22px; align-items: center; padding: 22px 26px; border-radius: 18px; }
+.costs h4 { font-size: 23px; }
+.costs p { font-size: 18px; line-height: 1.42; color: var(--muted); margin-top: 4px; }
+
+/* ===== 10. Таблица TCO ===== */
+.tbl { margin-top: 40px; border-radius: 24px; overflow: hidden; position: relative; background: var(--glass-noise), var(--glass-fill); background-color: rgba(36,36,36,.46); box-shadow: var(--glass-ring); }
+.tbl .row { display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); }
+.tbl .row > div { padding: 14px 28px; font-size: 19px; line-height: 1.42; color: var(--muted); border-top: 1px solid rgba(255,255,255,.08); }
+.tbl .row > div:first-child { color: var(--ink); font-weight: 700; font-size: 20px; }
+.tbl .row > div:last-child { background: var(--tint); color: var(--ink); }
+.tbl .row.head > div { border-top: 0; font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--guide); padding-block: 20px 16px; }
+.tbl .row.head > div:last-child { color: var(--shturval); }
+.tbl { flex: none; }
+.tco-foot { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 24px; margin-top: 28px; flex: none; }
+.tco-foot .rule { padding: 26px 36px; font-size: 26px; }
+.tco-foot .rule p + p { font-size: 19px; }
+.tco-foot .card { padding: 24px 30px; }
+.tco-foot .card p { font-size: 18px; }
+.tco-foot .card { display: grid; gap: 12px; align-content: center; }
+.tco-foot .card h3 { font-size: 26px; }
+
+/* ===== 11. ML-стек ===== */
+.ml { display: grid; grid-template-columns: minmax(0, 1fr) 470px; gap: 40px; flex: 1; margin-top: 8px; }
+.layers { display: grid; gap: 10px; align-content: start; }
+.layer { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: center; padding: 18px 24px; border-radius: 16px; background: var(--glass-noise), var(--glass-fill); background-color: rgba(255,255,255,.03); box-shadow: var(--glass-ring); }
+.layer.hl-l { background: var(--glass-noise), var(--tint-fill); box-shadow: var(--tint-ring); }
+.layer h4 { font-size: 20px; line-height: 1.25; }
+.layer h4 small { display: block; font-size: 15px; font-weight: 500; color: var(--guide); margin-top: 4px; }
+.layer.hl-l h4 { color: var(--shturval); }
+.layer .chip { font-size: 16px; padding: 6px 11px; }
+.ml-side { display: flex; flex-direction: column; gap: 14px; }
+.ml-side .card.t { display: grid; grid-template-columns: 118px minmax(0, 1fr); align-items: center; gap: 18px; padding: 20px 26px; border-radius: 18px; }
+.ml-side .card.t .stat { font-size: 64px; color: var(--shturval); }
+.ml-side .card.t p { font-size: 18px; color: var(--muted); }
+.ml-side .card.t p b { display: block; color: var(--ink); font-size: 20px; }
+.case { margin-top: auto; }
+.case .k { margin-bottom: 10px; display: block; }
+.case p { font-size: 20px; }
+
+/* ===== 12. Путь модели и пул GPU ===== */
+.path { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; margin-top: 44px; }
+.path::before { content: ""; position: absolute; top: 28px; left: 28px; right: 120px; height: 2px; background: linear-gradient(90deg, var(--shturval), rgba(28,242,222,.15)); }
+.step { padding-right: 28px; display: grid; gap: 8px; align-content: start; position: relative; }
+.step h4 { font-size: 24px; margin-top: 16px; }
+.step .tool { font-family: var(--f-mono); font-size: 15px; color: var(--shturval); }
+.step p { font-size: 17px; line-height: 1.42; color: var(--muted); }
+.pool { display: grid; grid-template-columns: minmax(0, 1.25fr) 80px minmax(0, 1fr) 470px; gap: 24px; align-items: stretch; margin-top: auto; }
+.pool .card { padding: 26px 28px; display: grid; gap: 16px; align-content: start; }
+.pool h4 { font-size: 20px; }
+.pool .card.t h4 { color: var(--shturval); }
+.srvs { display: grid; gap: 12px; }
+.srvs.six { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.srvs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+.srv { display: grid; gap: 6px; }
+.srv .lbl { font-family: var(--f-mono); font-size: 13px; color: var(--guide); }
+.gpus { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.gpu { aspect-ratio: 1 / 1.15; border-radius: 4px; background: #2b2b2b; display: grid; overflow: hidden; }
+.gpu.a { background: var(--shturval); } .gpu.b { background: var(--mid); } .gpu.c { background: var(--low); }
+.gpu.mig { background: transparent; gap: 2px; grid-template-rows: repeat(2, 1fr); }
+.gpu.mig i { border-radius: 2px; }
+.gpu.mig i.a { background: var(--shturval); } .gpu.mig i.c { background: var(--low); }
+.pool .cap { font-size: 16px; color: var(--muted); border-top: 1px solid rgba(255,255,255,.1); padding-top: 12px; }
+.pool .cap b { color: var(--ink); }
+.arrow { display: grid; place-items: center; }
+.arrow svg { width: 64px; }
+.pool-note { display: grid; gap: 14px; align-content: start; }
+.pool-note .ticks li { font-size: 18px; }
+
+/* ===== 13. Безопасность ===== */
+.sec3 { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 48px; flex: 1; }
+.sec3 .card { display: grid; gap: 22px; align-content: start; padding: 36px; }
+.sec3 .card h3 { font-size: 30px; display: flex; align-items: center; gap: 16px; }
+.sec3 .ico { width: 52px; height: 52px; flex: none; color: var(--shturval); }
+.sec3 .ticks li { font-size: 21px; }
+.sec3 .ticks { gap: 18px; }
+
+/* ===== 14. Vendor-agnostic ===== */
+.va { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: 44px; }
+.va .card { display: grid; gap: 18px; align-content: start; }
+.va .chips .chip { font-size: 19px; padding: 9px 15px; }
+.va-no { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: auto; }
+.va-no > div { border: 1px dashed var(--line); border-radius: 18px; padding: 22px 24px; font-size: 19px; color: var(--muted); display: grid; gap: 6px; }
+.va-no > div b { font-size: 22px; color: var(--ink); text-decoration: line-through; text-decoration-color: var(--shturval); text-decoration-thickness: 2px; }
+
+/* ===== 15. Банки ===== */
+.banks { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; margin-top: 36px; }
+.cases { display: grid; gap: 20px; }
+.cases .card { display: grid; gap: 12px; align-content: start; padding: 24px 32px; }
+.cases .card h3 { font-size: 28px; }
+.cases .nums { display: flex; gap: 44px; }
+.cases .nums b { display: block; font-size: 44px; line-height: 1; color: var(--shturval); }
+.cases .nums span { display: block; font-size: 17px; color: var(--muted); margin-top: 8px; }
+.wall { display: grid; gap: 18px; align-content: start; }
+.wall .k { color: var(--guide); }
+.names { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.names span { padding: 14px 20px; border-radius: 14px; font-size: 21px; font-weight: 700; background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.names.bank span { background: var(--tint); box-shadow: inset 0 0 0 1px rgba(28,242,222,.22); }
+.names.other span { font-size: 17px; font-weight: 500; color: var(--muted); padding: 10px 18px; }
+.growth-strip { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 40px; align-items: center; padding: 18px 34px; margin-top: auto !important; margin-bottom: 40px; }
+.growth-strip .stat { font-size: 56px; color: var(--shturval); }
+.growth-strip .stat-l { margin-top: 4px; font-size: 18px; }
+
+/* ===== 16. Рынок и работа с заказчиком ===== */
+.mk { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; margin-top: 44px; flex: 1; }
+.awards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-content: start; }
+.awards .card { padding: 24px 26px; border-radius: 18px; display: grid; gap: 8px; }
+.awards .stars { color: var(--shturval); letter-spacing: 4px; font-size: 16px; }
+.awards b { font-size: 22px; line-height: 1.25; }
+.awards span { font-size: 16px; color: var(--muted); line-height: 1.4; }
+.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.quotes .card { padding: 22px 26px; border-radius: 18px; font-size: 19px; line-height: 1.4; font-weight: 700; }
+.quotes .card span { display: block; font-weight: 500; color: var(--guide); font-size: 15px; margin-top: 10px; }
+.how { display: grid; gap: 16px; align-content: start; }
+.how .card { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 24px; align-items: center; padding: 28px 32px; }
+.how .stat { font-size: 54px; color: var(--shturval); }
+.how h4 { font-size: 24px; }
+.how p { font-size: 18px; color: var(--muted); line-height: 1.45; margin-top: 6px; }
+
+/* ===== 17. Финал ===== */
+.next { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 48px; }
+.next .card { display: grid; gap: 20px; align-content: start; padding: 36px 34px; min-height: 380px; }
+.next h3 { font-size: 30px; }
+.next p { font-size: 20px; }
+.cta { --cut: 64px; margin-top: auto; padding: 52px 64px; background: var(--shturval); color: var(--black); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 48px; align-items: center;
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut)); }
+.cta h2 { font-size: 52px; line-height: 1.05; }
+.cta p { font-size: 22px; margin-top: 12px; color: rgba(0,0,0,.72); }
+.cta .contacts { display: grid; gap: 10px; font-size: 24px; font-weight: 700; text-align: right; }
+.cta .contacts a { color: var(--black); text-decoration: none; }
+.cta .contacts a:hover { text-decoration: underline; }
+
+/* Правки 2026-10-23: слайды 15–16 */
+.banks { align-items: start; }
+.names.bank span.more { background: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); color: var(--muted); font-weight: 500; }
+.why4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 16px; margin-bottom: 40px; }
+.why4 .card { padding: 22px 26px; border-radius: 18px; display: grid; gap: 8px; align-content: start; }
+.why4 h4 { font-size: 21px; display: flex; gap: 12px; align-items: center; }
+.why4 h4::before { content: ""; width: 12px; height: 12px; flex: none; background: var(--shturval); clip-path: var(--oct); }
+.why4 p { font-size: 17px; line-height: 1.42; color: var(--muted); }
+.awards-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 420px minmax(0, 1fr); gap: 32px; align-items: center; margin-top: 32px; flex: 1; }
+.aw-col { display: grid; gap: 14px; }
+.aw-col .card { padding: 22px 28px; border-radius: 18px; display: grid; gap: 4px; }
+.aw-col .stars { color: var(--shturval); letter-spacing: 4px; font-size: 15px; }
+.aw-col .src { font-size: 15px; color: var(--shturval); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.aw-col b { font-size: 26px; line-height: 1.2; margin-top: 4px; }
+.aw-col span:last-child { font-size: 17px; color: var(--muted); line-height: 1.4; }
+.aw-mark { position: relative; display: grid; place-items: center; height: 100%; isolation: isolate; }
+.aw-mark::before { content: ""; position: absolute; z-index: -1; width: 320px; height: 320px; background: var(--shturval); clip-path: var(--oct); filter: blur(110px); opacity: .45; }
+.aw-mark img { width: 260px; filter: drop-shadow(0 0 30px rgba(28,242,222,.55)); }
+.quotes { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 24px; margin-bottom: 40px; }
+
+.why3 { display: grid; gap: 14px; margin-top: 18px; }
+.why3 li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 20px; align-items: center; font-size: 18px; line-height: 1.42; color: var(--muted); }
+.why3 li b { display: block; color: var(--ink); font-size: 22px; margin-bottom: 2px; }
+/* ===== Управление ===== */
+.ui { position: fixed; z-index: 10; left: 50%; transform: translateX(-50%); bottom: 12px; display: flex; gap: 8px; align-items: center; opacity: .25; transition: opacity .2s; }
+.ui:hover, .ui:focus-within { opacity: 1; }
+.ui button { width: 44px; height: 44px; border-radius: 10px; border: 0; background: rgba(255,255,255,.12); color: #fff; font: 700 18px var(--f-sans); cursor: pointer; }
+.ui button:hover { background: var(--tint-2); }
+.ui .cnt { font: 500 14px var(--f-sans); color: var(--muted); min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
+.progress { position: fixed; z-index: 10; left: 0; top: 0; height: 3px; background: var(--shturval); transition: width .35s ease; box-shadow: 0 0 12px rgba(28,242,222,.6); }
+:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+
+/* Печать / PDF: каждый слайд – отдельная страница */
+@media print {
+  @page { size: 1920px 1080px; margin: 0; }
+  html, body { overflow: visible; height: auto; }
+  .stage { position: static; display: block; }
+  .deck { position: static; transform: none !important; width: 1920px; height: auto; }
+  .slide { position: relative; opacity: 1 !important; visibility: visible !important; width: 1920px; height: 1080px; page-break-after: always; break-after: page; }
+  html.js .slide .rv { opacity: 1 !important; transform: none !important; }
+  html.js .slide:not(.active) .bars .b i { transform: none; }
+  .ui, .progress { display: none; }
+}
+
+/* ===== Печать / PDF: без прозрачности, размытий и теней – сплошные цвета ===== */
+@media print {
+  :root { --tint: #0a1f1e; --tint-2: #0c2a28; --mid: #0f857a; --low: #08443e; }
+  *, *::before, *::after { filter: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; text-shadow: none !important; }
+  .slide { --bg: #000; }
+  .slide.band { --bg: #171717; }
+  .g-tl::before { background: radial-gradient(circle 760px at 0 0, #07403b, var(--bg)) !important; }
+  .g-br::before { background: radial-gradient(circle 820px at 100% 100%, #073a36, var(--bg)) !important; }
+  .g-r::before { background: radial-gradient(circle 760px at 100% 30%, #06352f, var(--bg)) !important; }
+  .g-blue::before { background: radial-gradient(circle 760px at 100% 0, #0a1a38, var(--bg)) !important; }
+  .card, .layer, .tbl, .aw-col .card, .quotes .card, .awards .card {
+    background: linear-gradient(150deg, #2b2b2b 0%, #1d1d1d 100%) !important; box-shadow: none !important; border: 1px solid #353535; }
+  .card.t, .layer.hl-l { background: linear-gradient(150deg, #0f3431 0%, #0a1c1b 100%) !important; border-color: #1c5550; }
+  .rule { background: linear-gradient(135deg, #0b4440 0%, #031817 55%, #010a0a 100%) !important; box-shadow: none !important; border: 1px solid #1c5550; }
+  .chip { background: #333 !important; }
+  .chip.on { background: #0f3431 !important; }
+  .names span { background: #222 !important; box-shadow: none !important; border: 1px solid #333; }
+  .names.bank span { background: #0a1f1e !important; border-color: #1c5550; }
+  .names.bank span.more { background: transparent !important; border-color: #3a3a3a; }
+  .tbl .row > div:last-child { background: #102a28 !important; }
+  .tbl .row > div { border-top-color: #333 !important; }
+  .bars .b.sh i { background: linear-gradient(180deg, #1cf2de, #0f857a) !important; box-shadow: none !important; }
+  .growth-row .bar { background: #222 !important; }
+  .cover .art-glow, .aw-mark::before { display: none !important; }
+  .props .why { border-top-color: #3a3a3a !important; }
+  .pool .cap { border-top-color: #3a3a3a !important; }
+  .gpu { background: #2b2b2b; }
+  .cta { box-shadow: none !important; }
+}
+
+/* ===== Общая презентация: дополнения ===== */
+a.card.go { text-decoration: none; color: inherit; cursor: pointer; transition: background-color .2s; }
+a.card.go:hover { background-color: rgba(52,52,52,.5); }
+#automation .auto { margin-bottom: 44px; }
+#automation .auto-grid .card { padding: 18px 22px; gap: 6px; }
+#automation .auto-grid p { font-size: 16px; }
+#props .h2 { max-width: none; }
+#props .props { margin-bottom: 40px; }
+.list.tight li { padding: 15px 0; font-size: 20px; }
+.list.tight li b { font-size: 22px; }
+
+/* Кто мы */
+.about { display: grid; grid-template-columns: minmax(0, 1fr) 560px; gap: 24px; margin-top: 44px; }
+.stats4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.stats4 .card { padding: 26px 32px; }
+.stats4 .stat { font-size: 68px; }
+.growth-card { display: grid; gap: 18px; align-content: center; padding: 34px 40px; }
+.growth-card .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.growth-card .stat { font-size: 112px; color: var(--shturval); }
+.prod4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: auto; margin-bottom: 40px; }
+.prod4 .card { padding: 22px 26px; border-radius: 18px; display: grid; gap: 6px; align-content: start; }
+.prod4 h4 { font-size: 24px; }
+.prod4 .card.t h4 { color: var(--shturval); }
+.prod4 p { font-size: 17px; line-height: 1.42; color: var(--muted); }
+
+/* Вопросы */
+.q-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 20px; margin-top: 44px; flex: 1; margin-bottom: 40px; }
+.q-grid .card { display: grid; grid-template-rows: auto 1fr auto; gap: 18px; padding: 30px 32px; }
+.q-grid h3 { font-size: 27px; line-height: 1.25; }
+.q-grid .why-q { font-size: 18px; line-height: 1.4; color: var(--guide); padding-top: 14px; border-top: 1px solid rgba(255,255,255,.12); }
+
+/* Три статьи */
+.cost3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 48px; }
+.cost3 .card { display: grid; gap: 20px; align-content: start; padding: 36px; }
+.cost3 h3 { font-size: 36px; }
+.cost3 p { font-size: 22px; }
+
+/* Схема + текст */
+.split { display: grid; grid-template-columns: 640px minmax(0, 1fr); gap: 56px; flex: 1; margin-bottom: 40px; }
+.diagram-card { padding: 30px 34px; display: flex; flex-direction: column; justify-content: center; }
+.diagram-card svg { width: 100%; display: block; }
+.ticks.dim li::before { background: #5a5a5a; }
+
+/* DR */
+.dr-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 640px; gap: 24px; margin-top: 44px; flex: 1; margin-bottom: 40px; }
+.dr-grid > .card { padding: 32px 34px; }
+.dr-grid .ticks li { font-size: 21px; }
+.dr-grid .ticks { gap: 18px; }
+
+/* Сегменты */
+.seg3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 44px; }
+.seg3 .card { display: grid; gap: 14px; align-content: start; padding: 32px 36px; }
+.seg3 h3 { font-size: 32px; }
+.seg3 p { font-size: 21px; }
+
+/* Из коробки */
+.box4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
+.box4 .card { display: grid; gap: 14px; align-content: start; padding: 28px; }
+.box4 h3 { font-size: 26px; }
+.box4 .chip { white-space: normal; }
+.cycle { display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)); gap: 24px; align-items: center; margin-top: auto; margin-bottom: 40px; padding: 26px 34px; border-radius: 24px; background: var(--glass-noise), var(--tint-fill); box-shadow: var(--tint-ring); }
+.cycle b { display: block; font-size: 36px; line-height: 1.1; color: var(--shturval); }
+.cycle span { display: block; font-size: 17px; color: var(--muted); margin-top: 6px; }
+
+/* Vendor-agnostic */
+.journey { display: grid; grid-template-columns: minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr) 360px; gap: 12px; align-items: stretch; margin-top: 48px; }
+.journey .card { padding: 26px 28px; display: grid; gap: 10px; align-content: center; }
+.journey .card b { font-size: 30px; }
+.journey .j-arr { display: grid; place-items: center; font-size: 32px; color: var(--shturval); }
+.journey .j-end { margin-left: 24px; }
+.journey .j-end b { color: var(--shturval); font-size: 34px; }
+.journey .j-end span { font-size: 19px; color: var(--muted); }
+.inst3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: auto; margin-bottom: 40px; }
+.inst3 .card { padding: 24px 28px; display: grid; gap: 8px; border-radius: 18px; }
+.inst3 h4 { font-size: 22px; }
+.inst3 p { font-size: 18px; color: var(--muted); line-height: 1.42; }
+
+/* Безопасность */
+.sec4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: auto; margin-bottom: 40px; }
+#compat .va .chips .chip { font-size: 22px; padding: 11px 18px; }
+#compat .va .card { padding: 36px; gap: 22px; }
+.sec4 .card { padding: 34px 32px; min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; }
+.sec4 .stat { font-size: 64px; }
+.sec4 .card.t .stat { color: var(--shturval); }
+
+/* ML */
+.ml3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 36px; }
+.ml3 .card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: center; padding: 24px 30px; }
+.ml3 .stat { font-size: 60px; }
+.ml3 .card.t .stat { color: var(--shturval); }
+.ml3 .stat-l { margin-top: 0; font-size: 18px; }
+#ml .pool { margin-bottom: 40px; }
+.mpath { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 12px; }
+.mpath li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 18px; align-items: center; padding: 14px 20px; border-radius: 16px; background: var(--glass-noise), var(--glass-fill); box-shadow: var(--glass-ring); }
+.mpath b { display: block; font-size: 21px; }
+.mpath .tool { font-family: var(--f-mono); font-size: 15px; color: var(--shturval); }
+
+/* Логотипы */
+.logos { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; margin-top: 48px; }
+.logos .lg { background: #fff; border-radius: 18px; height: 168px; display: grid; place-items: center; padding: 26px 32px; }
+.logos .lg img { max-width: 100%; max-height: 116px; object-fit: contain; display: block; }
+.logos .lg.more { background: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); font-size: 24px; color: var(--muted); }
+
+/* Лицензии */
+.ed2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 40px; }
+.ed2 .card { display: flex; flex-direction: column; gap: 18px; padding: 32px 36px; }
+.ed2 h3 { font-size: 32px; }
+.lic3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: auto; margin-bottom: 40px; padding: 26px 34px; border-radius: 24px; border: 1px solid var(--line); }
+.lic3 b { display: block; font-size: 22px; margin-top: 8px; }
+
+/* Структура v2: что такое, идеи, работа с заказчиком, Community */
+.what4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
+.what4 .card { display: grid; gap: 16px; align-content: start; padding: 30px; }
+.what4 h3 { font-size: 26px; }
+.what4 p { font-size: 19px; }
+.facts5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; margin-top: auto; margin-bottom: 40px; padding: 26px 34px; border-radius: 24px; border: 1px solid var(--line); }
+.facts5 b { display: block; font-size: 30px; line-height: 1.1; color: var(--shturval); }
+.facts5 span { display: block; font-size: 16px; color: var(--muted); margin-top: 6px; }
+.ideas { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 48px; flex: 1; margin-bottom: 40px; }
+.ideas .card { display: flex; flex-direction: column; gap: 22px; padding: 40px 38px; }
+.ideas .num { font-size: 22px; font-weight: 700; color: var(--shturval); padding-left: 28px; background: var(--oct-dot) left center / 14px no-repeat; }
+.ideas h3 { font-size: 42px; line-height: 1.1; }
+.ideas p { font-size: 21px; }
+.ideas .chips { margin-top: auto; }
+.ideas .ticks li { font-size: 21px; }
+.ideas .ticks { gap: 20px; }
+.how3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 48px; }
+.how3 .card { display: grid; gap: 14px; align-content: start; padding: 36px; }
+.how3 .stat { font-size: 64px; color: var(--shturval); }
+.how3 h4 { font-size: 26px; line-height: 1.25; }
+.how3 p { font-size: 20px; }
+.comm3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 36px; }
+.comm3 .card { padding: 28px 32px; }
+.comm3 .stat { font-size: 72px; }
+.comm3 .card.t .stat { color: var(--shturval); }
+.comm2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: auto; margin-bottom: 40px; }
+.comm2 .card { padding: 28px 34px; }
+.comm2 .rule { display: grid; align-content: center; }
+
+
+/* ===== v3: меньше блоков, больше воздуха ===== */
+.card { padding: 24px 26px; border-radius: 20px; }
+.card h3 { font-size: 24px; }
+.card p { font-size: 18px; }
+.q-grid { flex: none; grid-auto-rows: auto; gap: 18px 22px; margin-top: 52px; }
+.q-grid .card { gap: 12px; padding: 22px 26px; grid-template-rows: auto auto auto; }
+.q-grid h3 { font-size: 23px; }
+.q-grid .why-q { font-size: 16px; padding-top: 10px; }
+.cost3 { gap: 22px; margin-top: 56px; }
+.cost3 .card { gap: 14px; padding: 26px 28px; }
+.cost3 h3 { font-size: 28px; }
+.cost3 p { font-size: 19px; }
+.props .card { padding: 24px 24px 22px; gap: 12px; }
+.props .card h3 { font-size: 23px; }
+.props .card p { font-size: 17px; }
+.props .why { font-size: 15px; padding-top: 14px; }
+#props .props { margin-top: 48px !important; margin-bottom: auto; }
+.ideas { flex: none; margin-top: 56px; gap: 22px; }
+.ideas .card { padding: 30px 30px; gap: 16px; }
+.ideas h3 { font-size: 32px; }
+.ideas p, .ideas .ticks li { font-size: 18px; }
+.seg3 .card { padding: 24px 28px; }
+.seg3 h3 { font-size: 24px; }
+.seg3 p { font-size: 18px; }
+.how3 { gap: 22px; }
+.how3 .card { padding: 26px 28px; gap: 10px; }
+.how3 .stat { font-size: 48px; }
+.how3 h4 { font-size: 21px; }
+.how3 p { font-size: 17px; }
+.comm3 .card { padding: 22px 26px; }
+.comm3 .stat { font-size: 56px; }
+.comm2 .card { padding: 22px 28px; }
+.sec4 .card { min-height: 0; padding: 24px 26px; gap: 26px; }
+.sec4 .stat { font-size: 48px; }
+.sec3 .card { padding: 28px; gap: 18px; }
+.sec3 .card h3 { font-size: 25px; }
+.sec3 .ticks li { font-size: 18px; }
+.next .card { min-height: 0; padding: 26px 28px; gap: 14px; }
+.next h3 { font-size: 25px; }
+.next p { font-size: 18px; }
+.cta { padding: 40px 52px; }
+.cta h2 { font-size: 42px; }
+.ops .card { padding: 24px 26px; }
+.ops .stat { font-size: 80px; }
+.ops .stat small { font-size: 28px; }
+.ops .stat-l { font-size: 19px; }
+.ctx .fte b { font-size: 60px; }
+.quote { font-size: 22px; padding: 24px 30px; }
+.two .card { padding: 26px 30px; gap: 14px; }
+.two .card h3 { font-size: 28px; }
+.two .ticks li { font-size: 18px; }
+.big-in .stat { font-size: 54px; }
+.box4 .card { padding: 22px; gap: 10px; }
+.box4 h3 { font-size: 22px; }
+.box4 .chip { font-size: 15px; }
+.cycle { padding: 20px 28px; }
+.cycle b { font-size: 28px; }
+.ml3 .card { padding: 18px 24px; }
+.ml3 .stat { font-size: 48px; }
+.dr-grid > .card { padding: 26px 28px; }
+.dr-grid .ticks li { font-size: 18px; }
+.ed2 .card { padding: 26px 30px; gap: 14px; }
+.ed2 h3 { font-size: 26px; }
+.ed2 .ticks li { font-size: 18px; }
+.lic3 { padding: 20px 28px; }
+.lic3 b { font-size: 20px; }
+.inst3 .card { padding: 20px 24px; }
+.journey .card { padding: 20px 24px; }
+.journey .card b { font-size: 26px; }
+.aw-col .card { padding: 18px 24px; }
+.aw-col b { font-size: 22px; }
+.quotes .card { padding: 18px 22px; font-size: 17px; }
+.logos .lg { height: 140px; }
+.growth-card .stat { font-size: 84px; }
+.stats .card { padding: 24px 28px; }
+.stats .stat { font-size: 64px; }
+.tco-chart { padding: 30px 34px 26px; }
+
+/* Кто мы */
+.about3 { display: grid; grid-template-columns: repeat(4, auto) minmax(0, 1fr); gap: 56px; align-items: end; margin-top: 52px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+.about3 b { display: block; font-size: 56px; line-height: 1; }
+.about3 span { display: block; font-size: 18px; color: var(--muted); margin-top: 10px; }
+.about3 .gr { justify-self: end; text-align: right; }
+.about3 .gr b { font-size: 40px; color: var(--shturval); }
+.about3 .gr small { font-size: 20px; color: var(--muted); font-weight: 500; }
+.prods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: auto; margin-bottom: 44px; }
+.prod { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 32px; align-items: center; padding: 30px 34px; border-radius: 22px;
+  background: radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, var(--pc) 22%, transparent) 0%, transparent 55%), #0e0e0e;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 40%, transparent); }
+.prod img { height: 60px; width: auto; max-width: 100%; justify-self: start; }
+.prod p { font-size: 20px; line-height: 1.4; color: var(--muted); border-left: 3px solid var(--pc); padding-left: 22px; }
+
+/* Что такое: фактура */
+.what2 { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 80px; margin-top: 72px; margin-bottom: auto; align-items: start; }
+.plus { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 48px; }
+.plus li { position: relative; padding-left: 50px; font-size: 27px; line-height: 1.3; font-weight: 700; }
+.plus li::before { content: "+"; position: absolute; left: 0; top: -3px; width: 34px; height: 34px; display: grid; place-items: center; font-size: 24px; color: var(--black); background: var(--shturval); clip-path: var(--oct); }
+.factlist { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.factlist li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.factlist b { font-size: 32px; color: var(--shturval); }
+.factlist span { font-size: 18px; color: var(--muted); }
+
+/* Не только Kubernetes */
+.stk { display: grid; grid-template-columns: 420px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 18px 22px; margin-top: 32px; margin-bottom: 44px; flex: 1; min-height: 0; }
+.stk-cap { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--shturval); margin-bottom: 4px; }
+.stk span, .stk-mgmt span { display: block; padding: 14px 16px; border-radius: 10px; background: #121212; box-shadow: inset 0 0 0 1px #262626; font-size: 17px; font-weight: 700; line-height: 1.3; }
+.stk small { display: block; font-size: 13px; font-weight: 500; color: var(--guide); margin-top: 2px; }
+.stk-mgmt { display: grid; gap: 10px; align-content: start; padding: 18px; border-radius: 18px; box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.5); }
+.stk-main { display: grid; grid-template-rows: auto 1fr; gap: 14px; }
+.stk-cl { padding: 18px; border-radius: 18px; box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.5); }
+.stk-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.stk-grid .k8s { box-shadow: inset 0 0 0 2.5px #ffb900; background: #1a1406; }
+.stk-grid .k8s small { color: #ffb900; }
+.stk-net { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.stk-net i { font-style: normal; text-align: center; font-size: 14px; font-weight: 700; color: var(--muted); padding: 9px 0; border-radius: 8px; box-shadow: inset 0 0 0 1px #333; }
+.stk-net span { grid-column: 1 / -1; text-align: center; color: var(--muted); font-weight: 500; }
+.stk-infra { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 14px; }
+.stk-infra > div { padding: 16px 18px; border-radius: 18px; box-shadow: inset 0 0 0 1px #333; }
+.stk-infra .chips { margin-top: 6px; gap: 6px; }
+.stk-infra .chip { font-size: 15px; padding: 6px 11px; }
+.stk .stk-infra .chip { display: inline-block; background: rgba(255,255,255,.08); box-shadow: none; padding: 6px 11px; font-size: 15px; font-weight: 500; border-radius: 8px; }
+.stk-bottom { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.stk-bottom span { text-align: center; padding: 14px; color: var(--muted); box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.35); background: transparent; }
+
+/* Архитектура */
+.arch2 { display: grid; grid-template-columns: 560px minmax(0, 1fr); gap: 56px; flex: 1; margin-top: 36px; margin-bottom: 40px; min-height: 0; }
+.arch-side { display: flex; flex-direction: column; gap: 28px; }
+.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.plain li { font-size: 19px; line-height: 1.45; color: var(--muted); }
+.plain li b { color: var(--ink); }
+.capi { margin-top: auto; padding: 20px 24px; background: var(--tint); border-radius: 14px; }
+.capi p:last-child { font-size: 17px; line-height: 1.45; color: var(--muted); margin-top: 8px; }
+.arch2 .diagram svg { height: 100%; }
+
+/* Vendor-agnostic */
+.journey .j-end { margin-left: 24px; padding: 20px 24px; border-left: 3px solid var(--shturval); display: grid; gap: 6px; align-content: center; }
+.cols3 { list-style: none; margin: auto 0 44px; padding: 28px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; border-top: 1px solid var(--line); }
+.cols3 li { font-size: 18px; line-height: 1.45; color: var(--muted); }
+.cols3 b { display: block; font-size: 22px; color: var(--ink); margin-bottom: 8px; }
+.never { list-style: none; margin: 40px 0 0; padding: 0; display: grid; }
+.never li { display: grid; grid-template-columns: 820px minmax(0, 1fr); gap: 40px; align-items: center; padding: 16px 0; border-bottom: 1px solid #333; }
+.never li:first-child { border-top: 1px solid #333; }
+.never b { font-size: 34px; line-height: 1.15; text-decoration: line-through; text-decoration-color: #ff5a5a; text-decoration-thickness: 3px; }
+.never span { font-size: 20px; color: var(--muted); }
+.never-foot { margin-top: auto; margin-bottom: 44px; font-size: 28px; font-weight: 700; }
+.never-foot::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 16px; background: var(--shturval); clip-path: var(--oct); }
+
+@media print {
+  .prod { background: #111 !important; }
+  .stk-grid .k8s { background: #1a1406 !important; }
+}
+
+
+/* ===== v4 ===== */
+/* Клиентские кластеры: две рамки сзади со смещением вверх-вправо */
+.stk-main { padding-top: 32px; }
+.stk-cl { position: relative; margin-right: 32px; background: #050505; }
+.stk-cl::before, .stk-cl::after { content: ""; position: absolute; inset: 0; border-radius: 18px; box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.32); background: #050505; z-index: -1; pointer-events: none; }
+.stk-cl::before { transform: translate(16px, -16px); }
+.stk-cl::after { transform: translate(32px, -32px); box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.18); z-index: -2; }
+.stk-mgmt { margin-top: 0; }
+/* Редакции и лицензии */
+.ed4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin-top: 40px; padding-bottom: 6px; }
+.ed4 > div { display: grid; gap: 8px; align-content: start; padding-top: 16px; border-top: 2px solid var(--line); }
+.ed4 > div:not(:first-child) { border-top-color: var(--shturval); }
+.ed-tag { font-family: var(--f-mono); font-size: 14px; color: var(--shturval); }
+.ed4 h4 { font-size: 24px; }
+.ed4 p { font-size: 17px; line-height: 1.45; color: var(--muted); }
+.licbox { margin-top: auto; margin-bottom: 44px; padding: 30px 34px; border-radius: 22px; background: var(--glass-noise), var(--glass-fill); background-color: rgba(36,36,36,.46); box-shadow: var(--glass-ring); }
+.lic4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px; margin-top: 20px; }
+.lic4 > div { display: grid; gap: 12px; align-content: start; }
+.lic4 h4 { font-size: 22px; }
+.lic4 p, .lic4 .ticks li { font-size: 17px; line-height: 1.45; color: var(--muted); }
+.lic4 b { color: var(--ink); }
+.lic4 .ticks { gap: 8px; }
+.lic4 .ticks li { padding-left: 26px; }
+.lic4 .ticks li::before { width: 11px; height: 11px; top: 8px; }
+@media print { .licbox { background: #1d1d1d !important; box-shadow: none !important; border: 1px solid #353535; } .stk-cl, .stk-cl::before, .stk-cl::after { background: #050505 !important; } }
+
+
+/* ===== v5: мультиЦОД ===== */
+.multi { display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 56px; flex: 1; min-height: 0; margin-top: 40px; margin-bottom: 40px; }
+.multi .plain { align-content: start; gap: 22px; }
+.multi { grid-template-rows: minmax(0, 1fr); }
+.multi .diagram { min-height: 0; height: 100%; }
+.multi .diagram svg { position: absolute; inset: 0; height: 100%; width: 100%; }
+
+/* Заметки докладчика и режимы */
+.notes { display: none; }
+#notes { position: fixed; z-index: 11; left: 16px; bottom: 68px; max-width: min(760px, calc(100vw - 32px)); padding: 18px 22px; border-radius: 14px; background: rgba(12,12,12,.94); box-shadow: inset 0 0 0 1px rgba(28,242,222,.3); color: #fff; font: 500 17px/1.5 var(--f-sans); display: none; }
+#notes.show { display: block; }
+#notes .nt { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--shturval); margin-bottom: 6px; }
+.ui .tg { width: auto; padding: 0 14px; font-size: 14px; font-weight: 700; }
+.ui .tg[aria-pressed="true"] { background: var(--tint-2); color: var(--shturval); }
+#help { position: fixed; z-index: 11; right: 16px; bottom: 68px; padding: 16px 20px; border-radius: 14px; background: rgba(12,12,12,.94); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); font: 500 15px/1.7 var(--f-sans); color: var(--muted); display: none; }
+#help.show { display: block; }
+#help b { color: #fff; display: inline-block; min-width: 64px; }
+
+@media print {
+  .slide.off { display: none !important; }
+  #notes, #help { display: none !important; }
+  .logos .lg { background: #fff !important; }
+}
+
+/* ===== Версия 2 ===== */
+/* Слайд 2: крупные плашки продуктов */
+#about .about3 { margin-top: 40px; padding-bottom: 28px; }
+#about .prods { flex: 1; min-height: 0; grid-auto-rows: 1fr; margin-top: 32px; margin-bottom: 44px; }
+#about .prod { grid-template-columns: 340px minmax(0, 1fr); padding: 36px 44px; border-radius: 24px; }
+#about .prod img { height: 76px; }
+#about .prod p { font-size: 25px; line-height: 1.35; padding-left: 28px; }
+
+/* Слайд 3: только вопросы */
+.qs { list-style: none; counter-reset: q; margin: 72px 0 72px; padding: 0; flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); grid-auto-flow: column; gap: 32px 96px; }
+.qs li { counter-increment: q; display: grid; grid-template-columns: 64px minmax(0, 1fr); align-content: start; font-size: 36px; line-height: 1.28; font-weight: 700; }
+.qs li::before { content: counter(q); color: var(--shturval); }
+
+/* Слайд 4: две колонки с общими верхом и низом */
+.what3 { display: grid; grid-template-columns: minmax(0, 1fr) 560px; gap: 72px; margin-top: 64px; margin-bottom: 72px; flex: 1; min-height: 0; }
+.what3 > div { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 20px; }
+.plus2, .facts2 { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.plus2 { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); column-gap: 48px; }
+.facts2 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+.plus2 li, .facts2 li { display: grid; align-items: center; border-bottom: 1px solid var(--line); }
+.plus2 li { position: relative; padding-left: 52px; font-size: 25px; line-height: 1.28; font-weight: 700; }
+.plus2 li::before { content: "+"; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; display: grid; place-items: center; font-size: 24px; color: var(--black); background: var(--shturval); clip-path: var(--oct); }
+.facts2 li { grid-template-columns: 200px minmax(0, 1fr); gap: 20px; }
+.facts2 b { font-size: 32px; color: var(--shturval); white-space: nowrap; }
+.facts2 span { font-size: 19px; line-height: 1.35; color: var(--muted); }
+
+/* Слайд 5: пять колонок сервисов */
+#stack .stk-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+#stack .stk-grid > span { padding: 13px 13px; font-size: 16px; }
+#stack .stk small { font-size: 14px; }
+#stack .stk-mgmt { grid-auto-rows: auto; grid-template-rows: auto repeat(7, minmax(0, 1fr)); align-content: stretch; }
+#stack .stk-mgmt span { display: flex; flex-direction: column; justify-content: center; padding: 8px 16px; font-size: 17px; }
+#stack .stk-net { margin-top: 8px; }
+#stack .stk-net span { padding: 6px; }
+
+/* Слайд 7: три свойства */
+.props3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 48px; margin-bottom: 64px; flex: 1; min-height: 0; }
+.props3 .card { display: flex; flex-direction: column; gap: 24px; padding: 36px 36px 40px; }
+.props3 h3 { font-size: 32px; line-height: 1.2; min-height: 3.6em; }
+#props .lead { max-width: none; }
+.props3 .ticks { gap: 18px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); }
+.props3 .ticks li { font-size: 23px; line-height: 1.32; color: var(--ink); }
+.props3 .ticks li::before { top: 8px; }
+
+/* Версия 2, правка 2 */
+.props3 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.props3 .card { gap: 18px; padding: 30px 28px 32px; }
+.props3 h3 { font-size: 27px; min-height: 3.6em; }
+.props3 .ticks { gap: 14px; padding-top: 20px; }
+.props3 .ticks li { font-size: 20px; padding-left: 28px; }
+.props3 .ticks li::before { width: 12px; height: 12px; }
+#stack .stk small { font-size: 13px; line-height: 1.25; }
+
+/* Разделы */
+.sec-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 80px; }
+.sec-n { font-size: 40px; font-weight: 700; color: var(--shturval); padding-left: 40px; background: var(--oct-dot) left center / 22px no-repeat; }
+.sec-t { margin-top: 28px; font-size: 128px; line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
+
+/* Заявление */
+.stmt { justify-content: center; }
+.stmt-t { font-size: 104px; line-height: 1.08; font-weight: 700; max-width: 17ch; text-wrap: balance; }
+
+/* Чего не будет */
+#never .never { margin-top: 28px; }
+#never .never li { padding: 19px 0; }
+#never .never b { font-size: 33px; }
+.never-rule { margin-top: auto; margin-bottom: 44px; padding: 24px 40px; font-size: 38px; }
+.never-rule p + p { margin-top: 6px; }
+
+/* Логотипы совместимости */
+.cmp { flex: 1; min-height: 0; margin-top: 28px; margin-bottom: 44px; padding: 26px 40px; border-radius: 24px; background: #fff; display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); }
+.cmp > div { display: flex; align-items: center; justify-content: space-around; gap: 20px; min-height: 0; }
+.cmp img { display: block; height: auto; flex: none; }
+
+/* Версия 2, правка 3: логотипы заказчиков внутри карточек */
+#clients .logos { flex: 1; min-height: 0; grid-auto-rows: minmax(0, 1fr); margin-top: 36px; margin-bottom: 44px; }
+#clients .lg { height: auto; min-height: 0; padding: 26px 34px; overflow: hidden; }
+#clients .lg img { width: 100%; height: 100%; max-width: 100%; max-height: 100%; min-height: 0; object-fit: contain; }
+
+/* Версия 2, правка 4 */
+#about .about3 { grid-template-columns: repeat(4, auto); justify-content: space-between; }
+.what3 { gap: 128px; grid-template-columns: minmax(0, 1fr) 520px; }
+.props3 { margin-bottom: 20px; }
+.props-rule { margin-bottom: 40px; padding: 20px 36px; font-size: 30px; text-align: center; }
+.props3 .card { padding-bottom: 24px; }
+.grow2 { flex: 1; min-height: 0; margin-bottom: 72px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 96px; align-items: center; }
+.grow2 b { display: block; font-size: 220px; line-height: 1; letter-spacing: -.01em; color: var(--shturval); }
+.grow2 span { display: block; margin-top: 18px; font-size: 40px; font-weight: 700; }
+
+#props .lead { font-size: 22px; margin-top: 18px; }
+.props3 { flex: none; margin-top: 30px; margin-bottom: 0; }
+.props3 .card { gap: 14px; padding: 24px 26px 24px; }
+.props3 .oct-n { width: 48px; height: 48px; font-size: 18px; }
+.props-rule { margin-top: auto; margin-bottom: 44px; }
+
+/* Версия 2, правка 5 */
+/* Работа с инфраструктурой */
+.ss { display: grid; grid-template-columns: 340px 64px minmax(0, 1fr); align-items: stretch; margin-top: 44px; flex: 1; min-height: 0; }
+.ss-user { display: flex; flex-direction: column; gap: 14px; padding: 30px 30px; }
+.ss-user h3 { font-size: 30px; }
+.ss-btns { margin-top: auto; display: grid; gap: 12px; }
+.ss-btns span { padding: 15px 20px; border-radius: 14px; text-align: center; font-size: 23px; font-weight: 700; color: var(--black); background: var(--shturval); }
+.ss-arr { display: grid; place-items: center; font-size: 40px; color: var(--shturval); }
+.ss-flow { padding: 30px 32px; border-radius: 20px; background: var(--glass-noise), var(--tint-fill); box-shadow: var(--tint-ring); display: flex; flex-direction: column; gap: 22px; }
+.ss-flow ol { list-style: none; counter-reset: ss; margin: 0; padding: 0; flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.ss-flow li { counter-increment: ss; font-size: 20px; line-height: 1.35; color: var(--muted); }
+.ss-flow li::before { content: counter(ss); display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 18px; font-size: 18px; font-weight: 700; color: var(--black); background: var(--shturval); clip-path: var(--oct); }
+.ss-flow b { display: block; margin-bottom: 8px; font-size: 25px; line-height: 1.2; color: var(--ink); }
+.ss-no { display: grid; grid-template-columns: 340px minmax(0, 1fr); align-items: center; gap: 64px; margin-top: 24px; margin-bottom: 44px; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.ss-no .k { font-size: 17px; }
+.ss-no ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-between; gap: 32px; }
+.ss-no li { font-size: 25px; font-weight: 700; text-decoration: line-through; text-decoration-color: #ff5a5a; text-decoration-thickness: 3px; }
+
+/* Community */
+.ce { flex: 1; min-height: 0; display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 88px; align-items: center; margin-bottom: 72px; }
+.ce-mark img { display: block; width: 190px; height: auto; filter: drop-shadow(0 0 48px rgba(28,242,222,.35)); }
+.ce-mark b { display: block; margin-top: 30px; font-size: 42px; line-height: 1.1; }
+.ce-mark p { margin-top: 14px; font-size: 22px; line-height: 1.42; color: var(--muted); }
+.ce-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ce-grid .card { padding: 20px 24px; border-radius: 16px; }
+.ce-grid b { display: block; font-size: 34px; line-height: 1.1; color: var(--shturval); }
+.ce-grid span { display: block; margin-top: 6px; font-size: 18px; line-height: 1.35; color: var(--muted); }
+
+.ss-flow ol { flex: none; margin-block: auto; align-items: start; gap: 36px; }
+.ss-flow li { font-size: 23px; }
+.ss-flow li::before { width: 60px; height: 60px; font-size: 22px; margin-bottom: 24px; }
+.ss-flow b { font-size: 29px; margin-bottom: 10px; }
+.ss-arr { font-size: 60px; }
+
+/* Версия 2, правка 6: ML */
+.pil3 { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 44px; margin-bottom: 64px; }
+.pil3 .card { display: flex; flex-direction: column; gap: 12px; padding: 34px 34px 32px; }
+.pil3 .idx { font-size: 84px; line-height: .9; font-weight: 700; color: var(--shturval); margin-bottom: 14px; }
+.pil3 .k { font-size: 16px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--shturval); }
+.pil3 h3 { font-size: 34px; line-height: 1.2; }
+.pil3 p { font-size: 21px; line-height: 1.42; }
+.pil-go { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 17px 22px; border-radius: 14px; font-size: 20px; font-weight: 700; color: var(--black); background: var(--shturval); }
+.pil-go i { font-style: normal; }
+.llm { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 720px; gap: 56px; align-items: center; margin-top: 28px; margin-bottom: 56px; }
+.llm .ticks { gap: 22px; }
+.llm .ticks li { font-size: 21px; line-height: 1.4; }
+.llm-code { padding: 26px 30px; }
+.llm-code pre { margin: 14px 0 0; font-family: var(--f-mono); font-size: 20px; line-height: 1.42; color: var(--ink); white-space: pre; overflow: hidden; }
+.llm-code .c { color: var(--guide); }
+.llm-code .y { color: var(--shturval); }
+
+/* Версия 2, правка 7 */
+.cover .h1 { max-width: none; font-size: 84px; }
+#cover .art { right: 150px; width: 470px; transform: translateY(-58%); filter: drop-shadow(0 0 22px rgba(28,242,222,.75)) drop-shadow(0 0 80px rgba(28,242,222,.5)); }
+#cover .art-glow { right: 170px; top: 160px; width: 440px; height: 440px; }
+.cover .facts { margin-bottom: 72px; }
+#questions .h2 { font-size: 50px; }
+.qs { flex: none; margin: 56px 0 0; grid-template-rows: repeat(3, auto); gap: 40px 96px; }
+.qs li { grid-template-columns: 46px minmax(0, 1fr); font-size: 26px; line-height: 1.32; }
+.what3 { gap: 208px; grid-template-columns: minmax(0, 1fr) 500px; }
+.what3 > div:last-child { grid-template-rows: minmax(0, 1fr); }
+.facts2.card { border-top: 0; padding: 10px 30px; border-radius: 20px; }
+.facts2.card li:last-child { border-bottom: 0; }
+.facts2 li { grid-template-columns: 180px minmax(0, 1fr); }
+#ideas .ideas { flex: 1; margin-top: 48px; margin-bottom: 64px; }
+#ideas .ideas .card { justify-content: center; gap: 22px; padding: 44px 40px; }
+#ideas .ideas h3 { font-size: 46px; line-height: 1.12; }
+.ss-no li, #never .never b { text-decoration-color: var(--shturval); text-decoration-thickness: 1.5px; }
+.pil3 { flex: none; margin-block: auto 120px; }
+.pil3 .card { min-height: 340px; }
+.pil3 .card { padding: 28px 28px 30px; gap: 10px; }
+.pil3 .idx { font-size: 56px; margin-bottom: 8px; }
+.pil3 .k { font-size: 14px; }
+.pil3 h3 { font-size: 27px; }
+.pil3 p { font-size: 19px; }
+.lic5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+.lic5 .card { padding: 20px 22px 22px; border-radius: 18px; display: grid; gap: 8px; align-content: start; }
+.lic5 .idx { font-size: 30px; line-height: 1; font-weight: 700; color: var(--shturval); }
+.lic5 h3 { font-size: 22px; min-height: 2.44em; }
+.lic5 ul { list-style: none; margin: 0; padding: 12px 0 0; display: grid; gap: 10px; border-top: 1px solid rgba(255,255,255,.12); font-size: 15px; line-height: 1.3; color: var(--muted); }
+.lic5 b { display: block; font-size: 20px; line-height: 1.25; color: var(--ink); }
+.lic-ex { display: flex; align-items: center; gap: 12px; margin-top: 22px; }
+.lic-ex .k { margin-right: 10px; }
+.lic-ex i { font-style: normal; color: var(--shturval); font-weight: 700; }
+.lic-ex .chip { font-size: 19px; padding: 9px 16px; }
+.lic-rules { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 36px; margin-top: auto; margin-bottom: 44px; padding-top: 20px; border-top: 1px solid var(--line); }
+.lic-rules li { font-size: 18px; line-height: 1.38; padding-left: 26px; }
+.lic-rules li::before { width: 11px; height: 11px; top: 8px; }
+
+#cover .art-glow { display: none; }
+#cover .art { right: 130px; width: 420px; top: 56%; }
+.lic5 { margin-top: 36px; gap: 18px; }
+.lic5 .card { padding: 24px 24px 28px; gap: 12px; }
+.lic5 h3 { font-size: 23px; }
+.lic5 ul { gap: 13px; padding-top: 14px; font-size: 16px; }
+.lic5 b { font-size: 21px; }
+.lic-ex { margin-top: 28px; }
+.lic-rules li { font-size: 19px; }
+
+/* Версия 2, правка 9 */
+#about .prods { flex: none; grid-auto-rows: auto; gap: 18px; margin-block: auto 72px; }
+#about .prod { grid-template-columns: 280px minmax(0, 1fr); padding: 24px 32px; border-radius: 20px; }
+#about .prod img { height: 54px; }
+#about .prod p { font-size: 20px; padding-left: 22px; }
+.qs { margin-top: 136px; }
+#ideas .ideas { flex: none; margin-block: auto 150px; }
+#ideas .ideas .card { padding: 40px 36px; min-height: 180px; }
+#ideas .ideas h3 { font-size: 36px; }
+#network .arch { flex: none; align-items: stretch; }
+#network .list { grid-auto-rows: minmax(0, 1fr); align-content: stretch; }
+#network .list li { display: flex; flex-direction: column; justify-content: center; }
+#network .diagram svg { height: auto; }
+#pochta .ctx { margin-top: 28px; }
+.ce-mark { text-align: center; }
+.ce-mark img { margin-inline: auto; }
+.lic5 h3 { color: var(--shturval); }
+
+/* Постер */
+.poster { padding: 64px 120px 56px; background: var(--shturval); color: var(--black); }
+.pst-mark { position: absolute; z-index: -1; right: -170px; top: -130px; width: 1120px; height: 1098px; color: #0a3f3a; opacity: .14; }
+.pst-top { display: flex; justify-content: space-between; align-items: center; }
+.pst-logo, .pst-lab { display: block; height: 44px; width: auto; color: var(--black); }
+.pst-t { margin-top: auto; font-size: 158px; line-height: .96; letter-spacing: -.005em; text-transform: uppercase; text-wrap: nowrap; }
+.pst-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px; margin-top: 56px; }
+.pst-steps > div { padding-top: 16px; border-top: 3px solid var(--black); }
+.pst-steps h3 { font-size: 28px; line-height: 1.15; }
+.pst-steps p { margin-top: 8px; font-size: 18px; line-height: 1.38; color: rgba(0,0,0,.72); }
+.pst-foot { display: flex; align-items: baseline; gap: 56px; margin-top: 40px; font-size: 22px; font-weight: 700; }
+.pst-foot a { color: var(--black); text-decoration: none; }
+.pst-foot a:hover { text-decoration: underline; }
+.pst-foot .pg { margin-left: auto; font-size: 16px; font-weight: 500; color: rgba(0,0,0,.6); }
+
+/* Версия 2, правка 10: резюме */
+.sum3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; margin-top: 64px; }
+.sum3 b { display: block; font-size: 104px; line-height: 1; letter-spacing: -.01em; color: var(--shturval); white-space: nowrap; }
+.sum3 small { font-size: 34px; letter-spacing: 0; color: var(--ink); }
+.sum3 span { display: block; margin-top: 16px; font-size: 22px; line-height: 1.38; color: var(--muted); }
+.sum-txt { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; margin-top: auto; margin-bottom: 64px; padding-top: 28px; border-top: 1px solid var(--line); }
+.sum-txt .k { margin-bottom: 10px; }
+.sum-txt p:not(.k) { font-size: 20px; line-height: 1.42; color: var(--ink); }
+
+/* Версия 2, правка 11 */
+.sum-cards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin-top: auto; margin-bottom: 72px; }
+.sum-cards .card { display: grid; place-items: center; min-height: 104px; padding: 16px 14px; border-radius: 16px; font-size: 21px; line-height: 1.22; font-weight: 700; text-align: center; }
+.ce-wide { grid-column: 1 / -1; }
+
+/* Версия 2, правка 12: постер принципов */
+.ip { flex: 1; min-height: 0; display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); margin-top: 20px; margin-bottom: 48px; border-bottom: 2px solid var(--shturval); }
+.ip a { display: flex; align-items: center; border-top: 2px solid var(--shturval); font-size: 134px; line-height: 1; font-weight: 700; letter-spacing: -.005em; text-transform: uppercase; white-space: nowrap; color: var(--ink); text-decoration: none; cursor: pointer; transition: color .15s; }
+.ip a:hover { color: var(--shturval); }
+
+/* Версия 2, правка 13: проход impeccable */
+::selection { background: var(--shturval); color: var(--black); }
+.poster ::selection { background: var(--black); color: var(--shturval); }
+.poster :focus-visible { outline-color: var(--black); }
+a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outline-offset: 4px; }
+.ip-h { font-weight: 500; }
+.k, .pil3 .k, .ss-no .k { font-size: 16px; }
+.prod p, #about .prod p { border-left-width: 1px; }
+#box .chip, .box4 .chip { font-size: 16px; }
+.auto-grid .was, .layer h4 small, .mpath .tool, #market .card span { font-size: 16px; }
+.srv .lbl { font-size: 14px; }
+#stack .stk small, .stk-cap { font-size: 14px; }
+#stack .stk-net i { font-size: 15px; }
+.stk .stk-infra .chip { font-size: 16px; }
+@media print { html { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .poster .pst-mark { opacity: .14; } }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="stage">
+<main class="deck" id="deck">
+
+<section class="slide cover g-tl" id="cover" data-title="Обложка">
+  <div class="brandline rv">
+    <img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo">
+    <img src="assets/chislitel-horizontal-white.svg" alt="Лаборатория Числитель" class="logo" style="height:34px;opacity:.8">
+  </div>
+  <div class="art-glow"></div>
+  <img class="art" src="assets/shturval-sign.svg" alt="">
+  <div class="body" style="padding-top:96px">
+    <h1 class="h1 rv" style="--d:80ms;margin-top:24px">Kubernetes-платформа <em>Enterprise-уровня</em></h1>
+    <div class="facts">
+      <div class="card rv" style="--d:240ms"><b>500+</b><span>кластеров под&nbsp;одним управлением</span></div>
+      <div class="card rv" style="--d:300ms"><b>№ 13933</b><span>в&nbsp;реестре российского ПО&nbsp;с&nbsp;2022 года</span></div>
+      <div class="card t rv" style="--d:360ms"><b>ФСТЭК</b><span>сертификат (под&nbsp;именем Kuberbox)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide g-r" id="about" data-title="Кто мы">
+  <div class="top"><div class="eyebrow">Кто мы</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Лаборатория Числитель&nbsp;– <span class="hl">российский разработчик</span> инфраструктурного ПО</h2>
+  <div class="about3 rv" style="--d:60ms">
+    <div><b>2019</b><span>на&nbsp;рынке</span></div>
+    <div><b>70+</b><span>разработчиков</span></div>
+    <div><b>85+</b><span>заказчиков</span></div>
+    <div><b>10 000+</b><span>развёрнутых экземпляров продуктов</span></div>
+  </div>
+  <div class="prods">
+    <div class="prod rv" style="--d:120ms;--pc:#1cf2de"><img src="assets/products/shturval-horizontal-on-dark.svg" alt="Штурвал"><p>Kubernetes-платформа: создание и&nbsp;управление кластерами</p></div>
+    <div class="prod rv" style="--d:170ms;--pc:#ff4848"><img src="assets/products/pult-horizontal-on-dark.svg" alt="Пульт"><p>Мониторинг ИТ-инфраструктуры на&nbsp;базе Zabbix</p></div>
+    <div class="prod rv" style="--d:220ms;--pc:#ffb900"><img src="assets/products/grafinya-horizontal-on-dark.svg" alt="Графиня"><p>Визуализация и&nbsp;анализ данных, аналог Grafana</p></div>
+    <div class="prod rv" style="--d:270ms;--pc:#56d878"><img src="assets/products/nimbius-horizontal-on-dark.svg" alt="Нимбиус"><p>Платформа для&nbsp;частных и&nbsp;гибридных облаков</p></div>
+  </div>
+  <div class="foot"><span>Все продукты&nbsp;– в&nbsp;реестре российского ПО</span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-tl" id="questions" data-title="Расскажите о себе">
+  <div class="top"><div class="eyebrow">Сначала&nbsp;– о&nbsp;вас</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Расскажите о&nbsp;себе&nbsp;– <span class="hl">чтобы говорить о&nbsp;вашем</span>, а&nbsp;не&nbsp;о&nbsp;нашем</h2>
+  <ol class="qs">
+    <li class="rv" style="--d:60ms">Сколько у&nbsp;вас кластеров сейчас и&nbsp;сколько будет через год?</li>
+    <li class="rv" style="--d:110ms">Есть ли закрытые или&nbsp;изолированные сегменты сети?</li>
+    <li class="rv" style="--d:160ms">На&nbsp;чём живёте: виртуализация, bare&nbsp;metal, облако?</li>
+    <li class="rv" style="--d:210ms">Как&nbsp;сейчас обновляете Kubernetes и&nbsp;закрываете уязвимости?</li>
+    <li class="rv" style="--d:260ms">Кто отвечает за&nbsp;доступы: ИБ, инфраструктура, разработка?</li>
+    <li class="rv" style="--d:310ms">Есть ли ML-нагрузки и&nbsp;GPU?</li>
+  </ol>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-r" id="summary" data-title="Коротко">
+  <div class="top"><div class="eyebrow">Коротко</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Кластеров становится больше, <span class="hl">команда&nbsp;– нет</span></h2>
+  <div class="sum3">
+    <div class="rv" style="--d:80ms"><b>1,5 <small>инженера</small></b><span>эксплуатируют 24+ кластера в&nbsp;Почта Банке</span></div>
+    <div class="rv" style="--d:140ms"><b>20 <small>минут</small></b><span>новый кластер, готовый к&nbsp;запуску приложений</span></div>
+    <div class="rv" style="--d:200ms"><b>384 <small>млн ₽</small></b><span>высвобождается за&nbsp;5 лет против своей сборки: 20 кластеров, 140 узлов, без&nbsp;лицензии Штурвала</span></div>
+  </div>
+  <div class="sum-cards">
+    <div class="card rv" style="--d:260ms">ФСТЭК</div>
+    <div class="card rv" style="--d:300ms">ML</div>
+    <div class="card rv" style="--d:340ms">CNCF</div>
+    <div class="card rv" style="--d:380ms">DR конфигурация</div>
+    <div class="card rv" style="--d:420ms">Vendor-agnostic</div>
+    <div class="card rv" style="--d:460ms">Встроенная ИБ</div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-blue" id="what" data-title="Что такое Штурвал">
+  <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Собственный продукт <span class="hl">на&nbsp;основе Kubernetes</span></h2>
+  <p class="lead rv" style="--d:60ms;max-width:72ch">Enterprise-платформа для&nbsp;создания и&nbsp;управления кластерами Kubernetes из&nbsp;одной точки&nbsp;– от&nbsp;одного кластера до&nbsp;сотен. Как&nbsp;vCenter, только для&nbsp;Kubernetes.</p>
+  <div class="what3">
+    <div class="rv" style="--d:100ms">
+      <p class="k">Что&nbsp;мы добавили к&nbsp;Kubernetes</p>
+      <ul class="plus2">
+        <li>Графический интерфейс управления</li>
+        <li>Протестированная и&nbsp;стабильная сборка</li>
+        <li>Простой установщик Kubernetes</li>
+        <li>Встроенные инструменты ИБ</li>
+        <li>Работа на&nbsp;отечественных ОС и&nbsp;виртуализации</li>
+        <li>Автоматизированные обновления</li>
+      </ul>
+    </div>
+    <div class="rv" style="--d:160ms">
+      <ul class="card facts2">
+        <li><b>№ 13933</b><span>в&nbsp;реестре российского ПО&nbsp;с&nbsp;14.06.2022</span></li>
+        <li><b>ФСТЭК</b><span>сертификат № 5045 от&nbsp;24.02.2026</span></li>
+        <li><b>CNCF</b><span>сертифицированный Kubernetes</span></li>
+        <li><b>&gt;10 млн $</b><span>вложено в&nbsp;собственную разработку</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-tl" id="stack" data-title="Не только Kubernetes">
+  <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Штурвал&nbsp;– это <span class="hl">совсем не&nbsp;только Kubernetes</span></h2>
+  <div class="stk rv" style="--d:80ms">
+    <div class="stk-mgmt">
+      <p class="stk-cap">Подсистема управления кластерами</p>
+      <span>Интерфейс управления платформой<small>GUI, CLI, REST API</small></span>
+      <span>Управление инфраструктурой<small>Cluster API и&nbsp;провайдеры</small></span>
+      <span>Управление конфигурацией кластеров</span>
+      <span>Управление доступом<small>LDAP, OIDC, RBAC, менеджер сессий</small></span>
+      <span>Построение отчётов</span>
+      <span>Обработка и&nbsp;отображение метрик<small>VictoriaMetrics Cluster, Grafana</small></span>
+      <span>Обработка и&nbsp;отображение журналов<small>VictoriaLogs</small></span>
+    </div>
+    <div class="stk-main">
+      <div class="stk-cl">
+        <p class="stk-cap">Клиентский кластер</p>
+        <div class="stk-grid">
+          <span class="k8s">Kubernetes API<small>это и&nbsp;есть «ванильный» Kubernetes</small></span>
+          <span>Ingress и&nbsp;Gateway API<small>Ingress NGINX</small></span>
+          <span>Локальные DNS<small>NodeLocal DNS</small></span>
+          <span>VIP и&nbsp;балансировка<small>Kube-VIP, Descheduler</small></span>
+          <span>Хранилище<small>RawFile CSI, NFS CSI, Ceph CSI, CSI Snapshotter</small></span>
+          <span>Управление доступом (RBAC)</span>
+          <span>Сбор метрик<small>VictoriaMetrics Agent</small></span>
+          <span>Сбор логов<small>Vector</small></span>
+          <span>Безопасность<small>Kyverno, Trivy</small></span>
+          <span>Бэкапы<small>Velero</small></span>
+          <span>Конфигурация системных сервисов</span>
+          <span>Конфигурация узлов</span>
+          <span>Обновление кластера</span>
+          <span>Доставка приложений<small>Argo CD, Argo Rollouts</small></span>
+          <span>Сертификаты<small>cert-manager, trust-manager, X.509 Certificate Exporter</small></span>
+        </div>
+        <div class="stk-net"><i>node</i><i>node</i><i>node</i><i>node</i><i>node</i><i>node</i><span>Сеть: Cilium, Multus, SR-IOV</span></div>
+      </div>
+      <div class="stk-infra">
+        <div><p class="stk-cap">Вычислительная инфраструктура</p><div class="chips"><span class="chip">bare metal</span><span class="chip">vSphere</span><span class="chip">zVirt</span><span class="chip">oVirt</span><span class="chip">RedVirt</span><span class="chip">OpenStack</span><span class="chip">vCloud Director</span><span class="chip">Basis</span><span class="chip">HostVM</span><span class="chip">RosaVirt</span><span class="chip">Yandex Cloud</span></div></div>
+        <div><p class="stk-cap">ОС узлов</p><div class="chips"><span class="chip">Astra Linux</span><span class="chip">РЕД ОС</span><span class="chip">Alt Linux</span><span class="chip">РОСА</span><span class="chip">Ubuntu</span><span class="chip">RHEL</span><span class="chip">…</span></div></div>
+      </div>
+    </div>
+    <div class="stk-bottom"><span>Модуль первоначального развёртывания</span><span>Модуль установки без&nbsp;доступа в&nbsp;интернет</span></div>
+  </div>
+  <div class="foot"><span>Kubernetes API&nbsp;– один блок из&nbsp;многих. Всё остальное в&nbsp;своей сборке собирают и&nbsp;сопровождают сами</span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-blue" id="box" data-title="Из коробки">
+  <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Что&nbsp;есть в&nbsp;каждом кластере <span class="hl">с&nbsp;первой минуты</span></h2>
+  <p class="lead rv" style="--d:60ms">Системные сервисы ставятся при&nbsp;создании кластера и&nbsp;обновляются вместе с&nbsp;ним. Набор настраивается под&nbsp;кластер.</p>
+  <div class="grid box4">
+    <div class="card rv" style="--d:100ms"><p class="k">OPS</p><h3>Эксплуатация</h3><div class="chips"><span class="chip">container runtime</span><span class="chip">локальное хранилище</span><span class="chip">бэкапы Velero</span><span class="chip">Argo CD · Rollouts</span><span class="chip">NodeConfig</span><span class="chip">cert-manager</span></div></div>
+    <div class="card rv" style="--d:150ms"><p class="k">Observability</p><h3>Наблюдаемость</h3><div class="chips"><span class="chip">сбор метрик</span><span class="chip">дашборды Grafana с&nbsp;SSO</span><span class="chip">сбор логов</span><span class="chip">доставка логов вовне</span><span class="chip">алерты: Email, Telegram, Webhook</span></div></div>
+    <div class="card rv" style="--d:200ms"><p class="k">NET</p><h3>Сеть</h3><div class="chips"><span class="chip">Cilium</span><span class="chip">Ingress</span><span class="chip">локальные DNS</span><span class="chip">балансировщик</span><span class="chip">сетевые метрики</span></div></div>
+    <div class="card rv" style="--d:250ms"><p class="k">SEC</p><h3>Безопасность</h3><div class="chips"><span class="chip">Kyverno</span><span class="chip">сканирование образов Trivy</span><span class="chip">анализ конфигураций</span><span class="chip">анализ манифестов</span><span class="chip">управление сертификатами</span><span class="chip">аудит → SIEM</span></div></div>
+  </div>
+  <div class="cycle rv" style="--d:300ms">
+    <p class="k">Цикл релизов</p>
+    <div><b>3</b><span>минорных релиза в&nbsp;год, как&nbsp;у&nbsp;Kubernetes</span></div>
+    <div><b>2</b><span>последние версии на&nbsp;поддержке</span></div>
+    <div><b>патчи</b><span>по&nbsp;необходимости</span></div>
+    <div><b>тест → прод</b><span>обновления изолированно по&nbsp;кластерам</span></div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide ideas-p" id="ideas" data-title="Основные идеи">
+  <div class="top"><h2 class="eyebrow ip-h">Три принципа Штурвала</h2><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="ip">
+    <a href="#sec-enterprise" class="rv go" style="--d:60ms" data-go="sec-enterprise">Enterprise во&nbsp;всём</a>
+    <a href="#sec-vendor" class="rv go" style="--d:160ms" data-go="sec-vendor">Vendor-agnostic</a>
+    <a href="#sec-tco" class="rv go" style="--d:260ms" data-go="sec-tco">Лучшее TCO</a>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+<section class="slide sec g-tl oct-bg" id="sec-enterprise" data-title="01 Enterprise во&nbsp;всём">
+  <div class="top"><span></span><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="sec-body"><p class="sec-n rv">01</p><h2 class="sec-t rv" style="--d:80ms">Enterprise во&nbsp;всём</h2></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+
+<section class="slide g-tl" id="props" data-title="Четыре свойства">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Enterprise&nbsp;– это когда <span class="hl">все четыре свойства</span> выполнены одновременно</h2>
+  <p class="lead rv" style="--d:80ms">Мы сформулировали их по&nbsp;итогам пилотов и&nbsp;разговоров с&nbsp;крупными заказчиками. Отдельные пункты закрывают разные платформы.</p>
+  <div class="grid props3">
+    <a href="#center" class="card rv go" style="--d:120ms" data-go="center"><div class="oct-n">1</div><h3>Масштабирование не&nbsp;равно росту затрат</h3><ul class="ticks"><li>Единый центр управления</li><li>Сквозной RBAC</li><li>Инфраструктурой управляет платформа</li></ul></a>
+    <a href="#dr" class="card rv go" style="--d:180ms" data-go="dr"><div class="oct-n">2</div><h3>Нет единой точки отказа</h3><ul class="ticks"><li>Кластеры работают и&nbsp;без&nbsp;управления</li><li>DR кластера управления</li><li>Встроенный бэкап конфигураций</li></ul></a>
+    <a href="#security-tech" class="card rv go" style="--d:240ms" data-go="security-tech"><div class="oct-n">3</div><h3>ИБ в&nbsp;архитектуре, а&nbsp;не&nbsp;в&nbsp;наложенных средствах</h3><ul class="ticks"><li>Единая точка интеграций с&nbsp;инфраструктурой</li><li>Полная изоляция нагрузок</li><li>Встроенная ИБ</li></ul></a>
+    <a href="#never" class="card rv go" style="--d:300ms" data-go="never"><div class="oct-n">4</div><h3>Уход от&nbsp;team lock и&nbsp;vendor lock</h3><ul class="ticks"><li>Любой компонент можно заменить</li><li>Все на&nbsp;операторах и&nbsp;CRD</li><li>GUI для&nbsp;удобства, GitOps и&nbsp;IaC для&nbsp;серьёзной работы</li></ul></a>
+  </div>
+  <div class="rule props-rule rv" style="--d:360ms"><p>Все свойства вместе только в&nbsp;Штурвале</p></div>
+  <div class="foot"><span>Карточки кликабельны</span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-blue" id="arch" data-title="Архитектура">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · архитектура</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Один кластер управления&nbsp;– <span class="hl">500+ клиентских</span></h2>
+  <div class="arch2">
+    <div class="arch-side">
+      <ul class="plain rv" style="--d:60ms">
+        <li><b>Два уровня.</b> Кластер управления создаёт и&nbsp;обслуживает клиентские кластеры, держит доступы, метрики и&nbsp;логи.</li>
+        <li><b>Клиентские кластеры независимы.</b> Свои версии Kubernetes, окна обновлений и&nbsp;сетевые сегменты.</li>
+        <li><b>Встраивается в&nbsp;ваш ИТ-ландшафт.</b> Каталог пользователей, IdP, SIEM, виртуализация, Git и&nbsp;репозиторий артефактов подключаются к&nbsp;кластеру управления один раз&nbsp;– для&nbsp;всех кластеров.</li>
+        <li><b>Ванильный API.</b> CNCF-сертифицированный Kubernetes: kubectl, Lens и&nbsp;ваши чарты работают как&nbsp;есть.</li>
+      </ul>
+      <div class="capi rv" style="--d:120ms">
+        <p class="k">В&nbsp;основе&nbsp;– Cluster API</p>
+        <p>Стандарт Kubernetes-сообщества для&nbsp;управления жизненным циклом кластеров, доработанный нами. Этот подход выбирают большинство крупнейших компаний: Т-Банк, Wildberries, Авито, Ozon, VMware Tanzu и&nbsp;др.</p>
+      </div>
+    </div>
+    <div class="diagram rv" style="--d:160ms">
+      <svg viewBox="0 0 1000 640" role="img" aria-label="Схема: корпоративные системы подключены к кластеру управления, который управляет клиентскими кластерами в доверенном и изолированном сегментах поверх инфраструктуры">
+        <defs>
+          <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1cf2de"/></marker>
+          <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#919191"/></marker>
+          <linearGradient id="mga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#085a53"/><stop offset="1" stop-color="#03211e"/></linearGradient>
+        </defs>
+        <text x="0" y="22" fill="#919191" font-size="13" font-weight="700" letter-spacing="1.5">КОРПОРАТИВНЫЕ СИСТЕМЫ</text>
+        <g font-size="15" font-weight="700" fill="#fff">
+          <rect x="0" y="40" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="64">AD / LDAP</text><text x="20" y="84" fill="#919191" font-size="13" font-weight="500">пользователи и группы</text>
+          <rect x="0" y="104" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="128">IdP: Keycloak, Blitz</text><text x="20" y="148" fill="#919191" font-size="13" font-weight="500">единый вход по OIDC</text>
+          <rect x="0" y="168" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="192">SIEM · syslog</text><text x="20" y="212" fill="#919191" font-size="13" font-weight="500">аудит всех действий</text>
+          <rect x="0" y="232" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="256">Виртуализация и облака</text><text x="20" y="276" fill="#919191" font-size="13" font-weight="500">создание ВМ через API</text>
+          <rect x="0" y="296" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="320">Git · CI/CD</text><text x="20" y="340" fill="#919191" font-size="13" font-weight="500">GitOps через Argo CD</text>
+          <rect x="0" y="360" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="384">Репозиторий артефактов</text><text x="20" y="404" fill="#919191" font-size="13" font-weight="500">зеркало для закрытого контура</text>
+          <rect x="0" y="424" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="448">Email · Telegram · Webhook</text><text x="20" y="468" fill="#919191" font-size="13" font-weight="500">доставка алертов</text>
+        </g>
+        <g fill="none" stroke="#1cf2de" stroke-width="1.6" opacity=".75">
+          <path d="M242 67 H285 V110"/><path d="M242 131 H285"/><path d="M242 195 H285 V150"/><path d="M242 259 H285 V150"/><path d="M242 323 H285 V150"/><path d="M242 387 H285 V150"/><path d="M242 451 H285 V150"/>
+          <path d="M285 110 V150 H326" marker-end="url(#aa)"/>
+        </g>
+        <rect x="330" y="60" width="330" height="150" rx="20" fill="url(#mga)" stroke="#13a99c"/>
+        <text x="495" y="100" text-anchor="middle" fill="#1cf2de" font-size="15" font-weight="700" letter-spacing="1.5">КЛАСТЕР УПРАВЛЕНИЯ</text>
+        <text x="495" y="134" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">GUI · CLI · REST API · RBAC</text>
+        <text x="495" y="160" text-anchor="middle" fill="#b9b9b9" font-size="14">Cluster API · метрики · логи · аудит</text>
+        <text x="495" y="184" text-anchor="middle" fill="#b9b9b9" font-size="14">обновления · политики</text>
+        <rect x="760" y="90" width="230" height="80" rx="16" fill="none" stroke="#919191" stroke-dasharray="6 6"/>
+        <text x="875" y="125" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Mgmt-DR</text>
+        <text x="875" y="150" text-anchor="middle" fill="#919191" font-size="13">резервная площадка</text>
+        <line x1="662" y1="130" x2="756" y2="130" stroke="#919191" stroke-dasharray="4 5" marker-end="url(#ag)"/>
+        <text x="709" y="118" text-anchor="middle" fill="#919191" font-size="13">sync</text>
+        <path d="M490 212 V282" fill="none" stroke="#1cf2de" stroke-width="2" marker-end="url(#aa)"/>
+        <path d="M560 212 V250 H830 V282" fill="none" stroke="#1cf2de" stroke-width="2" stroke-dasharray="8 6" marker-end="url(#aa)"/>
+        <text x="840" y="240" fill="#1cf2de" font-size="13" font-weight="700">односторонний доступ</text>
+        <rect x="330" y="288" width="320" height="210" rx="18" fill="#0b0b0b" stroke="#262626"/>
+        <text x="350" y="320" fill="#b9b9b9" font-size="13" font-weight="700" letter-spacing="1.5">ДОВЕРЕННЫЙ СЕГМЕНТ</text>
+        <g font-size="15" fill="#fff" font-weight="700" text-anchor="middle">
+          <rect x="350" y="338" width="88" height="66" rx="10" fill="#171717"/><text x="394" y="366">dev</text><text x="394" y="388" fill="#919191" font-weight="500" font-size="13">K8s 1.31</text>
+          <rect x="446" y="338" width="88" height="66" rx="10" fill="#171717"/><text x="490" y="366">test</text><text x="490" y="388" fill="#919191" font-weight="500" font-size="13">K8s 1.32</text>
+          <rect x="542" y="338" width="88" height="66" rx="10" fill="#06302c"/><text x="586" y="366">ml-gpu</text><text x="586" y="388" fill="#1cf2de" font-weight="500" font-size="13">Kubeflow</text>
+          <rect x="350" y="414" width="88" height="62" rx="10" fill="#171717"/><text x="394" y="450">prod-1</text>
+          <rect x="446" y="414" width="88" height="62" rx="10" fill="#171717"/><text x="490" y="450">prod-2</text>
+          <rect x="542" y="414" width="88" height="62" rx="10" fill="none" stroke="#333" stroke-dasharray="5 5"/><text x="586" y="450" fill="#919191">… 500+</text>
+        </g>
+        <rect x="670" y="288" width="320" height="210" rx="18" fill="#021412" stroke="#0b5e57" stroke-dasharray="8 6"/>
+        <text x="690" y="320" fill="#1cf2de" font-size="13" font-weight="700" letter-spacing="1.5">ИЗОЛИРОВАННЫЙ СЕГМЕНТ</text>
+        <g font-size="15" fill="#fff" font-weight="700" text-anchor="middle">
+          <rect x="690" y="338" width="136" height="66" rx="10" fill="#171717"/><text x="758" y="366">pci-dss</text><text x="758" y="388" fill="#919191" font-weight="500" font-size="13">свои политики ИБ</text>
+          <rect x="836" y="338" width="136" height="66" rx="10" fill="#171717"/><text x="904" y="366">prod-closed</text><text x="904" y="388" fill="#919191" font-weight="500" font-size="13">отдельный контур</text>
+          <text x="830" y="452" fill="#b9b9b9" font-weight="500" font-size="14">свои требования ИБ на сегмент</text>
+        </g>
+        <rect x="330" y="540" width="660" height="70" rx="16" fill="#0b0b0b" stroke="#222"/>
+        <text x="350" y="580" fill="#919191" font-size="13" font-weight="700" letter-spacing="1.5">ИНФРАСТРУКТУРА</text>
+        <text x="530" y="581" fill="#b9b9b9" font-size="15" font-weight="700">Виртуализация · bare metal · облако</text>
+        <line x1="490" y1="500" x2="490" y2="536" stroke="#454545" stroke-dasharray="3 4"/><line x1="830" y1="500" x2="830" y2="536" stroke="#454545" stroke-dasharray="3 4"/>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+<section class="slide g-blue" id="selfservice" data-title="Работа с инфраструктурой">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · работа с&nbsp;инфраструктурой</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Нода или&nbsp;кластер по&nbsp;кнопке,<br><span class="hl">остальное делает Штурвал</span></h2>
+  <div class="ss">
+    <div class="card ss-user rv" style="--d:80ms">
+      <p class="k">Пользователь</p>
+      <h3>Есть права и&nbsp;квота</h3>
+      <div class="ss-btns"><span>+ Нода</span><span>+ Кластер</span></div>
+    </div>
+    <span class="ss-arr rv" style="--d:120ms">→</span>
+    <div class="ss-flow rv" style="--d:160ms">
+      <p class="k">Штурвал сам</p>
+      <ol>
+        <li><b>Создаёт машину</b>Идёт в&nbsp;систему виртуализации</li>
+        <li><b>Ставит сервисы</b>Все свои сервисы на&nbsp;новую машину</li>
+        <li><b>Добавляет в&nbsp;платформу</b>Нода сразу под&nbsp;управлением</li>
+        <li><b>Балансирует</b>При&nbsp;необходимости</li>
+      </ol>
+    </div>
+  </div>
+  <div class="ss-no rv" style="--d:240ms">
+    <p class="k">Пользователю не&nbsp;нужны</p>
+    <ul>
+      <li>Доступ в&nbsp;систему виртуализации</li>
+      <li>Учётная запись в&nbsp;ней</li>
+      <li>Сетевой доступ к&nbsp;ней</li>
+    </ul>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+
+<section class="slide g-blue oct-bg" id="multi" data-title="МультиЦОД и мультиоблако">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · мультиЦОД и&nbsp;мультиоблако</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Все ЦОД и&nbsp;облака&nbsp;– <span class="hl">из&nbsp;одной точки</span></h2>
+  <div class="multi">
+    <ul class="plain rv" style="--d:60ms">
+      <li><b>Один кластер управления на&nbsp;все площадки.</b> Права, политики, метрики, логи и&nbsp;обновления&nbsp;– одинаково для&nbsp;своих ЦОД, частного и&nbsp;публичного облака.</li>
+      <li><b>Кластеры там, где им место.</b> Прод&nbsp;– в&nbsp;своём ЦОД, тесты и&nbsp;пиковая нагрузка&nbsp;– в&nbsp;облаке. Разные провайдеры, одна модель работы.</li>
+      <li><b>Гибридные кластеры.</b> Группы узлов на&nbsp;разной инфраструктуре в&nbsp;одном кластере: например, CPU на&nbsp;виртуализации и&nbsp;GPU на&nbsp;bare metal.</li>
+      <li><b>Потеря площадки&nbsp;– не&nbsp;потеря управления.</b> DR-копия управления во&nbsp;втором ЦОД, клиентские кластеры работают автономно. Бэкапы и&nbsp;миграция между кластерами&nbsp;– через Velero.</li>
+    </ul>
+    <div class="diagram rv" style="--d:140ms">
+      <svg viewBox="0 0 1000 620" role="img" aria-label="Схема: кластер управления с резервной копией управляет клиентскими кластерами в двух ЦОД, частном и публичном облаке">
+        <defs>
+          <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1cf2de"/></marker>
+          <marker id="amg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#919191"/></marker>
+          <linearGradient id="mgm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#085a53"/><stop offset="1" stop-color="#03211e"/></linearGradient>
+        </defs>
+                <rect x="330" y="10" width="340" height="112" rx="20" fill="url(#mgm)" stroke="#13a99c"/>
+        <text x="500" y="48" text-anchor="middle" fill="#1cf2de" font-size="15" font-weight="700" letter-spacing="1.5">КЛАСТЕР УПРАВЛЕНИЯ</text>
+        <text x="500" y="80" text-anchor="middle" fill="#fff" font-size="19" font-weight="700">одна консоль · один RBAC</text>
+        <text x="500" y="104" text-anchor="middle" fill="#b9b9b9" font-size="14">размещён в ЦОД 1</text>
+        <rect x="750" y="30" width="230" height="74" rx="16" fill="none" stroke="#919191" stroke-dasharray="6 6"/>
+        <text x="865" y="62" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Mgmt-DR</text>
+        <text x="865" y="86" text-anchor="middle" fill="#919191" font-size="13">копия в ЦОД 2</text>
+        <line x1="672" y1="66" x2="746" y2="66" stroke="#919191" stroke-dasharray="4 5" marker-end="url(#amg)"/>
+        <text x="709" y="54" text-anchor="middle" fill="#919191" font-size="13">sync</text>
+                <path d="M500 124 V160" stroke="#1cf2de" stroke-width="2.4" fill="none"/>
+        <path d="M116 160 H884" stroke="#1cf2de" stroke-width="2" fill="none"/>
+        <g stroke="#1cf2de" stroke-width="2" fill="none">
+          <path d="M116 160 V196" marker-end="url(#am)"/><path d="M372 160 V196" marker-end="url(#am)"/><path d="M628 160 V196" marker-end="url(#am)"/><path d="M884 160 V196" marker-end="url(#am)"/>
+        </g>
+                <g font-weight="700">
+          <rect x="0" y="202" width="232" height="300" rx="18" fill="#0b0b0b" stroke="#2a2a2a"/>
+          <rect x="256" y="202" width="232" height="300" rx="18" fill="#0b0b0b" stroke="#2a2a2a"/>
+          <rect x="512" y="202" width="232" height="300" rx="18" fill="#0b0b0b" stroke="#2a2a2a" stroke-dasharray="8 6"/>
+          <rect x="768" y="202" width="232" height="300" rx="18" fill="#0b0b0b" stroke="#2a2a2a" stroke-dasharray="8 6"/>
+          <g font-size="13" letter-spacing="1.4" fill="#1cf2de">
+            <text x="20" y="234">ЦОД 1</text><text x="276" y="234">ЦОД 2</text><text x="532" y="234">ЧАСТНОЕ ОБЛАКО</text><text x="788" y="234">ПУБЛИЧНОЕ ОБЛАКО</text>
+          </g>
+          <g font-size="14" fill="#919191" font-weight="500">
+            <text x="20" y="256">VMware vSphere</text><text x="276" y="256">zVirt · bare metal</text><text x="532" y="256">OpenStack</text><text x="788" y="256">Yandex Cloud</text>
+          </g>
+          <g font-size="16" fill="#fff" text-anchor="middle">
+            <rect x="20" y="276" width="192" height="58" rx="12" fill="#171717"/><text x="116" y="311">prod-1</text>
+            <rect x="20" y="344" width="192" height="58" rx="12" fill="#171717"/><text x="116" y="379">dev</text>
+            <rect x="20" y="412" width="192" height="58" rx="12" fill="none" stroke="#333" stroke-dasharray="5 5"/><text x="116" y="447" fill="#919191">…</text>
+            <rect x="276" y="276" width="192" height="58" rx="12" fill="#171717"/><text x="372" y="311">prod-2</text>
+            <rect x="276" y="344" width="192" height="126" rx="12" fill="#06201e" stroke="#13a99c"/>
+            <text x="372" y="372">ml-gpu</text>
+            <text x="372" y="392" fill="#1cf2de" font-size="13" font-weight="500">гибридный кластер</text>
+            <rect x="290" y="406" width="78" height="50" rx="8" fill="#171717"/><text x="329" y="436" font-size="13">CPU · ВМ</text>
+            <rect x="376" y="406" width="78" height="50" rx="8" fill="#0b3a35"/><text x="415" y="428" font-size="13">GPU</text><text x="415" y="446" font-size="13" fill="#b9b9b9" font-weight="500">железо</text>
+            <rect x="532" y="276" width="192" height="58" rx="12" fill="#171717"/><text x="628" y="311">test</text>
+            <rect x="532" y="344" width="192" height="58" rx="12" fill="#171717"/><text x="628" y="379">stage</text>
+            <rect x="788" y="276" width="192" height="58" rx="12" fill="#171717"/><text x="884" y="311">пиковая нагрузка</text>
+            <rect x="788" y="344" width="192" height="58" rx="12" fill="#171717"/><text x="884" y="379">sandbox</text>
+          </g>
+        </g>
+                <rect x="0" y="530" width="1000" height="70" rx="16" fill="#021412" stroke="#0b5e57"/>
+        <text x="24" y="571" fill="#1cf2de" font-size="13" font-weight="700" letter-spacing="1.4">ОДИНАКОВО ВЕЗДЕ</text>
+        <text x="220" y="572" fill="#fff" font-size="16" font-weight="700">RBAC · политики ИБ · метрики и логи · алерты · обновления · бэкапы</text>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-blue" id="dr" data-title="Отказ и DR">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · жизнь без&nbsp;управляющего кластера</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Что&nbsp;происходит <span class="hl">при&nbsp;отказе управления</span></h2>
+  <div class="dr-grid">
+    <div class="card t rv" style="--d:60ms"><p class="k">Продолжает работать</p>
+      <ul class="ticks" style="margin-top:18px">
+        <li>Приложения и&nbsp;сервисы во&nbsp;всех клиентских кластерах</li>
+        <li>Kubernetes API каждого кластера: kubectl, CI/CD, Argo CD</li>
+        <li>Сеть, Ingress, DNS, хранилище внутри кластеров</li>
+        <li>Метрики, логи и&nbsp;алерты внутри кластера</li>
+      </ul>
+    </div>
+    <div class="card rv" style="--d:120ms"><p class="k" style="color:var(--muted)">Временно недоступно</p>
+      <ul class="ticks dim" style="margin-top:18px">
+        <li>Создание и&nbsp;удаление кластеров</li>
+        <li>Обновления Kubernetes и&nbsp;системных сервисов</li>
+        <li>Масштабирование и&nbsp;замена узлов</li>
+        <li>Единая консоль и&nbsp;сквозной вход</li>
+      </ul>
+    </div>
+    <div class="card diagram-card rv" style="--d:180ms">
+      <p class="k">Резервирование самого управления</p>
+      <svg viewBox="0 0 560 330" style="margin-top:18px" role="img" aria-label="Схема: кластер управления синхронизируется с резервной площадкой">
+        <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1cf2de"/></marker></defs>
+        <rect x="10" y="10" width="230" height="100" rx="18" fill="#063a35" stroke="#13a99c"/>
+        <text x="125" y="52" text-anchor="middle" fill="#1cf2de" font-size="14" font-weight="700" letter-spacing="1.2">MGMT</text>
+        <text x="125" y="82" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">площадка 1</text>
+        <rect x="320" y="10" width="230" height="100" rx="18" fill="none" stroke="#919191" stroke-dasharray="6 6"/>
+        <text x="435" y="52" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" letter-spacing="1.2">MGMT-DR</text>
+        <text x="435" y="82" text-anchor="middle" fill="#b9b9b9" font-size="17" font-weight="700">площадка 2</text>
+        <line x1="244" y1="60" x2="314" y2="60" stroke="#1cf2de" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#ar2)"/>
+        <text x="280" y="46" text-anchor="middle" fill="#1cf2de" font-size="13" font-weight="700">sync</text>
+        <g stroke="#454545" stroke-width="2" fill="none"><path d="M125 112 V170"/><path d="M435 112 V150 H300 V170" stroke-dasharray="4 6"/></g>
+        <rect x="10" y="176" width="540" height="130" rx="18" fill="#0b0b0b" stroke="#262626"/>
+        <text x="34" y="212" fill="#919191" font-size="13" font-weight="700" letter-spacing="1.2">КЛИЕНТСКИЕ КЛАСТЕРЫ</text>
+        <g fill="#171717"><rect x="34" y="228" width="150" height="56" rx="10"/><rect x="205" y="228" width="150" height="56" rx="10"/><rect x="376" y="228" width="150" height="56" rx="10" fill="none" stroke="#333" stroke-dasharray="5 5"/></g>
+        <g fill="#fff" font-size="15" font-weight="700" text-anchor="middle"><text x="109" y="262">prod-1</text><text x="280" y="262">prod-2</text><text x="451" y="262" fill="#919191">…</text></g>
+      </svg>
+      <p class="small" style="margin-top:12px">При&nbsp;потере площадки управление переключается на&nbsp;DR-копию с&nbsp;синхронизированным состоянием.</p>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-tl" id="network" data-title="Сетевая схема">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · изолированные сегменты</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Как&nbsp;управление дотягивается <span class="hl">до&nbsp;каждого сегмента</span></h2>
+  <div class="arch" style="margin-top:36px;grid-template-columns:600px minmax(0,1fr)">
+    <ul class="list tight rv" style="--d:80ms">
+      <li><b>Одно управление на&nbsp;все сегменты</b>Права, политики, метрики и&nbsp;логи сводятся в&nbsp;кластер управления.</li>
+      <li><b>Одностороннего доступа достаточно</b>До&nbsp;PCI DSS и&nbsp;DMZ соединения открываются в&nbsp;одну сторону.</li>
+      <li><b>Без&nbsp;интернета</b>Все сегменты обновляются из&nbsp;зеркала внутри: образы, пакеты, чарты.</li>
+      <li><b>Свои правила на&nbsp;сегмент</b>Политики Kyverno, Pod Security Standards и&nbsp;набор системных сервисов&nbsp;– для&nbsp;каждого кластера отдельно.</li>
+    </ul>
+    <div class="diagram rv" style="--d:160ms">
+      <svg viewBox="0 0 1000 580" role="img" aria-label="Схема: кластер управления через межсетевой экран связан с открытым и закрытым сегментами в обе стороны, с PCI DSS и DMZ в одну сторону, все сегменты обновляются из внутреннего зеркала">
+        <defs>
+          <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1cf2de"/></marker>
+          <marker id="ar3g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#919191"/></marker>
+          <linearGradient id="mg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#085a53"/><stop offset="1" stop-color="#03211e"/></linearGradient>
+        </defs>
+        <rect x="320" y="2" width="360" height="96" rx="20" fill="url(#mg3)" stroke="#13a99c"/>
+        <text x="500" y="42" text-anchor="middle" fill="#1cf2de" font-size="15" font-weight="700" letter-spacing="1.5">КЛАСТЕР УПРАВЛЕНИЯ</text>
+        <text x="500" y="74" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">права · политики · метрики · логи</text>
+        <line x1="20" y1="176" x2="980" y2="176" stroke="#ff8a5c" stroke-width="2" stroke-dasharray="2 8"/>
+        <text x="255" y="164" text-anchor="middle" fill="#ff8a5c" font-size="13" font-weight="700" letter-spacing="1.2">МЕЖСЕТЕВЫЕ ЭКРАНЫ</text>
+        <path d="M340 100 V130 H132.5 V226" fill="none" stroke="#1cf2de" stroke-width="2" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
+        <path d="M377.5 100 V226" fill="none" stroke="#1cf2de" stroke-width="2" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
+        <path d="M622.5 100 V226" fill="none" stroke="#1cf2de" stroke-width="2.5" stroke-dasharray="9 6" marker-end="url(#ar3)"/>
+        <path d="M660 100 V130 H867.5 V226" fill="none" stroke="#1cf2de" stroke-width="2.5" stroke-dasharray="9 6" marker-end="url(#ar3)"/>
+        <text x="745" y="164" text-anchor="middle" fill="#1cf2de" font-size="14" font-weight="700">в одну сторону</text>
+        <g font-weight="700">
+          <rect x="20" y="232" width="225" height="214" rx="20" fill="#0b0b0b" stroke="#333"/>
+          <text x="132.5" y="266" text-anchor="middle" fill="#b9b9b9" font-size="13" letter-spacing="1.5">ОТКРЫТЫЙ</text>
+          <rect x="36" y="284" width="193" height="64" rx="12" fill="#171717"/><text x="132.5" y="322" text-anchor="middle" fill="#fff" font-size="17">dev · test</text>
+          <rect x="36" y="360" width="193" height="64" rx="12" fill="#171717"/><text x="132.5" y="398" text-anchor="middle" fill="#fff" font-size="17">подрядчики</text>
+          <rect x="265" y="232" width="225" height="214" rx="20" fill="#0b0b0b" stroke="#555" stroke-dasharray="8 6"/>
+          <text x="377.5" y="266" text-anchor="middle" fill="#b9b9b9" font-size="13" letter-spacing="1.5">ЗАКРЫТЫЙ</text>
+          <rect x="281" y="284" width="193" height="140" rx="12" fill="#171717"/><text x="377.5" y="360" text-anchor="middle" fill="#fff" font-size="17">prod</text>
+          <rect x="510" y="232" width="225" height="214" rx="20" fill="#021412" stroke="#0b5e57" stroke-dasharray="8 6"/>
+          <text x="622.5" y="266" text-anchor="middle" fill="#1cf2de" font-size="13" letter-spacing="1.5">ЗАКРЫТЫЙ</text>
+          <rect x="526" y="284" width="193" height="140" rx="12" fill="#171717"/><text x="622.5" y="360" text-anchor="middle" fill="#fff" font-size="17">PCI DSS</text>
+          <rect x="755" y="232" width="225" height="214" rx="20" fill="#021412" stroke="#0b5e57" stroke-dasharray="8 6"/>
+          <text x="867.5" y="266" text-anchor="middle" fill="#1cf2de" font-size="13" letter-spacing="1.5">НЕДОВЕРЕННЫЙ</text>
+          <rect x="771" y="284" width="193" height="140" rx="12" fill="#171717"/><text x="867.5" y="360" text-anchor="middle" fill="#fff" font-size="17">DMZ</text>
+        </g>
+        <g fill="none" stroke="#919191" stroke-width="1.5" stroke-dasharray="4 6">
+          <path d="M132.5 500 V452" marker-end="url(#ar3g)"/><path d="M377.5 500 V452" marker-end="url(#ar3g)"/><path d="M622.5 500 V452" marker-end="url(#ar3g)"/><path d="M867.5 500 V452" marker-end="url(#ar3g)"/>
+        </g>
+        <rect x="20" y="502" width="960" height="74" rx="16" fill="#0b0b0b" stroke="#919191" stroke-dasharray="6 6"/>
+        <text x="500" y="534" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Зеркало внутри вашего контура</text>
+        <text x="500" y="560" text-anchor="middle" fill="#919191" font-size="14">образы · пакеты · чарты – интернет не нужен ни одному сегменту</text>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-tl" id="automation" data-title="Автоматизации">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · масштаб без&nbsp;роста команды</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="auto">
+    <div class="auto-side">
+      <h2 class="h2 rv" style="font-size:56px">Рутину делает <span class="hl">платформа</span></h2>
+      <p class="lead rv" style="--d:60ms;font-size:23px">Всё, что&nbsp;в&nbsp;своей сборке держится на&nbsp;скриптах и&nbsp;людях, в&nbsp;Штурвале&nbsp;– функция продукта. Инженеры занимаются развитием, а&nbsp;не&nbsp;поддержкой.</p>
+      <div class="card t rv mt-auto" style="--d:120ms">
+        <p class="k">Принцип</p>
+        <p style="font-size:21px;color:var(--ink);margin-top:10px">GUI, IaC и&nbsp;GitOps&nbsp;– равноправные способы. Всё, что&nbsp;делается кнопкой, можно описать манифестом и&nbsp;вызвать через REST API.</p>
+      </div>
+    </div>
+    <div class="auto-grid">
+      <div class="card rv" style="--d:60ms"><h4>Создание кластера</h4><p>Из&nbsp;провайдера или&nbsp;на&nbsp;bare metal, сразу с&nbsp;сетью, Ingress, DNS, хранилищем и&nbsp;мониторингом.</p><span class="was">вместо <s>сборки по&nbsp;чек-листу</s></span></div>
+      <div class="card rv" style="--d:90ms"><h4>Обновление по&nbsp;кнопке</h4><p>Kubernetes и&nbsp;системные сервисы&nbsp;– по&nbsp;кнопке или&nbsp;расписанию, изолированно по&nbsp;кластерам.</p><span class="was">вместо <s>upgrade-проекта на&nbsp;квартал</s></span></div>
+      <div class="card rv" style="--d:120ms"><h4>Группы узлов и&nbsp;автоскейлинг</h4><p>Worker-группы масштабируются по&nbsp;нагрузке, узлы вводятся и&nbsp;выводятся платформой.</p><span class="was">вместо <s>заявок на&nbsp;ВМ</s></span></div>
+      <div class="card rv" style="--d:150ms"><h4>Самовосстановление</h4><p>MachineHealthCheck находит сбойный узел и&nbsp;пересоздаёт его.</p><span class="was">вместо <s>ночного разбора инцидента</s></span></div>
+      <div class="card rv" style="--d:180ms"><h4>Настройки узлов</h4><p>NodeConfig на&nbsp;группу: ядро, sysctl, runtime, метки и&nbsp;taints&nbsp;– декларативно.</p><span class="was">вместо <s>обхода узлов по&nbsp;SSH</s></span></div>
+      <div class="card rv" style="--d:210ms"><h4>Сертификаты</h4><p>cert-manager выпускает и&nbsp;продлевает, сроки видны на&nbsp;дашборде.</p><span class="was">вместо <s>инцидентов из-за истёкших</s></span></div>
+      <div class="card rv" style="--d:240ms"><h4>Бэкапы</h4><p>Velero по&nbsp;расписанию: ресурсы и&nbsp;PV, восстановление и&nbsp;миграция между кластерами.</p><span class="was">вместо <s>своих скриптов в&nbsp;cron</s></span></div>
+      <div class="card rv" style="--d:270ms"><h4>Сквозной RBAC</h4><p>Роли из&nbsp;LDAP / OIDC сразу на&nbsp;платформу, тенанты, кластеры и&nbsp;неймспейсы.</p><span class="was">вместо <s>ролей в&nbsp;каждом кластере</s></span></div>
+      <div class="card rv" style="--d:300ms"><h4>Наблюдаемость</h4><p>Метрики, логи, алерты и&nbsp;дашборды появляются в&nbsp;каждом новом кластере.</p><span class="was">вместо <s>стека мониторинга на&nbsp;кластер</s></span></div>
+      <div class="card rv" style="--d:330ms"><h4>Проверки ИБ</h4><p>Trivy, CIS Benchmark, Kyverno, аудит с&nbsp;выгрузкой в&nbsp;SIEM.</p><span class="was">вместо <s>ручных аудитов</s></span></div>
+      <div class="card rv" style="--d:360ms"><h4>Доставка приложений</h4><p>Argo CD и&nbsp;Argo Rollouts в&nbsp;составе платформы, под&nbsp;единым RBAC.</p><span class="was">вместо <s>отдельной инсталляции CD</s></span></div>
+      <div class="card rv" style="--d:390ms"><h4>Закрытый контур</h4><p>Установка и&nbsp;обновления из&nbsp;вашего зеркала, без&nbsp;выхода в&nbsp;интернет.</p><span class="was">вместо <s>ручного переноса артефактов</s></span></div>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide band oct-bg" id="pochta" data-title="Почта Банк">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · масштаб без&nbsp;роста команды · Почта Банк</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Операции, которые занимали дни,&nbsp;– <span class="hl">минуты</span></h2>
+  <p class="lead rv" style="--d:60ms">Дистанционное банковское обслуживание Почта Банка работает на&nbsp;Штурвале: рост с&nbsp;2 до&nbsp;24+ кластеров. Все кластеры эксплуатируют <b>1,5 инженера</b>. Так выглядит их рутина:</p>
+  <div class="grid ops">
+    <div class="card rv" style="--d:100ms"><div class="stat">20<small>мин</small></div><div class="stat-l">новый кластер, готовый к&nbsp;запуску приложений</div></div>
+    <div class="card rv" style="--d:160ms"><div class="stat">15<small>мин</small></div><div class="stat-l">добавить 10 worker-узлов</div></div>
+    <div class="card rv" style="--d:220ms"><div class="stat">15<small>мин</small></div><div class="stat-l">обновить Kubernetes в&nbsp;кластере</div></div>
+    <div class="card rv" style="--d:280ms"><div class="stat">10<small>мин</small></div><div class="stat-l">от&nbsp;merge request до&nbsp;прода</div></div>
+  </div>
+  <div class="ctx">
+    <div class="card t fte rv" style="--d:320ms"><b>1,5</b><span>инженера эксплуатируют все кластеры</span></div>
+    <div class="card st rv" style="--d:360ms">
+      <div><b>4</b><span>прод-кластера ДБО</span></div>
+      <div><b>2</b><span>ЦОД</span></div>
+      <div><b>500+</b><span>виртуальных машин</span></div>
+      <div><b>50 тыс.+</b><span>пользователей онлайн</span></div>
+    </div>
+    <div class="card quote rv" style="--d:400ms"><q>Штурвал повысил надёжность и&nbsp;производительность ДБО</q><span class="quote-by">Почта Банк</span></div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-tl" id="security-tech" data-title="Безопасность: детали">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · безопасность</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Как&nbsp;устроена <span class="hl">безопасность</span></h2>
+  <div class="grid sec3" style="margin-top:40px">
+    <div class="card rv" style="--d:80ms">
+      <h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M24 4 40 10v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="m17 24 5 5 9-10" stroke-linecap="round"/></svg>Проверки</h3>
+      <ul class="ticks">
+        <li>Сканирование образов Trivy с&nbsp;базами <b>БДУ ФСТЭК</b> и&nbsp;NVD</li>
+        <li>CIS Kubernetes Benchmark, рекомендации NSA, Pod Security Standards</li>
+        <li>Политики <b>Kyverno</b>: аудит или&nbsp;блокировка нарушений</li>
+        <li>CNCF-сертифицированный Kubernetes</li>
+      </ul>
+    </div>
+    <div class="card rv" style="--d:140ms">
+      <h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="8" y="20" width="32" height="22" rx="4"/><path d="M15 20v-6a9 9 0 0 1 18 0v6" stroke-linecap="round"/><circle cx="24" cy="31" r="3"/></svg>Закрытый контур</h3>
+      <ul class="ticks">
+        <li>Установка и&nbsp;обновления <b>без&nbsp;интернета</b>: своё зеркало или&nbsp;заливка релиза в&nbsp;ваш репозиторий артефактов</li>
+        <li>Сборка всех компонентов <b>из&nbsp;исходников</b> в&nbsp;защищённом контуре в&nbsp;РФ</li>
+        <li>Совместимость с&nbsp;наложенными СЗИ: <b>Kaspersky</b>, <b>PT Container Security</b>, <b>Luntry</b></li>
+      </ul>
+    </div>
+    <div class="card rv" style="--d:200ms">
+      <h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><circle cx="18" cy="16" r="7"/><path d="M5 40c1-8 6-12 13-12s12 4 13 12"/><path d="M33 22h10M33 29h10M36 36h7"/></svg>Доступ и&nbsp;аудит</h3>
+      <ul class="ticks">
+        <li><b>Сквозной RBAC:</b> платформа → тенанты → кластеры → неймспейсы</li>
+        <li>LDAP: AD, OpenLDAP, FreeIPA, ALD Pro, SambaDC. OIDC: <b>Keycloak</b>, <b>Blitz</b></li>
+        <li>Менеджер сессий, в&nbsp;том числе для&nbsp;Grafana и&nbsp;Argo CD</li>
+        <li>Доступ в&nbsp;консоль и&nbsp;логам пода <b>даже без&nbsp;сетевого доступа</b> к&nbsp;нему</li>
+        <li><b>Короткоживущие сертификаты</b> с&nbsp;автоматической ротацией</li>
+        <li>Аудит всех действий с&nbsp;выгрузкой в&nbsp;<b>SIEM</b>, syslog, Elasticsearch</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-br" id="center" data-title="Единый центр управления">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · единый центр управления</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Кластеров становится больше. <span class="hl">Сложность&nbsp;– нет</span></h2>
+  <div class="scale" style="margin-top:36px">
+    <div>
+      <p class="lead rv" style="margin-top:0;--d:40ms">Доступы, политики, логи, метрики и&nbsp;обновления всех кластеров&nbsp;– из&nbsp;одного места. <b>Как&nbsp;vCenter, только для&nbsp;Kubernetes.</b></p>
+      <div class="stats" style="margin-top:32px">
+        <div class="card rv" style="--d:80ms"><div class="stat">500+</div><div class="stat-l"><b>кластеров</b>под&nbsp;одним кластером управления</div></div>
+        <div class="card rv" style="--d:140ms"><div class="stat">1000+</div><div class="stat-l"><b>узлов</b>в&nbsp;одной инсталляции</div></div>
+      </div>
+      <p class="k rv" style="margin-top:36px;--d:200ms">Кластеров всегда становится больше</p>
+      <div class="growth">
+        <div class="growth-row rv" style="--d:240ms"><span class="nm">Почта Банк</span><span class="bar"><i style="width:30%"></i></span><span class="v">2 → 24+</span></div>
+        <div class="growth-row rv" style="--d:280ms"><span class="nm">Совкомбанк</span><span class="bar"><i style="width:88%"></i></span><span class="v">70+</span></div>
+      </div>
+    </div>
+    <div class="card chart-card rv" style="--d:160ms">
+      <p class="k" style="color:var(--muted)">Трудоёмкость эксплуатации</p>
+      <svg viewBox="0 0 680 470" style="width:100%;flex:1;margin-top:12px" role="img" aria-label="Схема: при раздельном управлении трудоёмкость растёт быстрее числа кластеров, со Штурвалом – почти не растёт">
+        <g stroke="#333"><line x1="60" y1="60" x2="660" y2="60"/><line x1="60" y1="160" x2="660" y2="160"/><line x1="60" y1="260" x2="660" y2="260"/><line x1="60" y1="360" x2="660" y2="360"/></g>
+        <line x1="60" y1="420" x2="660" y2="420" stroke="#454545"/><line x1="60" y1="20" x2="60" y2="420" stroke="#454545"/>
+        <path d="M60 410 C 260 395, 400 330, 470 220 S 560 40, 590 20" fill="none" stroke="#7a7a7a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M60 410 C 220 360, 380 260, 660 160" fill="none" stroke="#5a5a5a" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/>
+        <path d="M60 410 C 160 360, 260 345, 660 330" fill="none" stroke="#1cf2de" stroke-width="5" stroke-linecap="round" style="filter:drop-shadow(0 0 10px rgba(28,242,222,.6))"/>
+        <text x="600" y="40" fill="#b9b9b9" font-size="18" font-weight="700" text-anchor="end">каждый кластер отдельно</text>
+        <text x="655" y="145" fill="#919191" font-size="17" font-weight="700" text-anchor="end">своя сборка с автоматизацией</text>
+        <text x="655" y="320" fill="#1cf2de" font-size="19" font-weight="700" text-anchor="end">Штурвал</text>
+        <text x="660" y="452" fill="#919191" font-size="16" text-anchor="end">кластеры и узлы →</text>
+        <text x="40" y="30" fill="#919191" font-size="16" transform="rotate(-90 40 30)" text-anchor="end">FTE ↑</text>
+      </svg>
+      <p class="cap">Схема, не&nbsp;расчёт. Цифры для&nbsp;вашей конфигурации&nbsp;– в&nbsp;разделе TCO.</p>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+<section class="slide sec g-tl oct-bg" id="sec-ml" data-title="ML / AI">
+  <div class="top"><span></span><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="sec-body"><p class="sec-n rv">01</p><h2 class="sec-t rv" style="--d:80ms">ML / AI</h2></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+
+<section class="slide g-tl" id="ml-why" data-title="ML / AI: три вещи">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · ML / AI</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">ML уже встроен <span class="hl">в&nbsp;платформу</span></h2>
+  <div class="pil3">
+    <div class="card rv" style="--d:80ms"><span class="idx">01</span><span class="k">Запуск</span><h3>Весь ML-стек из&nbsp;коробки</h3><p>Администратор включает ML в&nbsp;клиентском кластере, платформа ставит драйверы, Kubeflow и&nbsp;MLflow.</p></div>
+    <div class="card rv" style="--d:140ms"><span class="idx">02</span><span class="k">Экономика</span><h3>Общий пул GPU вместо персональных серверов</h3><p>Карта становится ресурсом кластера. Её получает задача из&nbsp;очереди, а&nbsp;не&nbsp;человек, за&nbsp;которым она закреплена.</p></div>
+    <div class="card rv" style="--d:200ms"><span class="idx">03</span><span class="k">Эксплуатация</span><h3>Обновление по&nbsp;кнопке</h3><p>GPU- и&nbsp;ML-стек обновляется вместе с&nbsp;кластером.</p></div>
+  </div>
+  <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
+</section>
+
+<section class="slide band" id="ml" data-title="ML / AI">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · ML / AI</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Общий пул GPU <span class="hl">вместо карт, закреплённых за&nbsp;стендами</span></h2>
+  <div class="ml3">
+    <div class="card rv" style="--d:60ms"><div class="stat">до&nbsp;80%</div><div class="stat-l"><b>экономии</b>на&nbsp;GPU и&nbsp;эксплуатации</div></div>
+    <div class="card rv" style="--d:100ms"><div class="stat">1</div><div class="stat-l"><b>кнопка</b>ML-стек ставится и&nbsp;обновляется вместе с&nbsp;кластером</div></div>
+    <div class="card rv" style="--d:140ms"><div class="stat">0</div><div class="stat-l"><b>ручных установок</b>драйверов и&nbsp;плагинов на&nbsp;узлах</div></div>
+  </div>
+  <div class="pool">
+    <div class="card rv" style="--d:300ms">
+      <h4>Сейчас: сервер закреплён за&nbsp;командой</h4>
+      <div class="srvs six">
+        <div class="srv"><span class="lbl">team-a-01</span><div class="gpus"><i class="gpu a"></i><i class="gpu a"></i><i class="gpu"></i><i class="gpu"></i></div></div>
+        <div class="srv"><span class="lbl">team-a-02</span><div class="gpus"><i class="gpu a"></i><i class="gpu"></i><i class="gpu"></i><i class="gpu"></i></div></div>
+        <div class="srv"><span class="lbl">team-b-01</span><div class="gpus"><i class="gpu b"></i><i class="gpu b"></i><i class="gpu"></i><i class="gpu"></i></div></div>
+        <div class="srv"><span class="lbl">team-b-02</span><div class="gpus"><i class="gpu b"></i><i class="gpu"></i><i class="gpu"></i><i class="gpu"></i></div></div>
+        <div class="srv"><span class="lbl">team-c-01</span><div class="gpus"><i class="gpu c"></i><i class="gpu"></i><i class="gpu"></i><i class="gpu"></i></div></div>
+        <div class="srv"><span class="lbl">team-c-02</span><div class="gpus"><i class="gpu c"></i><i class="gpu"></i><i class="gpu"></i><i class="gpu"></i></div></div>
+      </div>
+      <p class="cap"><b>6 серверов, 24 карты</b> – заняты 9, остальные простаивают</p>
+    </div>
+    <div class="arrow rv" style="--d:340ms"><svg viewBox="0 0 64 40" fill="none" stroke="#1cf2de" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h52M42 6l14 14-14 14"/></svg></div>
+    <div class="card t rv" style="--d:380ms">
+      <h4>Со&nbsp;Штурвалом: общий пул</h4>
+      <div class="srvs two">
+        <div class="srv"><span class="lbl">pool-01</span><div class="gpus"><i class="gpu a"></i><i class="gpu a"></i><i class="gpu a"></i><i class="gpu b"></i></div></div>
+        <div class="srv"><span class="lbl">pool-02</span><div class="gpus"><i class="gpu b"></i><i class="gpu b"></i><i class="gpu mig"><i class="a"></i><i class="c"></i></i><i class="gpu"></i></div></div>
+      </div>
+      <p class="cap"><b>2 сервера, 7 карт</b> – те же 9 задач, две лёгкие делят карту через MIG</p>
+    </div>
+    <div class="pool-note rv" style="--d:420ms">
+      <ul class="ticks">
+        <li><b>Квоты, MIG и&nbsp;Time-slice</b> вместо отдельного сервера на&nbsp;команду</li>
+        <li><b>DCGM-метрики</b> по&nbsp;каждой карте&nbsp;– закупки по&nbsp;фактической загрузке</li>
+        <li><b>Потребление GPU видно</b> для&nbsp;внутреннего биллинга</li>
+      </ul>
+      <p class="small">Экономия&nbsp;– от&nbsp;загрузки карт и&nbsp;меньшей ручной работы, а&nbsp;не&nbsp;от&nbsp;ускорения обучения.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-blue" id="ml-stack" data-title="ML-стек">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · ML / AI</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Полноценный ML-стек <span class="hl">ставится вместе с&nbsp;кластером</span></h2>
+  <div class="ml" style="margin-top:40px">
+    <div class="layers">
+      <div class="layer rv" style="--d:60ms"><h4>Доступ команд<small>кто и&nbsp;сколько ресурсов получает</small></h4><div class="chips"><span class="chip">Профили Kubeflow</span><span class="chip">квоты CPU / GPU</span><span class="chip">RBAC Штурвала</span><span class="chip">SSO · LDAP / OIDC</span></div></div>
+      <div class="layer rv" style="--d:100ms"><h4>Kubeflow<small>эксперименты, обучение, инференс</small></h4><div class="chips"><span class="chip on">Notebooks</span><span class="chip on">Pipelines</span><span class="chip on">Training Operator</span><span class="chip on">Katib</span><span class="chip on">KServe · vLLM</span></div></div>
+      <div class="layer rv" style="--d:140ms"><h4>MLflow<small>учёт моделей</small></h4><div class="chips"><span class="chip on">Tracking</span><span class="chip on">Model Registry</span></div></div>
+      <div class="layer hl-l rv" style="--d:180ms"><h4>Подготовка GPU<small>карта&nbsp;– ресурс планировщика</small></h4><div class="chips"><span class="chip on">NVIDIA GPU Operator</span><span class="chip">драйвер</span><span class="chip">Container Toolkit</span><span class="chip">NFD / GFD</span><span class="chip">Device Plugin</span><span class="chip">MIG Manager</span><span class="chip">MIG / Time-slice</span><span class="chip">DCGM Exporter</span></div></div>
+      <div class="layer rv" style="--d:220ms"><h4>Эксплуатация<small>общая для&nbsp;всех слоёв</small></h4><div class="chips"><span class="chip">мониторинг и&nbsp;логи</span><span class="chip">Trivy · Kyverno · аудит</span><span class="chip">Argo CD / Rollouts</span><span class="chip">Velero</span><span class="chip">метеринг потребления GPU</span></div></div>
+      <div class="layer rv" style="--d:260ms"><h4>Узлы<small>управляет Штурвал</small></h4><div class="chips"><span class="chip">CPU на&nbsp;виртуализации</span><span class="chip">GPU на&nbsp;bare metal</span><span class="chip">NVIDIA A100 / H100 / L40S</span><span class="chip">автомасштабирование по&nbsp;запросу GPU</span></div></div>
+    </div>
+    <div class="ml-side">
+      <p class="k rv" style="--d:100ms">Путь модели в&nbsp;одном кластере</p>
+      <ol class="mpath">
+        <li class="rv" style="--d:140ms"><span class="oct-n">1</span><div><b>Эксперимент</b><span class="tool">Kubeflow Notebooks</span></div></li>
+        <li class="rv" style="--d:180ms"><span class="oct-n">2</span><div><b>Обучение</b><span class="tool">Pipelines · Training Operator</span></div></li>
+        <li class="rv" style="--d:220ms"><span class="oct-n">3</span><div><b>Подбор параметров</b><span class="tool">Katib</span></div></li>
+        <li class="rv" style="--d:260ms"><span class="oct-n">4</span><div><b>Версия модели</b><span class="tool">MLflow</span></div></li>
+        <li class="rv" style="--d:300ms"><span class="oct-n">5</span><div><b>Инференс</b><span class="tool">KServe · vLLM · Argo CD</span></div></li>
+      </ol>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-blue" id="ml-llm" data-title="LLM и инференс">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · ML / AI</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">LLM и&nbsp;инференс: <span class="hl">из&nbsp;реестра в&nbsp;сервис</span></h2>
+  <div class="llm">
+    <ul class="ticks rv" style="--d:80ms">
+      <li><b>Модель становится сервисом.</b> KServe публикует её из&nbsp;MLflow Registry как&nbsp;сервис инференса в&nbsp;кластере.</li>
+      <li><b>LLM на&nbsp;vLLM.</b> Режим auto выбирает vLLM, если он поддерживает модель, остальные обслуживает Hugging Face Transformers.</li>
+      <li><b>Классические модели.</b> Готовые runtime: sklearn, XGBoost, TorchServe, Triton.</li>
+      <li><b>Свой движок.</b> Например, TGI через собственный ServingRuntime KServe.</li>
+      <li><b>Как&nbsp;обычное приложение.</b> Манифесты доставляет Argo CD, обучение и&nbsp;инференс работают на&nbsp;разных группах узлов.</li>
+    </ul>
+    <div class="card llm-code rv" style="--d:160ms"><p class="k">Манифест сервиса</p><pre><span class="c"># Чат-модель на одной GPU через vLLM</span>
+<span class="y">apiVersion:</span> serving.kserve.io/v1beta1
+<span class="y">kind:</span> InferenceService
+<span class="y">metadata:</span>
+  <span class="y">name:</span> support-chat
+<span class="y">spec:</span>
+  <span class="y">predictor:</span>
+    <span class="y">model:</span>
+      <span class="y">modelFormat:</span>
+        <span class="y">name:</span> huggingface
+      <span class="y">args:</span> ["--backend=vllm"]
+      <span class="y">storageUri:</span> s3://models/qwen2.5-7b-instruct
+      <span class="y">resources:</span>
+        <span class="y">limits:</span>
+          <span class="y">nvidia.com/gpu:</span> 1</pre></div>
+  </div>
+  <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
+</section>
+<section class="slide sec g-tl oct-bg" id="sec-vendor" data-title="02 Vendor-agnostic">
+  <div class="top"><span></span><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="sec-body"><p class="sec-n rv">02</p><h2 class="sec-t rv" style="--d:80ms">Vendor-agnostic</h2></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide stmt" id="eco" data-title="Против экосистем">
+  <h2 class="stmt-t rv">Мы не&nbsp;делаем экосистем и&nbsp;<span class="hl">вообще против них</span></h2>
+</section>
+
+
+<section class="slide band" id="never" data-title="Чего не будет">
+  <div class="top"><div class="eyebrow"><span class="n">02</span>Vendor-agnostic · никаких экосистем</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Чего у&nbsp;Штурвала нет <span class="hl">и&nbsp;не&nbsp;будет&nbsp;– принципиально</span></h2>
+  <ul class="never rv" style="--d:80ms">
+    <li><b>Своей операционной системы</b><span>Работаем на&nbsp;ваших: Astra Linux, РЕД ОС, Alt Linux, РОСА и&nbsp;других</span></li>
+    <li><b>Своей виртуализации</b><span>Интегрируемся с&nbsp;той, что&nbsp;у&nbsp;вас есть, и&nbsp;с&nbsp;той, что&nbsp;появится</span></li>
+    <li><b>Своего CI/CD</b><span>Подключаем ваш через GitOps и&nbsp;API</span></li>
+    <li><b>Своего программного хранилища</b><span>Используем ваше: СХД, SDS, S3</span></li>
+    <li><b>«На&nbsp;нашем стеке работает лучше»</b><span>Одинаковая интеграция с&nbsp;любой платформой, без&nbsp;доплаты за&nbsp;«родную»</span></li>
+  </ul>
+  <div class="rule never-rule rv" style="--d:160ms"><p><span class="hl">Мы делаем одну вещь&nbsp;– управление Kubernetes</span></p><p>и&nbsp;делаем это хорошо</p></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-r" id="compat" data-title="Совместимость">
+  <div class="top"><div class="eyebrow"><span class="n">02</span>Vendor-agnostic · совместимость</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Vendor-agnostic <span class="hl">Kubernetes</span></h2>
+  <div class="cmp rv" style="--d:100ms">
+      <div><img src="assets/compat/vmware-vsphere.png" alt="VMware vSphere" style="width:191px"><img src="assets/compat/vcloud-director.png" alt="VMware Cloud Director" style="width:198px"><img src="assets/compat/zvirt.png" alt="zVirt" style="width:224px"><img src="assets/compat/ovirt.png" alt="oVirt" style="width:178px"><img src="assets/compat/red-virt.png" alt="РЕД Виртуализация" style="width:155px"><img src="assets/compat/openstack.png" alt="OpenStack" style="width:154px"><img src="assets/compat/basis.png" alt="Basis" style="width:186px"></div>
+      <div><img src="assets/compat/yandex-cloud.png" alt="Yandex Cloud" style="width:224px"><img src="assets/compat/vk-cloud.png" alt="VK Cloud" style="width:107px"><img src="assets/compat/sber.png" alt="Сбер" style="width:103px"><img src="assets/compat/sbertech.png" alt="СберТех" style="width:224px"><img src="assets/compat/nubes.png" alt="Nubes" style="width:224px"><img src="assets/compat/nvidia.png" alt="NVIDIA" style="width:224px"></div>
+      <div><img src="assets/compat/astra-linux.png" alt="Astra Linux" style="width:192px"><img src="assets/compat/red-os.png" alt="РЕД ОС" style="width:170px"><img src="assets/compat/alt-linux.png" alt="Alt Linux" style="width:183px"><img src="assets/compat/rosa.png" alt="РОСА" style="width:224px"><img src="assets/compat/ubuntu.png" alt="Ubuntu" style="width:180px"><img src="assets/compat/debian.png" alt="Debian" style="width:207px"><img src="assets/compat/rocky-linux.png" alt="Rocky Linux" style="width:224px"></div>
+      <div><img src="assets/compat/red-hat.png" alt="Red Hat" style="width:220px"><img src="assets/compat/oracle-linux.png" alt="Oracle Linux" style="width:147px"><img src="assets/compat/kaspersky.png" alt="Kaspersky" style="width:224px"><img src="assets/compat/positive-technologies.png" alt="Positive Technologies" style="width:220px"><img src="assets/compat/luntry.png" alt="Luntry" style="width:177px"><img src="assets/compat/monq.png" alt="monq" style="width:224px"></div>
+  </div>
+  <div class="foot"><span>Актуальный список&nbsp;– docs.shturval.tech</span><span class="pg"></span></div>
+</section>
+
+<section class="slide sec g-tl oct-bg" id="sec-tco" data-title="03 Лучшее TCO">
+  <div class="top"><span></span><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="sec-body"><p class="sec-n rv">03</p><h2 class="sec-t rv" style="--d:80ms">Лучшее TCO</h2></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-br" id="costs" data-title="Почему это дорого">
+  <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · дешевле своей сборки</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Деньги уходят не&nbsp;на&nbsp;«лицензию кубера», <span class="hl">а&nbsp;на&nbsp;три вещи</span></h2>
+  <div class="grid cost3">
+    <div class="card rv" style="--d:80ms"><div class="oct-n">1</div><h3>Собрать</h3><p>Сеть, хранилище, мониторинг, доступы, ИБ, автоматизация. Это <b>2+ года</b> сильной платформенной команды.</p></div>
+    <div class="card rv" style="--d:140ms"><div class="oct-n">2</div><h3>Обновлять</h3><p>Совместимость всех компонентов на&nbsp;каждом релизе Kubernetes, ОС и&nbsp;модулей. <b>Главная операционная боль.</b></p></div>
+    <div class="card rv" style="--d:200ms"><div class="oct-n">3</div><h3>Закрывать уязвимости</h3><p>Не&nbsp;разовое событие, а&nbsp;<b>постоянный процесс</b> и&nbsp;отдельная команда ИБ.</p></div>
+  </div>
+  <div class="rule rv" style="--d:260ms;margin-top:auto;margin-bottom:40px"><p>Ванильный Kubernetes&nbsp;– это API и&nbsp;оркестратор. В&nbsp;проде на&nbsp;нём одном никто не&nbsp;живёт.</p><p>Поэтому сравнивать имеет смысл со&nbsp;своей сборкой или&nbsp;с&nbsp;платформой&nbsp;– и&nbsp;по&nbsp;всем трём статьям сразу.</p></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-r" id="updates" data-title="Обновления и уязвимости">
+  <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · дешевле своей сборки</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Самая дорогая часть эксплуатации <span class="hl">уже заложена в&nbsp;продукт</span></h2>
+  <div class="two">
+    <div class="card rv" style="--d:80ms">
+      <h3><span class="oct-o"><span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#1cf2de" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></span></span>Обновления</h3>
+      <div class="big-in"><span class="stat">~60%</span><p style="font-size:20px;color:var(--muted);max-width:28ch">бюджета разработки Штурвала уходит на&nbsp;совместимость компонентов при&nbsp;каждом обновлении</p></div>
+      <ul class="ticks">
+        <li><b>3 минорных релиза в&nbsp;год</b>, как&nbsp;у&nbsp;Kubernetes, и&nbsp;патчи по&nbsp;необходимости. Поддерживаем две последние минорные версии.</li>
+        <li><b>Изолированно по&nbsp;кластерам:</b> сначала тест, потом прод. Один кластер не&nbsp;тянет за&nbsp;собой остальные.</li>
+        <li>Затраты на&nbsp;совместимость <b>делятся между всеми заказчиками</b>, а&nbsp;не&nbsp;ложатся на&nbsp;вашу команду.</li>
+      </ul>
+    </div>
+    <div class="card rv" style="--d:160ms">
+      <h3><span class="oct-o"><span>!</span></span>Уязвимости</h3>
+      <div class="big-in"><span class="stat">24 ч</span><p style="font-size:20px;color:var(--muted);max-width:28ch">каждое утро&nbsp;– разбор новых уязвимостей за&nbsp;сутки у&nbsp;технического директора продукта</p></div>
+      <ul class="ticks">
+        <li><b>Разметка, воспроизведение, оценка риска</b> и&nbsp;при&nbsp;необходимости&nbsp;– security-патч.</li>
+        <li>Компоненты <b>собираются из&nbsp;исходников</b> в&nbsp;защищённом контуре в&nbsp;РФ по&nbsp;практикам DevSecOps.</li>
+        <li>Исправления уходят заказчикам и&nbsp;в&nbsp;апстрим Kubernetes и&nbsp;модулей.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rule rv" style="--d:240ms;margin-top:24px;padding:28px 40px"><p>Своя сборка платит за&nbsp;это целиком на&nbsp;каждый релиз. Или&nbsp;не&nbsp;обновляется&nbsp;– и&nbsp;копит риски.</p></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-br" id="tco" data-title="TCO">
+  <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · дешевле своей сборки</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="tco">
+    <div style="display:flex;flex-direction:column">
+      <h2 class="h2 rv" style="font-size:58px">За&nbsp;5 лет высвобождается <span class="hl" style="white-space:nowrap">384 млн ₽</span></h2>
+      <p class="lead rv" style="--d:60ms;font-size:23px">Сборка, обновления и&nbsp;уязвимости уже заложены в&nbsp;продукт и&nbsp;разделены между всеми заказчиками. Чем больше кластеров и&nbsp;команд, тем заметнее разница.</p>
+      <div class="rule rv" style="--d:140ms;margin-top:auto;padding:28px 36px;font-size:24px"><p>Если вы обновляетесь и&nbsp;закрываете уязвимости&nbsp;– Штурвал дешевле своей сборки.</p><p>Если нет&nbsp;– своя сборка может выглядеть дешевле, но&nbsp;копит технический долг и&nbsp;риски ИБ. Мы считаем оба сценария.</p></div>
+      <div class="card t rv" style="--d:200ms;margin-top:16px;margin-bottom:40px;padding:22px 30px"><p class="k">Предложение</p><p style="font-size:20px;color:var(--ink);margin-top:8px"><b>Рассчитаем TCO для&nbsp;вас</b> на&nbsp;ваших параметрах: кластеры, узлы, рост, команда, 24×7. Методику покажем целиком.</p></div>
+    </div>
+    <div class="card tco-chart rv" style="--d:120ms;margin-bottom:40px">
+      <h4>Расходы за&nbsp;5 лет, млн ₽ · 20 кластеров, 140 worker-узлов, 24×7</h4>
+      <div class="bars">
+        <div class="b"><span class="val">520</span><i style="--h:43%"></i></div>
+        <div class="b sh"><span class="val">137</span><i style="--h:11%"></i></div>
+        <div class="b"><span class="val">1 197</span><i style="--h:100%"></i></div>
+      </div>
+      <div class="bar-names"><span>своя сборка на&nbsp;ванильном K8s</span><span class="sh">Штурвал без&nbsp;лицензии</span><span>своя платформа с&nbsp;нуля</span></div>
+      <p class="small" style="margin-top:22px">Калькулятор TCO, методика 2026.10.</p>
+    </div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+
+<section class="slide g-tl" id="community" data-title="Доступно всем">
+  <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · технология доступна всем</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Технология <span class="hl">должна быть доступна всем</span></h2>
+  <div class="ce">
+    <div class="ce-mark rv" style="--d:60ms">
+      <img src="assets/shturval-sign.svg" alt="Штурвал">
+      <b>Community Edition</b>
+      <p>Тот же Штурвал с&nbsp;полной функциональностью. Бесплатно и&nbsp;без&nbsp;ограничения по&nbsp;сроку.</p>
+    </div>
+    <div class="ce-grid">
+      <div class="card rv" style="--d:100ms"><b>0 ₽</b><span>лицензия</span></div>
+      <div class="card rv" style="--d:140ms"><b>~1100</b><span>выданных лицензий</span></div>
+      <div class="card rv" style="--d:180ms"><b>10</b><span>worker-узлов на&nbsp;инсталляцию</span></div>
+      <div class="card rv" style="--d:260ms"><b>Telegram</b><span>поддержка сообщества</span></div>
+      <div class="card t ce-wide rv" style="--d:300ms"><b>Кадры</b><span>инженеры, которые уже знают Штурвал</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Ограничения: не&nbsp;входит в&nbsp;реестр российского ПО, нужен доступ в&nbsp;интернет</span><span class="pg"></span></div>
+</section>
+
+
+<section class="slide band g-br" id="market" data-title="Оценка рынка">
+  <div class="top"><div class="eyebrow">Оценка рынка</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Рынок <span class="hl">уже оценил</span> Штурвал</h2>
+  <div class="awards-wrap">
+    <div class="aw-col">
+      <div class="card rv" style="--d:60ms"><span class="stars">★★★★★</span><span class="src">TAdviser IT Prize 2024</span><b>Платформа года</b><span>Контейнерная платформа «Штурвал»</span></div>
+      <div class="card rv" style="--d:120ms"><span class="stars">★★★★★</span><span class="src">CNewsMarket 2025</span><b>№ 1 в&nbsp;рейтинге</b><span>«Платформы Kubernetes для&nbsp;enterprise»</span></div>
+      <div class="card rv" style="--d:180ms"><span class="stars">★★★★★</span><span class="src">CNewsMarket 2025</span><b>№ 1 в&nbsp;рейтинге</b><span>«Платформы Kubernetes: лёгкий старт»</span></div>
+    </div>
+    <div class="aw-mark rv" style="--d:100ms"><img src="assets/shturval-sign.svg" alt=""></div>
+    <div class="aw-col">
+      <div class="card rv" style="--d:240ms"><span class="stars">★★★★★</span><span class="src">Digital Leaders 2025</span><b>Платформа года</b><span>Построение ДБО на&nbsp;базе контейнерной платформы «Штурвал»</span></div>
+      <div class="card rv" style="--d:300ms"><span class="stars">★★★★★</span><span class="src">«Компьютерра» 2025</span><b>Внедрение года</b><span>«Штурвал» K8s&nbsp;– новая инфраструктура для&nbsp;высоконагруженного ДБО</span></div>
+    </div>
+  </div>
+  <div class="quotes rv" style="--d:360ms">
+    <div class="card">«Штурвал повысил надёжность и&nbsp;производительность ДБО»<span>Почта Банк</span></div>
+    <div class="card">«Сейчас мы имеем легко управляемую платформу»<span>НПФ «Будущее»</span></div>
+    <div class="card">«На&nbsp;базе Штурвала в&nbsp;банке создана надёжная ML-платформа»<span>Совкомбанк</span></div>
+    <div class="card">«Штурвал&nbsp;– один из&nbsp;самых высокотехнологичных продуктов на&nbsp;рынке»<span>TAdviser</span></div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+<section class="slide g-tl" id="growth" data-title="Рост">
+  <div class="top"><div class="eyebrow">Рост Штурвала</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Сравнение: <span class="hl">H1 2026 к&nbsp;H1 2025</span></h2>
+  <div class="grow2">
+    <div class="rv" style="--d:100ms"><b>×8</b><span>заказчиков</span></div>
+    <div class="rv" style="--d:180ms"><b>×3,8</b><span>выручки</span></div>
+  </div>
+  <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+
+
+<section class="slide g-tl" id="clients" data-optional="logos" data-title="Заказчики">
+  <div class="top"><div class="eyebrow">Заказчики</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Штурвал <span class="hl">в&nbsp;продуктиве</span></h2>
+  <div class="logos rv" style="--d:80ms">
+    <div class="lg"><img src="assets/logos/sovcombank.png" alt="Совкомбанк"></div>
+    <div class="lg"><img src="assets/logos/pochtabank.png" alt="Почта Банк"></div>
+    <div class="lg"><img src="assets/logos/novikombank.png" alt="Новикомбанк"></div>
+    <div class="lg"><img src="assets/logos/centrinvest.png" alt="Банк Центр-инвест"></div>
+    <div class="lg"><img src="assets/logos/chelyabinvestbank.png" alt="Челябинвестбанк"></div>
+    <div class="lg"><img src="assets/logos/nbd-bank.jpg" alt="НБД-Банк"></div>
+    <div class="lg"><img src="assets/logos/npf-budushchee.jpg" alt="НПФ «Будущее»"></div>
+    <div class="lg"><img src="assets/logos/capital-group.png" alt="Capital Group"></div>
+    <div class="lg"><img src="assets/logos/goznak.jpg" alt="Гознак"></div>
+    <div class="lg"><img src="assets/logos/sheremetyevo.png" alt="Шереметьево"></div>
+    <div class="lg"><img src="assets/logos/kazakhtelecom.png" alt="Казахтелеком"></div>
+    <div class="lg"><img src="assets/logos/sts-media.png" alt="СТС Медиа"></div>
+    <div class="lg"><img src="assets/logos/mosgorgeotrest.png" alt="Мосгоргеотрест"></div>
+    <div class="lg more"><span>и&nbsp;другие</span></div>
+  </div>
+  <div class="foot"><span>Слайд отключается кнопкой «Логотипы» перед отправкой</span><span class="pg"></span></div>
+</section>
+
+<section class="slide g-r" id="license" data-title="Лицензия и поддержка">
+  <div class="top"><div class="eyebrow">Лицензия и&nbsp;поддержка</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv" style="max-width:none">Конфигурация собирается <span class="hl">из&nbsp;пяти параметров</span></h2>
+  <div class="lic5">
+    <div class="card rv" style="--d:60ms"><h3>Редакция</h3><ul><li><b>Enterprise</b></li><li><b>Enterprise ML</b></li><li><b>Security (ФСТЭК)</b></li></ul></div>
+    <div class="card rv" style="--d:100ms"><h3>Объект лицензирования</h3><ul><li><b>vCPU</b></li><li><b>Worker-нода</b></li><li><b>Физический сервер</b></li><li><b>Безлимит</b></li></ul></div>
+    <div class="card rv" style="--d:140ms"><h3>Тип лицензии</h3><ul><li><b>Срочная</b>на&nbsp;срок по&nbsp;договорённости</li><li><b>Бессрочная</b>без&nbsp;ограничения срока</li></ul></div>
+    <div class="card rv" style="--d:180ms"><h3>Уровень поддержки</h3><ul><li><b>Базовая</b>8×5</li><li><b>Продуктив</b>24×7</li></ul></div>
+    <div class="card rv" style="--d:220ms"><h3>Срок поддержки</h3><ul><li><b>1 год</b></li><li><b>3 года</b></li><li><b>5 лет</b></li></ul></div>
+  </div>
+  <div class="lic-ex rv" style="--d:260ms"><span class="k">Пример</span><span class="chip on">Enterprise ML</span><i>+</i><span class="chip on">148 vCPU</span><i>+</i><span class="chip on">Бессрочная</span><i>+</i><span class="chip on">Продуктив</span><i>+</i><span class="chip on">3 года поддержки</span></div>
+  <ul class="ticks lic-rules rv" style="--d:300ms">
+    <li>Поддержка приобретается <b>отдельно</b> от&nbsp;лицензии</li>
+    <li><b>Срочная:</b> поддержка обязательна на&nbsp;весь срок лицензии</li>
+    <li><b>Бессрочная:</b> поддержка обязательна на&nbsp;первый год, дальше продление на&nbsp;1, 3 или&nbsp;5 лет</li>
+    <li>Без&nbsp;поддержки <b>нет обновлений</b>, включая исправления безопасности</li>
+    <li>Уровень поддержки выбирается <b>для&nbsp;каждого кластера</b></li>
+    <li>Гарантия входит в&nbsp;лицензию, поддержка&nbsp;– отдельный сервис</li>
+  </ul>
+  <div class="foot"><span>Подробно&nbsp;– в&nbsp;руководстве по&nbsp;лицензированию v.2026-10</span><span class="pg"></span></div>
+</section>
+
+<section class="slide poster" id="steps" data-title="Дальнейшие шаги">
+  <svg class="pst-mark" aria-hidden="true" viewBox="0 0 90.00 88.21"><path fill="currentColor" d="M62.00 2.63L57.81 12.99C56.25 16.87 57.15 21.30 60.11 24.26L68.40 32.54C68.87 33.01 69.13 33.64 69.13 34.31L69.13 52.21C69.13 52.88 68.86 53.51 68.40 53.98L57.64 64.73C56.80 65.56 55.37 64.97 55.37 63.79L55.37 32.54C55.37 31.10 54.20 29.94 52.76 29.94L37.22 29.94C35.78 29.94 34.62 31.10 34.62 32.54L34.62 63.79C34.62 64.96 33.19 65.56 32.35 64.73L21.59 53.98C21.12 53.51 20.86 52.88 20.86 52.21L20.86 34.31C20.86 33.64 21.12 33.01 21.59 32.54L30.04 24.10C33.02 21.12 33.92 16.65 32.31 12.75L28.08 2.51C27.26 0.52 24.67 0.00 23.15 1.52L2.96 21.69C1.07 23.58 0.00 26.15 0.00 28.83L0.00 57.70C0.00 60.38 1.07 62.94 2.96 64.84L23.40 85.25C25.30 87.14 27.87 88.21 30.55 88.21L59.46 88.21C62.14 88.21 64.71 87.14 66.61 85.25L87.04 64.84C88.94 62.94 90.00 60.38 90.00 57.70L90.00 28.83C90.00 26.15 88.94 23.58 87.04 21.69L66.94 1.63C65.41 0.10 62.81 0.62 62.00 2.63Z"></path></svg>
+  <div class="pst-top"><svg class="pst-logo" role="img" aria-label="Штурвал" viewBox="0 0 499.01 108.80"><path fill="currentColor" d="M76.23 3.24L71.08 16.02C69.15 20.80 70.27 26.27 73.90 29.92L84.09 40.13C84.67 40.71 84.99 41.49 84.99 42.31L84.99 64.40C84.99 65.22 84.66 66.00 84.09 66.58L70.86 79.83C69.83 80.86 68.07 80.14 68.07 78.67L68.07 40.13C68.07 38.36 66.64 36.92 64.87 36.92L45.76 36.92C43.99 36.92 42.56 38.36 42.56 40.13L42.56 78.67C42.56 80.13 40.80 80.86 39.77 79.83L26.54 66.58C25.96 66.00 25.64 65.22 25.64 64.40L25.64 42.31C25.64 41.49 25.97 40.71 26.54 40.13L36.93 29.72C40.59 26.05 41.70 20.53 39.72 15.73L34.53 3.10C33.52 0.64 30.33 0.00 28.46 1.88L3.65 26.75C1.31 29.08 0.00 32.25 0.00 35.56L0.00 71.16C0.00 74.47 1.31 77.64 3.65 79.97L28.77 105.14C31.10 107.48 34.26 108.80 37.56 108.80L73.10 108.80C76.40 108.80 79.56 107.48 81.89 105.14L107.01 79.97C109.35 77.64 110.65 74.47 110.65 71.16L110.65 35.56C110.65 32.25 109.35 29.08 107.01 26.75L82.31 2.01C80.42 0.12 77.22 0.77 76.23 3.24Z"></path><path fill="currentColor" d="M266.78 88.30C269.88 88.32 276.28 88.35 279.43 88.23C285.66 88.23 289.26 85.12 291.91 77.71C294.18 71.36 304.74 44.54 307.74 35.68C308.13 34.52 307.28 33.32 306.06 33.32L297.80 33.32C296.64 33.32 295.60 34.07 295.25 35.17C293.49 40.64 288.25 54.23 285.48 62.79L273.41 35.02C273.01 34.01 272.02 33.33 270.94 33.33L262.52 33.33C261.25 33.33 260.38 34.62 260.87 35.80C264.06 43.46 273.90 62.75 279.26 75.78C278.36 76.49 277.70 76.63 276.69 76.63C274.24 76.63 269.42 76.63 266.81 76.63C265.82 76.63 265.03 77.43 265.03 78.41L265.03 86.50C265.03 87.47 265.81 88.27 266.79 88.28ZM486.30 45.26L473.76 45.22L473.76 61.97C473.76 63.76 473.37 65.50 472.57 67.23C471.78 68.95 470.66 70.49 469.25 71.86C467.83 73.22 466.15 74.32 464.19 75.15C462.24 75.98 460.13 76.41 457.85 76.41C457.10 76.41 456.53 76.36 456.12 76.27C455.71 76.17 455.39 76.06 455.19 75.92C454.98 75.78 454.85 75.63 454.81 75.46C454.76 75.28 454.74 75.12 454.74 74.95L454.74 67.29C454.74 67.10 454.75 66.91 454.77 66.70C454.80 66.49 454.87 66.30 454.98 66.13C455.09 65.95 455.28 65.80 455.53 65.68C455.78 65.55 456.15 65.49 456.60 65.49C457.46 65.49 458.17 65.32 458.73 64.98C459.30 64.65 459.75 64.20 460.08 63.64C460.41 63.06 460.65 62.42 460.78 61.69C460.92 60.96 460.99 60.20 460.99 59.41L460.99 34.85C460.99 33.82 461.51 33.30 462.55 33.30L497.56 33.30C497.97 33.30 498.32 33.43 498.59 33.70C498.87 33.96 499.01 34.32 499.01 34.75L499.01 74.33C499.01 75.30 498.52 75.78 497.56 75.78L487.76 75.78C486.80 75.78 486.31 75.30 486.31 74.33L486.31 45.26L486.30 45.26ZM436.16 50.60C435.64 49.33 434.93 48.22 434.01 47.25C433.09 46.29 432.02 45.53 430.79 44.96C429.55 44.40 428.22 44.11 426.79 44.11C425.48 44.11 424.22 44.36 423.02 44.87C421.82 45.39 420.76 46.10 419.85 47.03C418.93 47.96 418.21 49.05 417.66 50.34C417.12 51.62 416.85 53.05 416.85 54.63C416.85 56.20 417.11 57.53 417.61 58.81C418.12 60.10 418.81 61.20 419.68 62.14C420.56 63.07 421.61 63.81 422.83 64.34C424.06 64.87 425.37 65.14 426.78 65.14C428.19 65.14 429.55 64.86 430.78 64.29C432.02 63.73 433.09 62.97 434.00 62.02C434.92 61.07 435.63 59.96 436.15 58.67C436.67 57.38 436.93 56.04 436.93 54.63C436.93 53.22 436.67 51.88 436.15 50.60ZM449.64 74.30C449.64 75.29 449.15 75.78 448.16 75.78L440.57 75.78C440.23 75.78 439.93 75.67 439.66 75.44C439.39 75.20 439.16 74.93 438.97 74.59C438.77 74.25 438.60 73.91 438.47 73.55C438.33 73.20 438.21 72.89 438.12 72.63L437.67 71.46C436.15 73.06 434.42 74.30 432.48 75.17C430.54 76.05 428.46 76.48 426.21 76.48C423.42 76.48 420.74 75.97 418.16 74.92C415.59 73.88 413.32 72.40 411.34 70.50C409.37 68.58 407.80 66.29 406.63 63.61C405.47 60.93 404.89 57.96 404.89 54.70C404.89 51.69 405.44 48.86 406.53 46.20C407.63 43.54 409.13 41.22 411.03 39.24C412.93 37.26 415.19 35.70 417.80 34.56C420.41 33.42 423.21 32.85 426.21 32.85C428.78 32.85 431.06 33.35 433.07 34.35C435.07 35.36 436.82 36.73 438.29 38.46L439.61 34.79C439.79 34.26 439.96 33.87 440.12 33.64C440.29 33.41 440.61 33.30 441.09 33.30L448.16 33.30C449.15 33.30 449.64 33.80 449.64 34.79L449.64 74.30ZM372.02 57.44L372.02 66.87L384.55 66.87C385.38 66.87 386.10 66.73 386.72 66.46C387.33 66.18 387.84 65.82 388.24 65.37C388.64 64.92 388.94 64.39 389.12 63.79C389.30 63.19 389.39 62.58 389.39 61.95C389.39 61.28 389.25 60.67 388.94 60.11C388.64 59.56 388.26 59.08 387.80 58.69C387.35 58.30 386.83 57.99 386.25 57.78C385.67 57.56 385.11 57.45 384.56 57.45L372.03 57.45L372.02 57.44ZM386.46 42.85C385.60 42.30 384.54 42.04 383.27 42.04L372.02 42.04L372.02 49.29L383.24 49.29C384.53 49.29 385.60 48.99 386.46 48.41C387.31 47.82 387.74 46.87 387.74 45.54C387.74 44.30 387.31 43.40 386.46 42.85ZM399.33 47.91C399.15 48.57 398.91 49.19 398.61 49.77C398.31 50.35 397.96 50.89 397.57 51.38C397.18 51.88 396.79 52.36 396.40 52.82C397.78 54.12 398.89 55.52 399.71 57.03C400.53 58.55 400.93 60.29 400.93 62.29C400.93 64.00 400.59 65.66 399.90 67.28C399.21 68.90 398.24 70.33 396.99 71.60C395.74 72.86 394.25 73.87 392.52 74.63C390.78 75.39 388.88 75.78 386.77 75.78L361.39 75.78C360.12 75.78 359.49 75.17 359.49 73.98L359.49 35.09C359.49 33.77 360.12 33.12 361.39 33.12L386.28 33.12C388.09 33.12 389.79 33.47 391.41 34.19C393.02 34.91 394.44 35.85 395.65 37.04C396.86 38.21 397.82 39.56 398.54 41.08C399.26 42.59 399.61 44.16 399.61 45.77C399.61 46.54 399.52 47.25 399.33 47.90ZM324.24 58.48C324.68 59.72 325.33 60.83 326.18 61.81C327.04 62.78 328.07 63.56 329.30 64.15C330.53 64.74 331.92 65.04 333.49 65.04C335.06 65.04 336.47 64.77 337.73 64.22C338.99 63.68 340.06 62.94 340.95 62.00C341.84 61.07 342.52 59.97 343.01 58.70C343.49 57.44 343.73 56.08 343.73 54.63C343.73 53.17 343.52 51.80 343.08 50.50C342.64 49.20 341.99 48.09 341.12 47.13C340.26 46.18 339.20 45.44 337.94 44.87C336.68 44.32 335.22 44.04 333.56 44.04C332.11 44.04 330.77 44.35 329.54 44.96C328.32 45.58 327.27 46.38 326.39 47.38C325.51 48.37 324.83 49.50 324.34 50.76C323.83 52.02 323.59 53.31 323.59 54.63C323.59 55.94 323.82 57.23 324.25 58.48ZM311.85 34.79C311.85 34.30 311.98 33.93 312.26 33.68C312.54 33.43 312.92 33.30 313.40 33.30L320.43 33.30C320.78 33.30 321.06 33.39 321.28 33.57C321.49 33.76 321.68 33.99 321.81 34.27C321.95 34.54 322.06 34.85 322.14 35.17C322.22 35.49 322.30 35.78 322.37 36.03L323.09 38.88C324.54 37.08 326.30 35.62 328.35 34.51C330.41 33.40 332.77 32.85 335.45 32.85C338.27 32.85 340.89 33.37 343.33 34.40C345.76 35.43 347.89 36.88 349.72 38.77C351.54 40.65 352.97 42.93 354.01 45.60C355.05 48.28 355.56 51.24 355.56 54.50C355.56 57.50 355.09 60.33 354.13 62.98C353.17 65.63 351.81 67.94 350.03 69.92C348.25 71.89 346.12 73.46 343.62 74.60C341.12 75.74 338.33 76.31 335.24 76.31C333.09 76.31 331.11 75.90 329.27 75.07C327.44 74.24 325.86 73.19 324.54 71.94L324.54 87.08C324.54 88.08 324.05 88.57 323.06 88.57L313.40 88.57C312.92 88.57 312.54 88.45 312.26 88.21C311.98 87.97 311.85 87.58 311.85 87.08L311.85 34.79ZM254.60 33.30C255.49 33.30 255.94 33.76 255.94 34.68L255.94 43.32C255.94 43.66 255.89 43.95 255.79 44.17C255.68 44.38 255.55 44.56 255.41 44.70C255.26 44.84 255.10 44.94 254.92 44.98C254.75 45.02 254.60 45.05 254.49 45.05L242.93 45.05L242.93 73.66C242.93 74.24 242.76 74.74 242.44 75.15C242.12 75.57 241.67 75.78 241.10 75.78L231.65 75.78C231.30 75.78 231.03 75.71 230.84 75.57C230.64 75.43 230.49 75.25 230.39 75.03C230.28 74.81 230.21 74.58 230.18 74.34C230.15 74.10 230.13 73.87 230.13 73.66L230.13 45.05L218.81 45.05C217.79 45.05 217.29 44.50 217.29 43.42L217.29 34.96C217.29 34.52 217.43 34.13 217.73 33.78C218.04 33.44 218.39 33.26 218.81 33.26L254.60 33.30L254.60 33.30ZM148.38 34.75C148.38 33.78 148.86 33.30 149.83 33.30L159.65 33.30C160.62 33.30 161.11 33.78 161.11 34.75L161.11 63.19L173.26 63.19L173.26 34.75C173.26 33.78 173.74 33.30 174.71 33.30L184.54 33.30C185.50 33.30 185.99 33.78 185.99 34.75L185.99 63.19L198.62 63.19L198.62 34.75C198.62 33.78 199.11 33.30 200.07 33.30L209.94 33.30C210.90 33.30 211.39 33.78 211.39 34.75L211.39 74.33C211.39 74.77 211.25 75.13 210.97 75.39C210.70 75.65 210.35 75.78 209.94 75.78L149.80 75.78C149.45 75.78 149.13 75.66 148.82 75.42C148.50 75.18 148.35 74.81 148.35 74.33L148.35 34.75L148.38 34.75Z"></path></svg><svg class="pst-lab" role="img" aria-label="Лаборатория Числитель" viewBox="0 0 637.01 157.00"><path fill="currentColor" d="M90.91 152.89L90.91 141.92C90.91 139.65 89.08 137.82 86.82 137.82L40.18 137.82C37.92 137.82 36.09 139.65 36.09 141.92L36.09 152.89C36.09 155.15 37.92 157.00 40.18 157.00L86.82 157.00C89.08 157.00 90.91 155.15 90.91 152.89ZM33.10 4.64L4.62 33.22C1.66 36.20 0.00 40.22 0.00 44.43L0.00 84.85C0.00 89.06 1.66 93.08 4.62 96.06L33.10 124.64C36.07 127.61 40.09 129.28 44.27 129.28L84.55 129.28C88.73 129.28 92.75 127.60 95.72 124.64L124.20 96.06C127.16 93.09 128.82 89.06 128.82 84.85L128.82 44.43C128.82 40.22 127.16 36.20 124.20 33.22L95.72 4.64C92.76 1.68 88.74 0.00 84.55 0.00L44.27 0.00C40.09 0.00 36.07 1.68 33.10 4.64ZM92.99 57.02L92.99 72.28C92.99 75.01 91.92 77.61 90.00 79.54L79.25 90.34C77.33 92.27 74.73 93.34 72.02 93.34L56.80 93.34C54.10 93.34 51.48 92.27 49.57 90.34L38.81 79.54C36.89 77.61 35.82 75.01 35.82 72.28L35.82 57.02C35.82 54.29 36.89 51.69 38.81 49.76L49.57 38.96C51.48 37.05 54.09 35.95 56.80 35.95L72.02 35.95C74.73 35.95 77.33 37.04 79.25 38.96L90.00 49.76C91.91 51.69 92.99 54.29 92.99 57.02Z"></path><path fill="currentColor" d="M617.24 28.75C617.24 29.33 617.35 29.84 617.57 30.29C617.79 30.75 618.08 31.12 618.44 31.43C618.79 31.75 619.20 31.98 619.66 32.14C620.12 32.30 620.60 32.38 621.07 32.38L627.50 32.38L627.50 25.17L621.07 25.17C620.57 25.17 620.08 25.24 619.61 25.39C619.15 25.53 618.75 25.75 618.40 26.05C618.04 26.33 617.76 26.70 617.55 27.15C617.34 27.60 617.23 28.13 617.23 28.76ZM628.47 45.60C628.23 45.60 628.00 45.52 627.80 45.35C627.60 45.19 627.50 44.90 627.50 44.50L627.50 37.50L621.31 37.50L617.51 44.86C617.40 45.08 617.31 45.26 617.23 45.40C617.16 45.53 616.99 45.61 616.75 45.61L612.45 45.61C612.19 45.61 611.98 45.50 611.82 45.29C611.67 45.08 611.63 44.87 611.73 44.67L616.02 36.36C615.40 35.99 614.84 35.53 614.33 35.00C613.83 34.46 613.40 33.89 613.05 33.24C612.69 32.61 612.41 31.93 612.22 31.21C612.03 30.50 611.93 29.76 611.93 28.99C611.93 27.87 612.13 26.79 612.54 25.73C612.96 24.68 613.52 23.75 614.24 22.93C614.97 22.11 615.83 21.44 616.84 20.95C617.84 20.46 618.93 20.20 620.10 20.20L632.02 20.20C632.75 20.20 633.12 20.57 633.12 21.30L633.12 44.41C633.12 45.20 632.78 45.59 632.10 45.59L628.45 45.59L628.47 45.60ZM576.35 44.90C576.19 45.13 576.04 45.31 575.90 45.42C575.76 45.54 575.59 45.60 575.36 45.60L571.23 45.60C570.96 45.60 570.82 45.53 570.79 45.40C570.76 45.27 570.75 45.07 570.75 44.79L570.73 20.99C570.73 20.74 570.80 20.55 570.95 20.39C571.10 20.25 571.29 20.18 571.52 20.18L575.28 20.18C575.48 20.18 575.66 20.25 575.82 20.38C575.97 20.53 576.04 20.73 576.04 20.99L576.04 36.74L587.45 20.73C587.59 20.54 587.71 20.39 587.81 20.31C587.91 20.23 588.04 20.19 588.21 20.19L592.09 20.19C592.30 20.19 592.48 20.26 592.64 20.39C592.81 20.54 592.88 20.74 592.88 21.00L592.88 44.80C592.88 45.05 592.81 45.24 592.67 45.39C592.54 45.54 592.34 45.61 592.08 45.61L588.35 45.61C587.83 45.61 587.57 45.34 587.57 44.81L587.57 29.31L576.35 44.92L576.35 44.90ZM530.78 35.71C531.13 36.65 531.64 37.50 532.29 38.25C532.94 38.99 533.73 39.60 534.65 40.05C535.58 40.52 536.60 40.75 537.75 40.75C538.90 40.75 539.88 40.55 540.80 40.14C541.71 39.74 542.50 39.17 543.15 38.47C543.80 37.75 544.31 36.92 544.67 35.97C545.03 35.01 545.21 33.98 545.21 32.89C545.21 31.80 545.04 30.78 544.70 29.84C544.35 28.90 543.86 28.08 543.22 27.40C542.58 26.71 541.79 26.17 540.88 25.77C539.95 25.38 538.92 25.18 537.78 25.18C536.65 25.18 535.60 25.40 534.67 25.85C533.74 26.30 532.95 26.89 532.30 27.62C531.65 28.35 531.14 29.17 530.79 30.10C530.44 31.03 530.26 31.96 530.26 32.90C530.26 33.84 530.43 34.80 530.79 35.73ZM524.93 21.02C524.93 20.48 525.20 20.19 525.75 20.19L528.58 20.19C528.94 20.19 529.21 20.30 529.40 20.52C529.58 20.73 529.71 21.01 529.78 21.35L530.21 23.83C531.26 22.65 532.47 21.72 533.87 21.02C535.27 20.33 536.76 19.98 538.34 19.98C540.02 19.98 541.61 20.29 543.12 20.92C544.63 21.54 545.95 22.41 547.09 23.55C548.24 24.68 549.14 26.05 549.81 27.62C550.47 29.19 550.81 30.94 550.81 32.84C550.81 34.63 550.50 36.33 549.89 37.91C549.27 39.51 548.40 40.89 547.29 42.07C546.19 43.25 544.87 44.19 543.34 44.87C541.81 45.55 540.14 45.90 538.32 45.90C536.75 45.90 535.28 45.58 533.95 44.97C532.61 44.35 531.46 43.51 530.46 42.45L530.46 52.42C530.46 52.98 530.20 53.25 529.68 53.25L525.75 53.25C525.20 53.25 524.93 52.97 524.93 52.42L524.93 21.03L524.93 21.02ZM485.49 36.02C485.85 36.96 486.36 37.79 487.00 38.50C487.64 39.21 488.42 39.76 489.32 40.17C490.23 40.59 491.22 40.80 492.31 40.80C493.40 40.80 494.42 40.60 495.34 40.17C496.25 39.76 497.05 39.19 497.69 38.49C498.34 37.78 498.86 36.95 499.22 36.01C499.58 35.06 499.77 34.05 499.77 32.99C499.77 31.93 499.59 30.92 499.22 29.98C498.86 29.04 498.34 28.22 497.68 27.52C497.02 26.81 496.23 26.26 495.32 25.85C494.40 25.45 493.40 25.24 492.31 25.24C491.22 25.24 490.25 25.44 489.34 25.84C488.44 26.25 487.66 26.80 487.01 27.50C486.36 28.21 485.85 29.03 485.49 29.96C485.14 30.91 484.96 31.91 484.96 32.99C484.96 34.07 485.14 35.08 485.49 36.03ZM480.32 27.89C481.00 26.31 481.93 24.94 483.10 23.76C484.28 22.58 485.64 21.66 487.23 20.97C488.81 20.29 490.50 19.95 492.29 19.95C494.08 19.95 495.80 20.29 497.40 20.97C499.00 21.66 500.39 22.58 501.58 23.77C502.77 24.95 503.71 26.33 504.40 27.91C505.09 29.50 505.43 31.18 505.43 32.98C505.43 34.77 505.09 36.47 504.40 38.05C503.71 39.64 502.77 41.03 501.58 42.21C500.39 43.39 499.00 44.32 497.41 45.02C495.82 45.70 494.12 46.06 492.32 46.06C490.52 46.06 488.84 45.71 487.26 45.02C485.68 44.32 484.30 43.39 483.12 42.21C481.94 41.02 481.02 39.64 480.33 38.05C479.65 36.47 479.31 34.77 479.31 32.98C479.31 31.18 479.65 29.48 480.33 27.89ZM461.74 20.19C462.26 20.19 462.53 20.43 462.53 20.90L462.53 24.61C462.53 24.98 462.42 25.22 462.23 25.33C462.04 25.45 461.87 25.50 461.72 25.50L454.24 25.50L454.24 44.48C454.24 44.81 454.16 45.07 454.01 45.28C453.85 45.49 453.62 45.60 453.31 45.60L449.29 45.60C448.93 45.60 448.71 45.47 448.62 45.23C448.52 44.99 448.48 44.74 448.48 44.48L448.48 25.50L441.11 25.50C440.54 25.50 440.26 25.23 440.26 24.67L440.26 21.05C440.26 20.82 440.34 20.62 440.51 20.45C440.67 20.28 440.88 20.20 441.12 20.20L461.76 20.20L461.74 20.19ZM417.02 29.94C416.63 28.98 416.09 28.15 415.42 27.43C414.73 26.70 413.93 26.14 413.02 25.72C412.11 25.30 411.12 25.09 410.08 25.09C409.03 25.09 408.11 25.29 407.21 25.68C406.30 26.08 405.52 26.62 404.85 27.33C404.17 28.03 403.64 28.87 403.25 29.84C402.85 30.81 402.65 31.86 402.65 33.01C402.65 34.16 402.85 35.15 403.23 36.11C403.60 37.07 404.12 37.90 404.80 38.61C405.46 39.32 406.24 39.88 407.15 40.28C408.05 40.69 409.03 40.90 410.08 40.90C411.12 40.90 412.15 40.69 413.07 40.26C414.00 39.84 414.79 39.28 415.47 38.56C416.14 37.83 416.66 37.01 417.04 36.05C417.43 35.10 417.62 34.08 417.62 33.00C417.62 31.92 417.42 30.90 417.02 29.94ZM423.24 44.77C423.24 45.32 422.98 45.59 422.45 45.59L418.92 45.59C418.56 45.59 418.28 45.47 418.05 45.24C417.83 45.01 417.71 44.70 417.71 44.35L417.71 42.70C416.63 43.75 415.43 44.56 414.08 45.17C412.74 45.76 411.32 46.06 409.83 46.06C408.16 46.06 406.55 45.73 405.00 45.10C403.46 44.45 402.09 43.55 400.92 42.40C399.73 41.25 398.78 39.87 398.09 38.28C397.39 36.68 397.03 34.94 397.03 33.03C397.03 31.23 397.37 29.54 398.04 27.95C398.71 26.37 399.64 24.98 400.78 23.80C401.94 22.62 403.30 21.68 404.86 20.99C406.42 20.30 408.06 19.95 409.83 19.95C411.60 19.95 413.07 20.24 414.40 20.81C415.73 21.37 416.91 22.28 417.99 23.51L418.34 21.03C418.38 20.76 418.46 20.55 418.56 20.41C418.67 20.26 418.86 20.20 419.15 20.20L422.44 20.20C422.97 20.20 423.23 20.49 423.23 21.03L423.23 44.78L423.24 44.77ZM358.21 35.71C358.56 36.65 359.06 37.50 359.72 38.25C360.37 38.99 361.17 39.60 362.08 40.05C363.01 40.52 364.03 40.75 365.18 40.75C366.32 40.75 367.31 40.55 368.22 40.14C369.14 39.74 369.92 39.17 370.58 38.47C371.23 37.75 371.73 36.92 372.10 35.97C372.45 35.01 372.64 33.98 372.64 32.89C372.64 31.80 372.47 30.78 372.12 29.84C371.77 28.90 371.28 28.08 370.64 27.40C369.99 26.71 369.22 26.17 368.29 25.77C367.37 25.38 366.34 25.18 365.20 25.18C364.05 25.18 363.03 25.40 362.09 25.85C361.17 26.30 360.37 26.89 359.72 27.62C359.06 28.35 358.56 29.17 358.21 30.10C357.86 31.03 357.69 31.96 357.69 32.90C357.69 33.84 357.87 34.80 358.21 35.73ZM352.36 21.02C352.36 20.48 352.64 20.19 353.18 20.19L356.01 20.19C356.37 20.19 356.64 20.30 356.82 20.52C357.01 20.73 357.13 21.01 357.20 21.35L357.64 23.83C358.68 22.65 359.91 21.72 361.30 21.02C362.69 20.33 364.18 19.98 365.76 19.98C367.44 19.98 369.04 20.29 370.55 20.92C372.06 21.54 373.38 22.41 374.52 23.55C375.67 24.68 376.57 26.05 377.23 27.62C377.91 29.19 378.24 30.94 378.24 32.84C378.24 34.63 377.93 36.33 377.31 37.91C376.69 39.51 375.84 40.89 374.72 42.07C373.60 43.25 372.30 44.19 370.77 44.87C369.24 45.55 367.57 45.90 365.75 45.90C364.17 45.90 362.70 45.58 361.37 44.97C360.03 44.35 358.87 43.51 357.88 42.45L357.88 52.42C357.88 52.98 357.62 53.25 357.09 53.25L353.17 53.25C352.62 53.25 352.35 52.97 352.35 52.42L352.35 21.03L352.36 21.02ZM312.92 36.02C313.28 36.96 313.78 37.79 314.43 38.50C315.08 39.21 315.85 39.76 316.75 40.17C317.64 40.59 318.64 40.80 319.73 40.80C320.81 40.80 321.84 40.60 322.75 40.17C323.67 39.76 324.45 39.19 325.11 38.49C325.76 37.78 326.27 36.95 326.63 36.01C327.00 35.06 327.18 34.05 327.18 32.99C327.18 31.93 327.00 30.92 326.63 29.98C326.27 29.04 325.75 28.22 325.10 27.52C324.43 26.81 323.65 26.26 322.73 25.85C321.82 25.45 320.82 25.24 319.73 25.24C318.63 25.24 317.67 25.44 316.76 25.84C315.86 26.25 315.08 26.80 314.43 27.50C313.77 28.21 313.27 29.03 312.91 29.96C312.56 30.91 312.38 31.91 312.38 32.99C312.38 34.07 312.56 35.08 312.91 36.03ZM307.75 27.89C308.43 26.31 309.36 24.94 310.53 23.76C311.70 22.58 313.08 21.66 314.66 20.97C316.24 20.29 317.93 19.95 319.72 19.95C321.51 19.95 323.22 20.29 324.81 20.97C326.41 21.66 327.80 22.58 329.00 23.77C330.18 24.95 331.13 26.33 331.81 27.91C332.50 29.50 332.85 31.18 332.85 32.98C332.85 34.77 332.51 36.47 331.81 38.05C331.13 39.64 330.18 41.03 329.00 42.21C327.81 43.39 326.41 44.32 324.82 45.02C323.24 45.70 321.54 46.06 319.74 46.06C317.94 46.06 316.27 45.71 314.68 45.02C313.09 44.32 311.71 43.39 310.54 42.21C309.36 41.02 308.42 39.64 307.75 38.05C307.07 36.47 306.72 34.77 306.72 32.98C306.72 31.18 307.07 29.48 307.75 27.89ZM274.07 26.97C273.26 27.37 272.55 27.90 271.94 28.57C271.34 29.23 270.86 30.02 270.50 30.90C270.15 31.78 269.98 32.72 269.98 33.70C269.98 34.67 270.15 35.61 270.50 36.50C270.86 37.39 271.33 38.18 271.94 38.84C272.55 39.52 273.26 40.04 274.07 40.45C274.89 40.85 275.77 41.05 276.71 41.05C277.64 41.05 278.50 40.85 279.31 40.45C280.13 40.04 280.84 39.51 281.45 38.84C282.07 38.18 282.55 37.39 282.89 36.50C283.24 35.61 283.42 34.67 283.42 33.70C283.42 32.72 283.24 31.78 282.89 30.90C282.54 30.01 282.06 29.23 281.45 28.57C280.84 27.89 280.13 27.37 279.31 26.97C278.50 26.58 277.63 26.39 276.71 26.39C275.78 26.39 274.89 26.59 274.07 26.97ZM272.36 45.05C270.89 44.47 269.57 43.66 268.40 42.57C267.25 41.49 266.30 40.18 265.59 38.64C264.87 37.10 264.51 35.36 264.51 33.42L264.51 22.24C264.51 16.72 268.97 12.24 274.47 12.24L284.47 12.24L284.52 17.55L275.03 17.55C272.35 17.55 270.18 19.72 270.17 22.40L270.17 24.76C270.50 24.28 270.95 23.84 271.48 23.43C272.01 23.03 272.58 22.68 273.18 22.37C273.78 22.07 274.41 21.84 275.04 21.67C275.67 21.49 276.28 21.41 276.84 21.41C278.52 21.41 280.09 21.74 281.57 22.38C283.03 23.03 284.32 23.92 285.43 25.03C286.53 26.14 287.40 27.44 288.02 28.91C288.65 30.40 288.98 31.95 288.98 33.59C288.98 35.24 288.66 36.80 288.04 38.29C287.42 39.77 286.55 41.08 285.46 42.21C284.36 43.34 283.07 44.24 281.61 44.91C280.13 45.57 278.56 45.91 276.87 45.91C275.34 45.91 273.84 45.61 272.35 45.05ZM238.90 29.94C238.51 28.98 237.97 28.15 237.29 27.43C236.61 26.70 235.81 26.14 234.90 25.72C233.98 25.30 233.00 25.09 231.96 25.09C230.93 25.09 230.00 25.29 229.10 25.68C228.20 26.08 227.41 26.62 226.73 27.33C226.06 28.03 225.53 28.87 225.13 29.84C224.74 30.81 224.54 31.86 224.54 33.01C224.54 34.16 224.73 35.15 225.11 36.11C225.49 37.07 226.02 37.90 226.68 38.61C227.36 39.32 228.13 39.88 229.04 40.28C229.94 40.69 230.91 40.90 231.96 40.90C233.02 40.90 234.03 40.69 234.95 40.26C235.87 39.84 236.67 39.28 237.35 38.56C238.02 37.83 238.55 37.01 238.93 36.05C239.30 35.10 239.49 34.08 239.49 33.00C239.49 31.92 239.29 30.90 238.90 29.94ZM245.10 44.77C245.10 45.32 244.84 45.59 244.32 45.59L240.78 45.59C240.42 45.59 240.14 45.47 239.91 45.24C239.67 45.01 239.56 44.70 239.56 44.35L239.56 42.70C238.49 43.75 237.28 44.56 235.94 45.17C234.61 45.76 233.19 46.06 231.70 46.06C230.02 46.06 228.41 45.73 226.86 45.10C225.32 44.45 223.96 43.55 222.77 42.40C221.58 41.25 220.65 39.87 219.95 38.28C219.24 36.68 218.89 34.94 218.89 33.03C218.89 31.23 219.23 29.54 219.90 27.95C220.58 26.37 221.49 24.98 222.65 23.80C223.81 22.62 225.16 21.68 226.71 20.99C228.27 20.30 229.93 19.95 231.69 19.95C233.45 19.95 234.93 20.24 236.26 20.81C237.57 21.37 238.78 22.28 239.85 23.51L240.20 21.03C240.24 20.76 240.31 20.55 240.42 20.41C240.53 20.26 240.72 20.20 241.00 20.20L244.31 20.20C244.83 20.20 245.09 20.49 245.09 21.03L245.09 44.78L245.10 44.77ZM192.64 25.62L182.82 25.60L182.82 37.83C182.82 38.84 182.61 39.83 182.19 40.79C181.76 41.76 181.17 42.63 180.40 43.38C179.63 44.14 178.71 44.76 177.62 45.22C176.55 45.69 175.33 45.93 174.00 45.93C173.63 45.93 173.35 45.90 173.15 45.85C172.95 45.79 172.79 45.72 172.69 45.64C172.59 45.56 172.53 45.47 172.51 45.38C172.49 45.30 172.48 45.21 172.48 45.15L172.48 41.86C172.48 41.78 172.48 41.68 172.51 41.58C172.52 41.48 172.56 41.37 172.62 41.27C172.68 41.17 172.78 41.10 172.93 41.03C173.06 40.96 173.26 40.93 173.50 40.93C174.11 40.93 174.65 40.82 175.10 40.60C175.55 40.38 175.91 40.08 176.20 39.69C176.49 39.32 176.71 38.87 176.85 38.37C176.99 37.86 177.06 37.32 177.06 36.74L177.06 21.05C177.06 20.49 177.33 20.20 177.88 20.20L197.62 20.20C197.85 20.20 198.04 20.27 198.18 20.42C198.34 20.56 198.41 20.75 198.41 20.99L198.41 44.80C198.41 45.34 198.14 45.60 197.61 45.60L193.45 45.60C192.93 45.60 192.66 45.33 192.66 44.80L192.66 25.62L192.64 25.62ZM527.38 110.59L489.79 110.59C488.75 110.59 487.91 109.75 487.91 108.71L487.91 62.72C487.91 61.68 488.75 60.84 489.79 60.84L527.38 60.84C528.42 60.84 529.25 61.68 529.25 62.72L529.25 72.68C529.25 73.72 528.41 74.56 527.38 74.56L502.84 74.56L502.84 79.84L521.06 79.84C522.09 79.84 522.93 80.68 522.93 81.72L522.93 89.10C522.93 90.14 522.09 90.97 521.06 90.97L502.84 90.97L502.84 96.75L527.38 96.75C528.42 96.75 529.25 97.58 529.25 98.63L529.25 108.70C529.25 109.74 528.41 110.58 527.38 110.58ZM623.02 91.82C622.70 91.21 622.25 90.68 621.69 90.26C621.11 89.83 620.47 89.53 619.71 89.32C618.97 89.12 618.21 89.02 617.39 89.02L610.78 89.02L610.78 99.26L617.39 99.26C618.23 99.26 619.02 99.15 619.76 98.92C620.51 98.68 621.15 98.35 621.71 97.91C622.26 97.46 622.70 96.91 623.02 96.26C623.34 95.62 623.51 94.85 623.51 93.98C623.51 93.17 623.34 92.46 623.02 91.82ZM598.33 110.56C597.11 110.56 596.23 110.30 595.69 109.79C595.15 109.28 594.89 108.44 594.89 107.27L594.89 62.48C594.89 61.91 595.07 61.48 595.43 61.19C595.79 60.91 596.18 60.77 596.59 60.77L608.09 60.77C608.58 60.77 608.98 60.92 609.31 61.23C609.63 61.55 609.79 61.96 609.79 62.48L609.79 77.72L622.27 77.72C624.38 77.72 626.32 78.19 628.12 79.13C629.92 80.06 631.47 81.29 632.78 82.80C634.08 84.31 635.12 86.07 635.88 88.03C636.64 89.99 637.01 91.99 637.01 94.02C637.01 96.05 636.63 98.14 635.85 100.12C635.09 102.09 634.03 103.85 632.70 105.40C631.36 106.95 629.78 108.20 627.95 109.15C626.13 110.10 624.15 110.57 622.02 110.57L598.33 110.57L598.33 110.56ZM572.93 74.56L558.26 74.52L558.26 94.38C558.26 96.47 557.79 98.52 556.87 100.55C555.93 102.57 554.63 104.37 552.98 105.98C551.32 107.57 549.35 108.87 547.06 109.84C544.78 110.82 542.31 111.31 539.63 111.31C538.77 111.31 538.09 111.25 537.61 111.15C537.13 111.03 536.76 110.90 536.51 110.74C536.27 110.58 536.12 110.39 536.07 110.20C536.01 110.00 535.99 109.79 535.99 109.60L535.99 100.61C535.99 100.40 536.00 100.17 536.03 99.92C536.06 99.68 536.14 99.45 536.27 99.25C536.40 99.05 536.63 98.87 536.92 98.72C537.22 98.57 537.63 98.50 538.17 98.50C539.17 98.50 540.00 98.31 540.66 97.92C541.32 97.52 541.84 96.99 542.24 96.33C542.62 95.67 542.90 94.91 543.06 94.05C543.22 93.20 543.30 92.32 543.30 91.39L543.30 62.62C543.30 61.40 543.91 60.79 545.12 60.79L586.07 60.79C586.55 60.79 586.95 60.94 587.28 61.25C587.61 61.57 587.77 61.98 587.77 62.50L587.77 108.88C587.77 110.02 587.19 110.58 586.07 110.58L574.60 110.58C573.47 110.58 572.90 110.02 572.90 108.88L572.90 74.59L572.93 74.56ZM481.03 60.77C482.08 60.77 482.61 61.32 482.61 62.39L482.61 72.52C482.61 72.92 482.55 73.26 482.43 73.52C482.30 73.78 482.15 73.98 481.98 74.14C481.80 74.30 481.62 74.41 481.41 74.46C481.21 74.51 481.04 74.54 480.91 74.54L467.38 74.54L467.38 108.08C467.38 108.75 467.19 109.34 466.82 109.82C466.44 110.31 465.91 110.55 465.24 110.55L454.18 110.55C453.78 110.55 453.46 110.47 453.22 110.31C452.99 110.15 452.82 109.93 452.70 109.68C452.58 109.43 452.50 109.15 452.46 108.87C452.42 108.58 452.40 108.32 452.40 108.08L452.40 74.54L439.16 74.54C437.97 74.54 437.38 73.91 437.38 72.64L437.38 62.72C437.38 62.20 437.56 61.74 437.90 61.34C438.25 60.93 438.67 60.73 439.16 60.73L481.04 60.77L481.03 60.77ZM399.39 87.47L416.08 62.07C416.37 61.64 416.64 61.33 416.87 61.11C417.10 60.91 417.37 60.81 417.67 60.81L429.29 60.81C429.69 60.81 430.08 60.95 430.45 61.23C430.81 61.52 430.99 61.94 430.99 62.52L430.99 108.86C430.99 109.39 430.84 109.81 430.55 110.12C430.26 110.41 429.83 110.56 429.29 110.56L417.75 110.56C416.61 110.56 416.05 110.00 416.05 108.86L416.05 84.26L399.48 109.42C399.21 109.80 398.96 110.09 398.75 110.28C398.54 110.47 398.19 110.56 397.70 110.56L386.07 110.56C385.00 110.56 384.45 110.00 384.45 108.86L384.45 62.48C384.45 61.96 384.62 61.55 384.94 61.23C385.26 60.92 385.66 60.77 386.15 60.77L397.70 60.77C398.10 60.77 398.49 60.91 398.85 61.19C399.22 61.48 399.40 61.91 399.40 62.48L399.40 87.47L399.39 87.47ZM362.40 74.56L347.74 74.52L347.74 94.38C347.74 96.47 347.28 98.52 346.34 100.55C345.41 102.57 344.11 104.37 342.45 105.98C340.79 107.57 338.82 108.87 336.54 109.84C334.26 110.82 331.78 111.31 329.11 111.31C328.24 111.31 327.57 111.25 327.09 111.15C326.60 111.03 326.23 110.90 325.99 110.74C325.75 110.58 325.60 110.39 325.55 110.20C325.50 110.00 325.47 109.79 325.47 109.60L325.47 100.61C325.47 100.40 325.48 100.17 325.51 99.92C325.54 99.68 325.62 99.45 325.75 99.25C325.88 99.05 326.10 98.87 326.40 98.72C326.71 98.57 327.12 98.50 327.66 98.50C328.66 98.50 329.49 98.31 330.14 97.92C330.81 97.52 331.33 96.99 331.72 96.33C332.11 95.67 332.39 94.91 332.55 94.05C332.71 93.20 332.79 92.32 332.79 91.39L332.79 62.62C332.79 61.40 333.39 60.79 334.62 60.79L375.57 60.79C376.05 60.79 376.45 60.94 376.78 61.25C377.10 61.57 377.26 61.98 377.26 62.50L377.26 108.88C377.26 110.02 376.70 110.58 375.57 110.58L364.10 110.58C362.97 110.58 362.40 110.02 362.40 108.88L362.40 74.59L362.40 74.56ZM313.79 94.26C314.28 94.26 314.62 94.44 314.81 94.79L320.36 102.96C320.69 103.51 320.83 103.95 320.80 104.30C320.77 104.66 320.53 105.04 320.07 105.44C319.18 106.23 318.12 106.99 316.89 107.71C315.66 108.45 314.35 109.10 312.93 109.65C311.51 110.21 310.05 110.65 308.55 110.97C307.06 111.30 305.58 111.46 304.12 111.46C300.61 111.43 297.30 110.78 294.20 109.51C291.09 108.24 288.38 106.46 286.08 104.18C283.77 101.90 281.95 99.20 280.61 96.05C279.27 92.91 278.61 89.47 278.61 85.73C278.61 82.20 279.27 78.89 280.60 75.81C281.92 72.72 283.73 70.02 286.00 67.72C288.28 65.42 290.96 63.60 294.02 62.25C297.08 60.91 300.36 60.25 303.84 60.25C305.68 60.25 307.34 60.38 308.82 60.63C310.30 60.88 311.69 61.25 312.99 61.73C314.29 62.20 315.50 62.79 316.65 63.49C317.80 64.20 318.94 65.00 320.07 65.90C320.39 66.17 320.60 66.44 320.70 66.73C320.79 67.02 320.73 67.34 320.52 67.69L314.97 76.31C314.79 76.61 314.48 76.76 314.03 76.76C313.65 76.76 313.34 76.67 313.06 76.48C311.36 75.29 309.79 74.46 308.36 74.02C306.94 73.58 305.45 73.35 303.91 73.35C302.37 73.35 301.00 73.66 299.66 74.27C298.31 74.88 297.11 75.74 296.09 76.84C295.06 77.94 294.25 79.24 293.64 80.76C293.03 82.27 292.73 83.96 292.73 85.80C292.73 87.63 293.02 89.31 293.60 90.81C294.19 92.32 294.97 93.61 295.98 94.69C296.97 95.78 298.16 96.60 299.54 97.19C300.92 97.77 302.39 98.06 303.96 98.06C304.87 98.06 305.75 97.95 306.59 97.73C307.43 97.51 308.23 97.24 308.98 96.90C309.74 96.56 310.44 96.19 311.07 95.78C311.70 95.37 312.27 94.99 312.75 94.64C313.10 94.39 313.45 94.27 313.80 94.27ZM242.36 87.47L259.04 62.07C259.34 61.64 259.60 61.33 259.84 61.11C260.07 60.91 260.33 60.81 260.62 60.81L272.24 60.81C272.65 60.81 273.03 60.95 273.39 61.23C273.75 61.52 273.93 61.94 273.93 62.52L273.93 108.86C273.93 109.39 273.78 109.81 273.49 110.12C273.20 110.41 272.78 110.56 272.23 110.56L260.69 110.56C259.55 110.56 258.99 110.00 258.99 108.86L258.99 84.26L242.43 109.42C242.16 109.80 241.92 110.09 241.70 110.28C241.48 110.47 241.13 110.56 240.64 110.56L229.02 110.56C227.93 110.56 227.40 110.00 227.40 108.86L227.40 62.48C227.40 61.96 227.56 61.55 227.88 61.23C228.20 60.92 228.61 60.77 229.10 60.77L240.64 60.77C241.04 60.77 241.43 60.91 241.80 61.19C242.16 61.48 242.34 61.91 242.34 62.48L242.34 87.47L242.36 87.47ZM205.52 62.60C205.52 61.59 206.33 60.77 207.34 60.77L218.67 60.77C219.67 60.77 220.50 61.59 220.50 62.60L220.50 108.73C220.50 109.74 219.68 110.56 218.67 110.56L207.37 110.56C206.34 110.56 205.51 109.72 205.51 108.69L205.51 94.10L184.03 94.10C177.64 94.10 172.46 88.91 172.46 82.51L172.46 76.66L172.46 62.56C172.46 62.01 172.61 61.58 172.91 61.25C173.20 60.93 173.65 60.77 174.24 60.77L185.63 60.77C186.61 60.77 187.41 61.57 187.41 62.56L187.41 77.48C187.41 79.07 188.68 80.36 190.26 80.36L205.50 80.36L205.50 71.80L205.51 62.61L205.52 62.60Z"></path></svg></div>
+  <h2 class="pst-t rv" style="--d:60ms">Покажем<br>на&nbsp;вашей<br>инфраструктуре</h2>
+  <div class="pst-steps">
+    <div class="rv" style="--d:160ms"><h3>Демо</h3><p>На&nbsp;нашем стенде, под&nbsp;ваши вопросы и&nbsp;сценарии.</p></div>
+    <div class="rv" style="--d:220ms"><h3>Расчёт TCO</h3><p>На&nbsp;ваших параметрах: кластеры, узлы, рост, команда.</p></div>
+    <div class="rv" style="--d:280ms"><h3>Пилот</h3><p>На&nbsp;вашей инфраструктуре, в&nbsp;том числе в&nbsp;закрытом контуре.</p></div>
+    <div class="rv" style="--d:340ms"><h3>План внедрения</h3><p>Перенос кластеров и&nbsp;нагрузок, интеграция с&nbsp;CI/CD, ИБ и&nbsp;мониторингом.</p></div>
+  </div>
+  <div class="pst-foot rv" style="--d:400ms"><a href="mailto:shturval@chislitellab.ru">shturval@chislitellab.ru</a><a href="https://docs.shturval.tech/" target="_blank" rel="noopener">docs.shturval.tech</a><a href="https://chislitellab.ru/shturval" target="_blank" rel="noopener">chislitellab.ru/shturval</a><span class="pg"></span></div>
+</section>
+</main>
+</div>
+
+<div class="ui" aria-label="Навигация по слайдам">
+  <button id="prev" aria-label="Предыдущий слайд">←</button>
+  <span class="cnt" id="cnt"></span>
+  <button id="next" aria-label="Следующий слайд">→</button>
+  <button id="logos" class="tg" aria-pressed="true" title="Клавиша L">Логотипы</button>
+  <button id="fs" aria-label="Во весь экран" title="Клавиша F">⤢</button>
+  <button id="hbtn" aria-label="Подсказка по клавишам">?</button>
+</div>
+<div id="help"><b>← →</b> листать<br><b>L</b> показать / скрыть логотипы заказчиков<br><b>F</b> полный экран<br><b>Home / End</b> в начало / в конец</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add('js');
+  var deck = document.getElementById('deck');
+  var all = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var slides = [], cur = 0;
+
+  // Состояние: логотипы. Хранится в адресе: ?nologos
+  var q = new URLSearchParams(location.search);
+  var state = { logos: !q.has('nologos') };
+
+  // Неразрывный пробел после коротких слов и перед тире
+  var re = /(^|[\s(«])((?:[а-яёА-ЯЁ]{1,2})|и|в|с|к|о|у|а|на|не|по|за|от|до|из|для|без|при|над|под|про|что|как)\s+/g;
+  var walker = document.createTreeWalker(deck, NodeFilter.SHOW_TEXT, null);
+  var n; while ((n = walker.nextNode())) {
+    if (n.parentNode.closest('svg, .mono, .tool')) continue;
+    n.nodeValue = n.nodeValue.replace(re, function (m, a, w) { return a + w + '\u00a0'; }).replace(/\s+–/g, '\u00a0–');
+  }
+
+  function rebuild(keepId) {
+    slides = all.filter(function (s) {
+      var off = !state.logos && s.getAttribute('data-optional') === 'logos';
+      s.classList.toggle('off', off);
+      return !off;
+    });
+    slides.forEach(function (s, i) { var pg = s.querySelector('.pg'); if (pg) pg.textContent = (i + 1) + ' / ' + slides.length; });
+    var i = slides.findIndex(function (s) { return s.id === keepId; });
+    if (i < 0) { // текущий слайд скрыт – идём к ближайшему видимому перед ним
+      var k = all.findIndex(function (s) { return s.id === keepId; });
+      while (k > 0 && all[k].classList.contains('off')) k--;
+      i = Math.max(0, slides.indexOf(all[k]));
+    }
+    document.getElementById('logos').setAttribute('aria-pressed', state.logos);
+    var p = new URLSearchParams(); if (!state.logos) p.set('nologos', '');
+    var s = p.toString().replace(/=(&|$)/g, '$1');
+    history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    show(i);
+  }
+
+  function fit() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    deck.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+  }
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    all.forEach(function (s) { var on = s === slides[cur]; s.classList.toggle('active', on); s.setAttribute('aria-hidden', on ? 'false' : 'true'); });
+    document.getElementById('cnt').textContent = (cur + 1) + ' / ' + slides.length;
+    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+    var h = '#' + slides[cur].id;
+    if (location.hash !== h) history.replaceState(null, '', location.pathname + location.search + h);
+  }
+  function go(id) { var i = slides.findIndex(function (s) { return s.id === id; }); if (i > -1) show(i); }
+  function toggle(key) {
+    state[key] = !state[key]; rebuild(slides[cur].id);
+  }
+  function toggleFs() { if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); } else { document.exitFullscreen(); } }
+
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key.toLowerCase();
+    if ((k === 'enter' || k === ' ') && e.target.closest('a, button')) return;
+    if (['arrowright', 'pagedown', ' ', 'enter'].indexOf(k) > -1) { e.preventDefault(); show(cur + 1); }
+    else if (['arrowleft', 'pageup', 'backspace'].indexOf(k) > -1) { e.preventDefault(); show(cur - 1); }
+    else if (k === 'home') show(0);
+    else if (k === 'end') show(slides.length - 1);
+    else if (k === 'f' || k === 'а') toggleFs();
+    else if (k === 'l' || k === 'д') toggle('logos');
+    else if (k === '?' || k === ',') document.getElementById('help').classList.toggle('show');
+  });
+  document.getElementById('prev').onclick = function () { show(cur - 1); };
+  document.getElementById('next').onclick = function () { show(cur + 1); };
+  document.getElementById('fs').onclick = toggleFs;
+  document.getElementById('logos').onclick = function () { toggle('logos'); };
+  document.getElementById('hbtn').onclick = function () { document.getElementById('help').classList.toggle('show'); };
+  deck.addEventListener('click', function (e) {
+    var g = e.target.closest('[data-go]');
+    if (g) { e.preventDefault(); go(g.getAttribute('data-go')); return; }
+    if (e.target.closest('a, button')) return;
+    var r = deck.getBoundingClientRect();
+    if (e.clientX - r.left > r.width * 0.5) show(cur + 1); else show(cur - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); x0 = null; });
+  window.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (/^\d+$/.test(h)) show(+h - 1); else go(h); });
+
+  fit();
+  var h = location.hash.slice(1);
+  rebuild(/^\d+$/.test(h) ? (all[+h - 1] || all[0]).id : (h || all[0].id));
+})();
+</script>
+</body>
+</html>
