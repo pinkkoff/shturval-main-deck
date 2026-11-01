@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only dark">
+<meta name="supported-color-schemes" content="dark">
+<meta name="darkreader-lock">
 <title>Штурвал – Kubernetes-платформа Enterprise-уровня</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -1031,6 +1034,9 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 #stack .stk-net i { font-size: 15px; }
 .stk .stk-infra .chip { font-size: 16px; }
 @media print { html { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .poster .pst-mark { opacity: .14; } }
+
+/* Тема одна, тёмная: расширения вроде Noir и Dark Reader не должны затемнять страницу повторно */
+@media (prefers-color-scheme: dark) { :root { color-scheme: only dark; } }
 </style>
 </head>
 <body>
