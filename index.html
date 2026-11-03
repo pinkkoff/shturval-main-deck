@@ -1476,6 +1476,118 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 
 /* Тема одна, тёмная: расширения вроде Noir и Dark Reader не должны затемнять страницу повторно */
 @media (prefers-color-scheme: dark) { :root { color-scheme: only dark; } }
+
+/* Слайд «Рутину делает платформа»: дашборд кластера */
+.au2 { flex: 1; min-height: 0; display: grid; grid-template-columns: 600px minmax(0, 1fr); gap: 56px; align-items: center; margin-bottom: 40px; }
+.au2-l { display: flex; flex-direction: column; gap: 30px; }
+.au2-l .h2 { font-size: 58px; }
+.au2-lead { font-size: 23px; line-height: 1.42; color: var(--muted); }
+.au2-g { display: grid; gap: 22px; }
+.au2-g .k { margin-bottom: 10px; }
+.au2-g .chip { font-size: 18px; padding: 8px 14px; white-space: normal; }
+.au2-pr { padding-top: 22px; border-top: 1px solid var(--line); font-size: 19px; line-height: 1.45; color: var(--muted); }
+.au2-r { display: grid; place-items: center; }
+#automation .gui-wrap { background: #0b1016; }
+.cd { --a: var(--shturval); --ok: #3ddc97; --warn: #ffb74d; --err: #ff6b6b; --bg: #0b1016; --pn: #121a24; --pn2: #172131; --bd: #223044; --tx: #e8ecf1; --mu: #8b95a8;
+  display: grid; grid-template-columns: 188px minmax(0, 1fr); width: 1060px; height: 751px; transform: scale(.88679); transform-origin: 0 0; font-size: 14px; line-height: 1.3; color: var(--tx); background: var(--bg); overflow: hidden; }
+.cd button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.cd-side { display: flex; flex-direction: column; gap: 2px; padding: 18px 12px; background: #0e151e; border-right: 1px solid var(--bd); }
+.cd-logo { display: flex; align-items: center; gap: 10px; margin: 0 6px 16px; font-size: 20px; font-weight: 700; } .cd-logo img { width: 26px; }
+.cd-g { padding: 8px 8px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); } .cd-g.open { color: var(--tx); }
+.cd-ni { display: grid; gap: 1px; margin: 0 0 6px 4px; } .cd-ni span { padding: 6px 10px; border-radius: 8px; font-size: 13px; color: #a7b0c0; } .cd-ni span.on { color: var(--a); background: rgba(28,242,222,.1); font-weight: 700; }
+.cd-main { display: flex; flex-direction: column; min-width: 0; }
+.cd-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 18px 18px 14px; }
+.cd-head h4 { display: flex; align-items: center; gap: 12px; font-size: 23px; font-weight: 700; } .cd-head h4 span { color: var(--mu); }
+.cd-meta { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; color: var(--mu); } .cd-meta i { font-style: normal; } .cd-meta b { color: var(--tx); font-weight: 500; } .cd-meta b.w { color: var(--warn); }
+.cd-pill { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-style: normal; font-weight: 700; color: var(--ok); background: rgba(61,220,151,.12); box-shadow: inset 0 0 0 1px rgba(61,220,151,.4); }
+.cd-pill.err { color: var(--err); background: rgba(255,107,107,.12); box-shadow: inset 0 0 0 1px rgba(255,107,107,.45); }
+.cd-acts { display: flex; gap: 10px; align-items: center; }
+.cd-seg { display: flex; padding: 3px; border-radius: 10px; background: var(--pn2); box-shadow: inset 0 0 0 1px var(--bd); } .cd-seg button { padding: 6px 12px; border-radius: 8px; font-size: 13px; color: var(--mu); } .cd-seg button.on { background: var(--a); color: #000; font-weight: 700; }
+.cd-seg.sm button { padding: 4px 9px; font-size: 12px; }
+.cd .cd-btn { padding: 7px 12px; border-radius: 9px; font-size: 13px; background: var(--pn2); box-shadow: inset 0 0 0 1px var(--bd); white-space: nowrap; } .cd .cd-btn:hover { background: #1e2a3d; }
+.cd-tabs { display: flex; gap: 0; padding: 0 18px; border-bottom: 1px solid var(--bd); } .cd-tabs span { padding: 10px 10px; font-size: 13px; color: var(--mu); } .cd-tabs span.on { color: var(--a); font-weight: 700; box-shadow: inset 0 -2px 0 var(--a); }
+.cd-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 226px; }
+.cd-content { padding: 4px 18px 16px; overflow: hidden; }
+.cd h5 { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); } .cd h5 span { letter-spacing: 0; text-transform: none; font-weight: 500; }
+.cd-kpi { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.cd-t { position: relative; padding: 12px 14px 12px; border-radius: 12px; background: var(--pn); box-shadow: inset 0 0 0 1px var(--bd); transition: background .25s, box-shadow .25s; }
+.cd-t small { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--mu); } .cd-t small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+.cd-t b { display: block; margin-top: 7px; font-size: 19px; font-weight: 700; white-space: nowrap; }
+.cd-t span { display: block; margin-top: 3px; font-size: 12px; color: var(--mu); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cd-t.warn { background: rgba(255,183,77,.06); box-shadow: inset 0 0 0 1px rgba(255,183,77,.35); } .cd-t.warn small::before { background: var(--warn); } .cd-t.warn b { color: var(--warn); }
+.cd-t.err { background: rgba(255,107,107,.07); box-shadow: inset 0 0 0 1px rgba(255,107,107,.4); } .cd-t.err small::before { background: var(--err); } .cd-t.err b { color: var(--err); }
+.cd-cp { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.cd-ng { display: grid; gap: 8px; }
+.cd-row { display: grid; grid-template-columns: minmax(0, 1fr) 104px 104px 92px; gap: 14px; align-items: center; padding: 11px 14px; border-radius: 12px; background: var(--pn); box-shadow: inset 0 0 0 1px var(--bd); }
+.cd-row b { display: block; font-size: 14px; } .cd-row p { display: flex; gap: 6px; margin-top: 5px; } .cd-row p span { padding: 2px 8px; border-radius: 6px; font-size: 11px; color: #a7b0c0; background: var(--pn2); }
+.cd-row p span.ok { color: var(--ok); background: rgba(61,220,151,.1); } .cd-row p span.warn { color: var(--warn); background: rgba(255,183,77,.1); }
+.cd-bar small { display: flex; justify-content: space-between; font-size: 11px; color: var(--mu); } .cd-bar small b { color: var(--tx); font-weight: 500; }
+.cd-bar i { display: block; height: 5px; margin-top: 5px; border-radius: 3px; background: var(--pn2); overflow: hidden; } .cd-bar i::after { content: ""; display: block; width: var(--w); height: 100%; border-radius: 3px; background: var(--a); }
+.cd-row .cd-st { font-size: 12px; color: var(--mu); text-align: right; } .cd-row .cd-st.w { color: var(--warn); }
+.cd-ev { display: flex; flex-direction: column; gap: 10px; padding: 6px 16px 16px; border-left: 1px solid var(--bd); background: #0e151e; }
+.cd-ev h5 { margin-bottom: 0; } .cd-ev h5 span { font-weight: 700; } .cd-ev h5 .w { color: var(--warn); } .cd-ev h5 .e { color: var(--err); }
+.cd-ev ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cd-ev li { padding: 9px 11px; border-radius: 10px; background: var(--pn); box-shadow: inset 0 0 0 1px var(--bd); font-size: 12px; color: var(--mu); }
+.cd-ev li b { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--tx); } .cd-ev li b::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+.cd-ev li.w b::before { background: var(--warn); } .cd-ev li.e b::before { background: var(--err); } .cd-ev li em { float: right; font-style: normal; }
+.cd-ev li span { display: block; margin-top: 4px; color: var(--a); }
+.cd-empty { padding: 18px 10px; border-radius: 10px; text-align: center; font-size: 13px; color: var(--mu); box-shadow: inset 0 0 0 1px var(--bd); }
+
+.cd-t b { font-size: 21px; }
+.cd-row b { font-size: 15px; }
+.cd-row .cd-st { font-size: 14px; font-weight: 700; color: var(--tx); }
+.cd-ev li { font-size: 12px; }
+
+.cd h5 { margin: 12px 0 8px; }
+.cd-t { padding: 10px 12px; } .cd-t b { margin-top: 5px; }
+.cd-row { padding: 8px 14px; } .cd-row p { margin-top: 4px; }
+.cd-row b small { font-size: 12px; font-weight: 500; color: var(--mu); margin-left: 6px; }
+.cd-g { letter-spacing: .04em; }
+.cd-meta { white-space: nowrap; }
+
+/* Слайд 16: плитки автоматизаций и светлый экран */
+.au2-l { gap: 26px; }
+.au2-l .h2 { font-size: 54px; }
+.au2-g { gap: 18px; }
+.au2-g .k { margin-bottom: 8px; }
+.au2-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.au2-tiles span { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 10px 14px; border-radius: 12px; font-size: 17px; font-weight: 700; line-height: 1.2; background: #111; box-shadow: inset 0 0 0 1px #2a2a2a; }
+.au2-tiles span::before { content: ""; width: 8px; height: 8px; flex: none; background: var(--shturval); clip-path: var(--oct); }
+#automation .gui-wrap { background: #f3f5f6; }
+.cd { --a: #0a9e91; --ok: #12965a; --warn: #b8730a; --err: #d64545; --bg: #f3f5f6; --pn: #fff; --pn2: #eef2f4; --bd: #dde3e8; --tx: #1d2329; --mu: #6b7681; }
+.cd-side, .cd-ev { background: #fff; }
+.cd-ni span { color: #4a5560; } .cd-ni span.on { color: var(--a); background: rgba(10,158,145,.1); }
+.cd-seg button.on { color: #fff; }
+.cd .cd-btn:hover { background: #e4e9ec; }
+.cd-row p span { color: #4a5560; }
+.cd-row p span.ok { background: rgba(18,150,90,.1); } .cd-row p span.warn { background: rgba(184,115,10,.1); }
+.cd-pill { background: rgba(18,150,90,.1); box-shadow: inset 0 0 0 1px rgba(18,150,90,.35); }
+.cd-pill.err { background: rgba(214,69,69,.08); box-shadow: inset 0 0 0 1px rgba(214,69,69,.4); }
+.cd-t.warn { background: rgba(184,115,10,.06); box-shadow: inset 0 0 0 1px rgba(184,115,10,.35); }
+.cd-t.err { background: rgba(214,69,69,.06); box-shadow: inset 0 0 0 1px rgba(214,69,69,.4); }
+.cd-t, .cd-row, .cd-ev li { box-shadow: inset 0 0 0 1px var(--bd); }
+.cd-t.warn, .cd-t.err { box-shadow: inset 0 0 0 1px currentColor; }
+.cd-t.warn { color: var(--tx); box-shadow: inset 0 0 0 1px rgba(184,115,10,.4); } .cd-t.err { box-shadow: inset 0 0 0 1px rgba(214,69,69,.45); }
+.cd-logo { color: var(--tx); }
+
+/* Правки 2026-11-03 вечер */
+.cv-eyebrow { position: relative; }
+.cv-eyebrow::before { position: absolute; right: 100%; top: 50%; margin-right: 16px; width: 40px; }
+#about .prods { margin-block: 56px auto; }
+.au2-tiles span { min-height: 72px; padding: 12px 16px; }
+.au2-tiles span::before { display: none; }
+.au2-l { gap: 18px; }
+.au2-g { gap: 14px; }
+.au2-pr { padding-top: 16px; font-size: 18px; }
+#ml .pool { margin-top: 40px; margin-bottom: auto; }
+.aw-mark::before { display: none; }
+#clients .lg-sm { padding: 34px 54px; }
+.lic-rules { margin-top: 40px; margin-bottom: auto; }
+
+/* Слайд 23: верхние карточки без стекла */
+#ml .ml3 .card { background: #0c0c0c; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: inset 0 0 0 1px #2a2a2a; }
+#ml .ml3 .card.t { box-shadow: inset 0 0 0 1px rgba(28,242,222,.45); }
+#ml .pool { margin-top: 64px; }
 </style>
 </head>
 <body>
@@ -1494,7 +1606,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     <li><b>№ 13933</b><span>в&nbsp;реестре российского ПО с&nbsp;2022 года</span></li>
     <li><b>ФСТЭК</b><span>сертификат (под&nbsp;именем Kuberbox)</span></li>
     <li><b>ML / AI</b><span>Kubeflow, MLflow и&nbsp;общий пул GPU из&nbsp;коробки</span></li>
-    <li><b>DR</b><span>Disaster Recovery</span></li>
+    <li><b>DR</b><span>Катастрофоустойчивая мультиЦОД / мультиоблачная конфигурация</span></li>
   </ul>
 </section>
 
@@ -1513,7 +1625,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     <div class="prod rv" style="--d:220ms;--pc:#ffb900"><img src="assets/products/grafinya-horizontal-on-dark.svg" alt="Графиня"><p>Визуализация и&nbsp;анализ данных, аналог Grafana</p></div>
     <div class="prod rv" style="--d:270ms;--pc:#56d878"><img src="assets/products/nimbius-horizontal-on-dark.svg" alt="Нимбиус"><p>Платформа для&nbsp;частных и&nbsp;гибридных облаков</p></div>
   </div>
-  <div class="foot"><span>Все продукты в&nbsp;реестре российского ПО</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-tl" id="questions" data-title="Расскажите о себе">
@@ -1575,7 +1687,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       </div></div></div>
     </div>
   </div>
-  <div class="foot"><span>Интерфейс Штурвала: сводка платформы</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-tl" id="stack" data-title="Не только Kubernetes">
@@ -1621,7 +1733,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     </div>
     <div class="stk-bottom"><span>Модуль первоначального развёртывания</span><span>Модуль установки без&nbsp;доступа в&nbsp;интернет</span></div>
   </div>
-  <div class="foot"><span>Всё, кроме Kubernetes, в&nbsp;своей сборке собирают и&nbsp;сопровождают сами</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-r" id="summary" data-title="Короткое резюме">
@@ -1654,7 +1766,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <div class="bx2">
     <div class="bx2-l">
       <h2 class="h2 rv">Что&nbsp;есть в&nbsp;каждом кластере <span class="hl">с&nbsp;первой минуты</span></h2>
-      <p class="bx2-lead rv" style="--d:60ms">Системные сервисы ставятся при&nbsp;создании кластера и&nbsp;обновляются вместе с&nbsp;ним.</p>
+      <p class="bx2-lead rv" style="--d:60ms">Модули ставятся при&nbsp;создании кластера и&nbsp;обновляются вместе с&nbsp;ним.</p>
       <div class="bx2-g rv" style="--d:100ms">
         <div><p class="k">Эксплуатация</p><div class="chips"><span class="chip">container runtime</span><span class="chip">локальное хранилище</span><span class="chip">Velero</span><span class="chip">Argo CD</span><span class="chip">NodeConfig</span><span class="chip">cert-manager</span></div></div>
         <div><p class="k">Наблюдаемость</p><div class="chips"><span class="chip">метрики</span><span class="chip">Grafana с&nbsp;SSO</span><span class="chip">логи</span><span class="chip">алерты: Email, Telegram, Webhook</span></div></div>
@@ -1726,7 +1838,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       </div>
     </div>
   </div>
-  <div class="foot"><span>Интерфейс Штурвала: главный экран и&nbsp;обзор Deployment. Клик по&nbsp;заднему экрану выводит его вперёд</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide ideas-p" id="ideas" data-title="Основные идеи">
@@ -1747,12 +1859,12 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 
 <section class="slide pp-poster" id="props" data-title="Четыре свойства">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Enterprise начинается, когда <span class="hl">все четыре свойства</span> выполнены одновременно</h2>
+  <h2 class="h2 rv">Enterprise начинается, когда у&nbsp;платформы есть <span class="hl">все четыре свойства сразу</span></h2>
   <div class="pp rv" style="--d:120ms">
     <div class="pp-q"><span class="pp-n">1</span><div><h3>Масштабирование не&nbsp;равно росту затрат</h3><ul><li>Единый центр управления</li><li>Сквозной RBAC</li><li>Инфраструктурой управляет платформа</li></ul></div></div>
     <div class="pp-q"><span class="pp-n">2</span><div><h3>Нет единой точки отказа</h3><ul><li>Кластеры работают и&nbsp;без&nbsp;управления</li><li>DR кластера управления</li><li>Встроенный бэкап конфигураций</li></ul></div></div>
     <div class="pp-q"><span class="pp-n">3</span><div><h3>ИБ в&nbsp;архитектуре, а&nbsp;не&nbsp;в&nbsp;наложенных средствах</h3><ul><li>Единая точка интеграций с&nbsp;инфраструктурой</li><li>Полная изоляция нагрузок</li><li>Встроенная ИБ</li></ul></div></div>
-    <div class="pp-q"><span class="pp-n">4</span><div><h3>Уход от&nbsp;team lock и&nbsp;vendor lock</h3><ul><li>Любой компонент можно заменить</li><li>Всё на&nbsp;операторах и&nbsp;CRD</li><li>GUI для&nbsp;удобства, GitOps и&nbsp;IaC для&nbsp;серьёзной работы</li></ul></div></div>
+    <div class="pp-q"><span class="pp-n">4</span><div><h3>Уход от&nbsp;team lock и&nbsp;vendor lock</h3><ul><li>Любой компонент можно заменить</li><li>Всё на&nbsp;операторах и&nbsp;CRD</li><li>Платформой могут управлять люди разной квалификации</li></ul></div></div>
     <div class="pp-mark" aria-hidden="true"><img src="assets/shturval-sign.svg" alt=""></div>
   </div>
   <p class="pp-rule rv" style="--d:240ms">Все свойства вместе только в&nbsp;Штурвале</p>
@@ -1767,7 +1879,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       <ul class="plain rv" style="--d:60ms">
         <li><b>Два уровня.</b> Кластер управления создаёт и&nbsp;обслуживает клиентские кластеры, держит доступы, метрики и&nbsp;логи.</li>
         <li><b>Клиентские кластеры независимы.</b> Свои версии Kubernetes, окна обновлений и&nbsp;сетевые сегменты.</li>
-        <li><b>Встраивается в&nbsp;ваш ИТ-ландшафт.</b> Каталог пользователей, IdP, SIEM, виртуализация, Git и&nbsp;репозиторий артефактов подключаются к&nbsp;кластеру управления один раз сразу для&nbsp;всех кластеров.</li>
+        <li><b>Встраивается в&nbsp;ваш ИТ-ландшафт.</b> Каталог пользователей, IdP, SIEM, виртуализация и&nbsp;Git подключаются к&nbsp;кластеру управления один раз сразу для&nbsp;всех кластеров.</li>
         <li><b>Ванильный API.</b> CNCF-сертифицированный Kubernetes: kubectl, Lens и&nbsp;ваши чарты работают как&nbsp;есть.</li>
       </ul>
       <div class="capi rv" style="--d:120ms">
@@ -1789,11 +1901,10 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
           <rect x="0" y="168" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="192">SIEM · syslog</text><text x="20" y="212" fill="#919191" font-size="13" font-weight="500">аудит всех действий</text>
           <rect x="0" y="232" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="256">Виртуализация и облака</text><text x="20" y="276" fill="#919191" font-size="13" font-weight="500">создание ВМ через API</text>
           <rect x="0" y="296" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="320">Git · CI/CD</text><text x="20" y="340" fill="#919191" font-size="13" font-weight="500">GitOps через Argo CD</text>
-          <rect x="0" y="360" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="384">Репозиторий артефактов</text><text x="20" y="404" fill="#919191" font-size="13" font-weight="500">зеркало для закрытого контура</text>
-          <rect x="0" y="424" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="448">Email · Telegram · Webhook</text><text x="20" y="468" fill="#919191" font-size="13" font-weight="500">доставка алертов</text>
+          <rect x="0" y="360" width="240" height="54" rx="12" fill="#141414" stroke="#2c2c2c"/><text x="20" y="384">Email · Telegram · Webhook</text><text x="20" y="404" fill="#919191" font-size="13" font-weight="500">доставка алертов</text>
         </g>
         <g fill="none" stroke="#1cf2de" stroke-width="1.6" opacity=".75">
-          <path d="M242 67 H285 V110"/><path d="M242 131 H285"/><path d="M242 195 H285 V150"/><path d="M242 259 H285 V150"/><path d="M242 323 H285 V150"/><path d="M242 387 H285 V150"/><path d="M242 451 H285 V150"/>
+          <path d="M242 67 H285 V110"/><path d="M242 131 H285"/><path d="M242 195 H285 V150"/><path d="M242 259 H285 V150"/><path d="M242 323 H285 V150"/><path d="M242 387 H285 V150"/>
           <path d="M285 110 V150 H326" marker-end="url(#aa)"/>
         </g>
         <rect x="330" y="60" width="330" height="150" rx="20" fill="url(#mga)" stroke="#13a99c"/>
@@ -1891,7 +2002,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       </div></div></div>
     </div>
   </div>
-  <div class="foot"><span>Интерфейс Штурвала</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 
@@ -2011,7 +2122,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <h2 class="h2 rv">Как&nbsp;управление дотягивается <span class="hl">до&nbsp;каждого сегмента</span></h2>
   <div class="arch" style="margin-top:36px;grid-template-columns:600px minmax(0,1fr)">
     <ul class="list tight rv" style="--d:80ms">
-      <li><b>Одно управление на&nbsp;все сегменты</b>Права, политики, метрики и&nbsp;логи сводятся в&nbsp;кластер управления.</li>
+      <li><b>Одно управление на&nbsp;все сегменты</b>Права, аудит, метрики и&nbsp;логи сводятся в&nbsp;кластер управления.</li>
       <li><b>Одностороннего доступа достаточно</b>До&nbsp;PCI DSS и&nbsp;DMZ соединения открываются в&nbsp;одну сторону.</li>
       <li><b>Без&nbsp;интернета</b>Все сегменты обновляются из&nbsp;зеркала внутри: образы, пакеты, чарты.</li>
       <li><b>Свои правила на&nbsp;сегмент</b>Политики Kyverno, Pod Security Standards и&nbsp;набор системных сервисов задаются для&nbsp;каждого кластера отдельно.</li>
@@ -2025,7 +2136,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
         </defs>
         <rect x="320" y="2" width="360" height="96" rx="20" fill="url(#mg3)" stroke="#13a99c"/>
         <text x="500" y="42" text-anchor="middle" fill="#1cf2de" font-size="15" font-weight="700" letter-spacing="1.5">КЛАСТЕР УПРАВЛЕНИЯ</text>
-        <text x="500" y="74" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">права · политики · метрики · логи</text>
+        <text x="500" y="74" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">права · аудит · метрики · логи</text>
         <line x1="20" y1="176" x2="980" y2="176" stroke="#ff8a5c" stroke-width="2" stroke-dasharray="2 8"/>
         <text x="255" y="164" text-anchor="middle" fill="#ff8a5c" font-size="13" font-weight="700" letter-spacing="1.2">МЕЖСЕТЕВЫЕ ЭКРАНЫ</text>
         <path d="M340 100 V130 H132.5 V226" fill="none" stroke="#1cf2de" stroke-width="2" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
@@ -2060,30 +2171,57 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
-<section class="slide g-tl" id="automation" data-title="Автоматизации">
+<section class="slide g-blue" id="automation" data-title="Автоматизации">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · масштаб без&nbsp;роста команды</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <div class="auto">
-    <div class="auto-side">
-      <h2 class="h2 rv" style="font-size:56px">Рутину делает <span class="hl">платформа</span></h2>
-      <p class="lead rv" style="--d:60ms;font-size:23px">Всё, что&nbsp;в&nbsp;своей сборке держится на&nbsp;скриптах и&nbsp;людях, в&nbsp;Штурвале делает сам продукт. Инженеры занимаются развитием, а&nbsp;не&nbsp;поддержкой.</p>
-      <div class="card t rv mt-auto" style="--d:120ms">
-        <p class="k">Принцип</p>
-        <p style="font-size:21px;color:var(--ink);margin-top:10px">GUI, IaC и&nbsp;GitOps равноправны. Всё, что&nbsp;делается кнопкой, можно описать манифестом и&nbsp;вызвать через REST API.</p>
+  <div class="au2">
+    <div class="au2-l">
+      <h2 class="h2 rv">Рутину делает <span class="hl">платформа</span></h2>
+      <p class="au2-lead rv" style="--d:60ms">То, что в&nbsp;своей сборке держится на&nbsp;скриптах и&nbsp;людях, в&nbsp;Штурвале делает сам продукт.</p>
+      <div class="au2-g rv" style="--d:110ms">
+        <div><p class="k">Кластеры и&nbsp;узлы</p><div class="au2-tiles"><span>Создание кластера</span><span>Обновление по&nbsp;кнопке</span><span>Группы узлов</span><span>Автоскейлинг</span><span>Само&shy;восстановление</span><span>Настройки узлов</span></div></div>
+        <div><p class="k">Сервисы</p><div class="au2-tiles"><span>Сертификаты</span><span>Бэкапы</span><span>Наблюдаемость</span><span>Доставка приложений</span><span>Алерты и&nbsp;оповещения</span><span>Каталог модулей</span></div></div>
+        <div><p class="k">Доступ и&nbsp;ИБ</p><div class="au2-tiles"><span>Сквозной RBAC</span><span>Проверки ИБ</span><span>Закрытый контур</span></div></div>
       </div>
+      <p class="au2-pr rv" style="--d:160ms">GUI, IaC и&nbsp;GitOps равноправны: всё, что делается кнопкой, можно описать манифестом и&nbsp;вызвать через REST API.</p>
     </div>
-    <div class="auto-grid">
-      <div class="card rv" style="--d:60ms"><h4>Создание кластера</h4><p>Из&nbsp;провайдера или&nbsp;на&nbsp;bare metal, сразу с&nbsp;сетью, Ingress, DNS, хранилищем и&nbsp;мониторингом.</p><span class="was">вместо <s>сборки по&nbsp;чек-листу</s></span></div>
-      <div class="card rv" style="--d:90ms"><h4>Обновление по&nbsp;кнопке</h4><p>Kubernetes и&nbsp;системные сервисы обновляются по&nbsp;кнопке или&nbsp;расписанию, изолированно по&nbsp;кластерам.</p><span class="was">вместо <s>upgrade-проекта на&nbsp;квартал</s></span></div>
-      <div class="card rv" style="--d:120ms"><h4>Группы узлов и&nbsp;автоскейлинг</h4><p>Worker-группы масштабируются по&nbsp;нагрузке, узлы вводятся и&nbsp;выводятся платформой.</p><span class="was">вместо <s>заявок на&nbsp;ВМ</s></span></div>
-      <div class="card rv" style="--d:150ms"><h4>Самовосстановление</h4><p>MachineHealthCheck находит сбойный узел и&nbsp;пересоздаёт его.</p><span class="was">вместо <s>ночного разбора инцидента</s></span></div>
-      <div class="card rv" style="--d:180ms"><h4>Настройки узлов</h4><p>NodeConfig на&nbsp;группу: ядро, sysctl, runtime, метки и&nbsp;taints описываются декларативно.</p><span class="was">вместо <s>обхода узлов по&nbsp;SSH</s></span></div>
-      <div class="card rv" style="--d:210ms"><h4>Сертификаты</h4><p>cert-manager выпускает и&nbsp;продлевает, сроки видны на&nbsp;дашборде.</p><span class="was">вместо <s>инцидентов из-за истёкших</s></span></div>
-      <div class="card rv" style="--d:240ms"><h4>Бэкапы</h4><p>Velero по&nbsp;расписанию: ресурсы и&nbsp;PV, восстановление и&nbsp;миграция между кластерами.</p><span class="was">вместо <s>своих скриптов в&nbsp;cron</s></span></div>
-      <div class="card rv" style="--d:270ms"><h4>Сквозной RBAC</h4><p>Роли из&nbsp;LDAP / OIDC сразу на&nbsp;платформу, тенанты, кластеры и&nbsp;неймспейсы.</p><span class="was">вместо <s>ролей в&nbsp;каждом кластере</s></span></div>
-      <div class="card rv" style="--d:300ms"><h4>Наблюдаемость</h4><p>Метрики, логи, алерты и&nbsp;дашборды появляются в&nbsp;каждом новом кластере.</p><span class="was">вместо <s>стека мониторинга на&nbsp;кластер</s></span></div>
-      <div class="card rv" style="--d:330ms"><h4>Проверки ИБ</h4><p>Trivy, CIS Benchmark, Kyverno, аудит с&nbsp;выгрузкой в&nbsp;SIEM.</p><span class="was">вместо <s>ручных аудитов</s></span></div>
-      <div class="card rv" style="--d:360ms"><h4>Доставка приложений</h4><p>Argo CD и&nbsp;Argo Rollouts в&nbsp;составе платформы, под&nbsp;единым RBAC.</p><span class="was">вместо <s>отдельной инсталляции CD</s></span></div>
-      <div class="card rv" style="--d:390ms"><h4>Закрытый контур</h4><p>Установка и&nbsp;обновления из&nbsp;вашего зеркала, без&nbsp;выхода в&nbsp;интернет.</p><span class="was">вместо <s>ручного переноса артефактов</s></span></div>
+    <div class="au2-r rv" style="--d:120ms">
+      <div class="tablet"><div class="gui-wrap"><div class="cd" aria-label="Интерфейс Штурвала: дашборд кластера">
+        <aside class="cd-side">
+          <div class="cd-logo"><img src="assets/shturval-sign.svg" alt="">штурвал</div>
+          <p class="cd-g">Неймспейсы</p>
+          <p class="cd-g open">Администрирование</p>
+          <div class="cd-ni"><span class="on">Дашборд</span><span>Управление доступом</span><span>Управление узлами</span><span>Конфигурация узлов</span><span>ClusterIssuers</span><span>Сетевые политики Cilium</span></div>
+          <p class="cd-g">Оповещения</p><p class="cd-g">Хранилище</p><p class="cd-g">Сервисы и&nbsp;репозитории</p><p class="cd-g">Резервное копирование</p><p class="cd-g">Сети</p>
+        </aside>
+        <div class="cd-main">
+          <div class="cd-head">
+            <div>
+              <h4><span>←</span>prod-cluster-01<em class="cd-pill">Provisioned</em></h4>
+              <p class="cd-meta">Реконсиляция: <b id="cd-rec">активна</b><i>·</i><span class="cd-pill" id="cd-ready">Ready</span></p>
+            </div>
+            <div class="cd-acts">
+              <div class="cd-seg" id="cd-scn"><button type="button" class="on" data-s="ok">Healthy</button><button type="button" data-s="bad">Problem</button></div>
+              <button type="button" class="cd-btn" id="cd-pause">Приостановить реконсиляцию</button>
+            </div>
+          </div>
+          <div class="cd-tabs"><span class="on">Кластер</span><span>Info</span><span>События</span><span>Логи</span><span>Обновление</span><span>Сертификаты</span><span>Доступность</span></div>
+          <div class="cd-body">
+            <div class="cd-content">
+              <h5>Жизненно важные объекты</h5>
+              <div class="cd-kpi" id="cd-kpi"></div>
+              <h5>Компоненты control plane <span id="cd-cps"></span></h5>
+              <div class="cd-cp" id="cd-cp"></div>
+              <h5>Группы узлов</h5>
+              <div class="cd-ng" id="cd-ng"></div>
+            </div>
+            <aside class="cd-ev">
+              <h5>События <span id="cd-evc"></span></h5>
+              <div class="cd-seg sm" id="cd-evf"><button type="button" data-f="we">Warning + Error</button><button type="button" class="on" data-f="all">Все</button></div>
+              <ul id="cd-evl"></ul>
+            </aside>
+          </div>
+        </div>
+      </div></div></div>
     </div>
   </div>
   <div class="foot"><span></span><span class="pg"></span></div>
@@ -2142,21 +2280,21 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       </div></div></div>
     </div>
   </div>
-  <div class="foot"><span>Интерфейс Штурвала: сводный отчёт по&nbsp;политикам Kyverno</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-tl" id="sec-layers" data-title="Безопасность по слоям">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · безопасная разработка</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
   <div class="sl-head">
-    <div><h2 class="h2 rv">Каждый слой Штурвала <span class="hl">под&nbsp;контролем</span></h2><p class="sl-lead rv" style="--d:60ms">Проверяем всё, из&nbsp;чего состоит платформа: от&nbsp;исходного кода до&nbsp;работающего кластера управления</p></div>
-    <div class="sl-facts rv" style="--d:100ms"><div><b>Каждый день</b><span>мониторинг новых CVE</span></div><div><b>Каждый релиз</b><span>полный цикл проверки</span></div></div>
+    <div><h2 class="h2 rv">Каждый слой Штурвала <span class="hl">под&nbsp;контролем</span></h2><p class="sl-lead rv" style="--d:60ms">Все компоненты собираются из&nbsp;исходного кода и&nbsp;хранятся в&nbsp;репозитории на&nbsp;территории РФ</p></div>
+    <div class="sl-facts rv" style="--d:100ms"><div><b>Каждый день</b><span>сканирование до&nbsp;выпуска релиза</span></div><div><b>Каждый релиз</b><span>отчёт по&nbsp;уязвимостям в&nbsp;Service Desk</span></div></div>
   </div>
   <div class="sl-main rv" style="--d:140ms">
-    <div class="sl-stack"><div class="sl-layer"><div class="sl-name"><i class="sl-mark"></i><div><h3>Исходный код</h3><p>Платформа, утилиты и&nbsp;плагины</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="SAST" aria-expanded="false">SAST</button><button type="button" data-term="Secrets" aria-expanded="false">Secrets</button></div><p class="sl-catch">Уязвимые конструкции и&nbsp;забытые ключи</p></div><div class="sl-tip" data-for="SAST" hidden><b>SAST · статический анализ кода</b><p>Ищет уязвимые конструкции и&nbsp;опасные потоки данных в&nbsp;исходном коде без&nbsp;запуска программы.</p></div><div class="sl-tip" data-for="Secrets" hidden><b>Secrets · поиск секретов</b><p>Находит токены, пароли и&nbsp;ключи, случайно оставленные в&nbsp;коде и&nbsp;конфигурациях.</p></div></div><div class="sl-layer"><div class="sl-name"><i class="sl-mark"></i><div><h3>Зависимости</h3><p>Сторонние библиотеки и&nbsp;компоненты</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="SCA" aria-expanded="false">SCA</button><span class="sl-daily">каждый день</span></div><p class="sl-catch">Известные CVE в&nbsp;день публикации</p></div><div class="sl-tip" data-for="SCA" hidden><b>SCA · анализ сторонних компонентов</b><p>Каждый день сверяет библиотеки и&nbsp;зависимости с&nbsp;базами известных уязвимостей (CVE).</p></div></div><div class="sl-layer up"><div class="sl-name"><i class="sl-mark"></i><div><h3>Образы контейнеров</h3><p>Системные сервисы платформы</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="Images" aria-expanded="false">Images</button></div><p class="sl-catch">Уязвимые пакеты и&nbsp;небезопасные настройки</p></div><div class="sl-tip" data-for="Images" hidden><b>Images · анализ образов</b><p>Проверяет образы контейнеров: пакеты, слои, базовый образ и&nbsp;небезопасные настройки.</p></div></div><div class="sl-layer up"><div class="sl-name"><i class="sl-mark"></i><div><h3>Работающая платформа</h3><p>API, интерфейс и&nbsp;сервисы</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="DAST" aria-expanded="false">DAST</button><button type="button" data-term="Fuzzing" aria-expanded="false">Fuzzing</button></div><p class="sl-catch">Атаки снаружи и&nbsp;сбои на&nbsp;неожиданных данных</p></div><div class="sl-tip" data-for="DAST" hidden><b>DAST · динамический анализ</b><p>Атакует работающую платформу снаружи, так, как&nbsp;это сделал&nbsp;бы злоумышленник.</p></div><div class="sl-tip" data-for="Fuzzing" hidden><b>Fuzzing · фаззинг</b><p>Подаёт на&nbsp;вход случайные и&nbsp;искажённые данные, чтобы найти сбои и&nbsp;необработанные ошибки.</p></div></div></div>
+    <div class="sl-stack"><div class="sl-layer"><div class="sl-name"><i class="sl-mark"></i><div><h3>Исходный код</h3><p>Платформа, утилиты и&nbsp;плагины</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="SAST" aria-expanded="false">SAST</button><button type="button" data-term="Secrets" aria-expanded="false">Secrets</button></div><p class="sl-catch">Уязвимые конструкции и&nbsp;забытые ключи</p></div><div class="sl-tip" data-for="SAST" hidden><b>SAST · статический анализ кода</b><p>Инструменты под&nbsp;каждый язык стека ищут инъекции, небезопасные функции и&nbsp;типичные ошибки.</p></div><div class="sl-tip" data-for="Secrets" hidden><b>Secrets · gitleaks</b><p>В&nbsp;том числе как&nbsp;pre-commit-хук: учётные данные, ключи и&nbsp;токены не&nbsp;попадают в&nbsp;код и&nbsp;образы.</p></div></div><div class="sl-layer"><div class="sl-name"><i class="sl-mark"></i><div><h3>Зависимости</h3><p>Сторонние библиотеки и&nbsp;компоненты</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="SCA" aria-expanded="false">SCA</button><span class="sl-daily">каждый день</span></div><p class="sl-catch">Известные CVE и&nbsp;состав ПО (SBOM)</p></div><div class="sl-tip" data-for="SCA" hidden><b>SCA · Dependency-Track и&nbsp;Syft</b><p>Dependency-Track проверяет зависимости на&nbsp;известные уязвимости, Syft формирует SBOM.</p></div></div><div class="sl-layer up"><div class="sl-name"><i class="sl-mark"></i><div><h3>Образы контейнеров</h3><p>Модули платформы</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="Images" aria-expanded="false">Images</button></div><p class="sl-catch">Уязвимости, мисконфигурации и&nbsp;секреты</p></div><div class="sl-tip" data-for="Images" hidden><b>Images · Trivy</b><p>Проверяет собранные образы: уязвимости, мисконфигурации и&nbsp;секреты.</p></div></div><div class="sl-layer up"><div class="sl-name"><i class="sl-mark"></i><div><h3>Работающая платформа</h3><p>API, интерфейс и&nbsp;сервисы</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="DAST" aria-expanded="false">DAST</button></div><p class="sl-catch">Атаки через открытые порты и&nbsp;API</p></div><div class="sl-tip" data-for="DAST" hidden><b>DAST · OWASP ZAP</b><p>Тестирует работающее приложение через открытые порты и&nbsp;доступные API.</p></div></div></div>
     <div class="sl-bridge" aria-hidden="true"><svg viewBox="0 0 64 600" preserveAspectRatio="none"><path d="M6 75 H26 V525 H6 M26 300 H56" fill="none" stroke="#1cf2de" stroke-opacity=".6" stroke-width="1.5" vector-effect="non-scaling-stroke"/><path d="M49 293 L57 300 L49 307" fill="none" stroke="#1cf2de" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></div>
-    <div class="sl-panel"><p class="sl-ph">Если что-то найдено</p><h3>Каждая находка проходит полный цикл</h3><ol class="sl-flow"><li><i class="sl-mark"></i><div><b>Оценка применимости</b><span>Эксперты проверяют, опасна&nbsp;ли уязвимость на&nbsp;деле</span></div></li><li><i class="sl-mark"></i><div><b>Исправление</b><span>Команда Штурвала закрывает подтверждённые уязвимости</span></div></li><li><i class="sl-mark"></i><div><b>Тестирование</b><span>Повторное сканирование и&nbsp;регрессионные тесты</span></div></li><li><i class="sl-mark"></i><div><b>Обновление</b><span>У&nbsp;заказчика по&nbsp;кнопке или&nbsp;по&nbsp;расписанию</span></div></li></ol></div>
+    <div class="sl-panel"><p class="sl-ph">Уязвимости High и&nbsp;Critical</p><h3>Каждая исправлена или&nbsp;размечена</h3><ol class="sl-flow"><li><i class="sl-mark"></i><div><b>Учёт</b><span>DefectDojo сводит отчёты всех сканеров</span></div></li><li><i class="sl-mark"></i><div><b>Анализ применимости</b><span>Можно&nbsp;ли эксплуатировать уязвимость в&nbsp;платформе</span></div></li><li><i class="sl-mark"></i><div><b>Исправление</b><span>Обновление зависимостей, правка кода, смена базового образа. Исправления уходят и&nbsp;в&nbsp;open source</span></div></li><li><i class="sl-mark"></i><div><b>Разметка VEX</b><span>Если эксплуатация невозможна или&nbsp;риск принят по&nbsp;регламенту</span></div></li></ol></div>
   </div>
-  <div class="foot"><span>Клик по&nbsp;метке раскрывает пояснение</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 <section class="slide g-br" id="center" data-title="Единый центр управления">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · единый центр управления</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
@@ -2266,7 +2404,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       <p class="small">Экономия идёт от&nbsp;загрузки карт и&nbsp;меньшей ручной работы, а&nbsp;не&nbsp;от&nbsp;ускорения обучения.</p>
     </div>
   </div>
-  <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-blue" id="ml-llm" data-title="LLM и инференс">
@@ -2296,7 +2434,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
         <span class="y">limits:</span>
           <span class="y">nvidia.com/gpu:</span> 1</pre></div>
   </div>
-  <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 <section class="slide sec g-tl oct-bg" id="sec-vendor" data-title="02 Vendor-agnostic">
   <div class="top"><span></span><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
@@ -2332,7 +2470,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       <div><img src="assets/compat/astra-linux.png" alt="Astra Linux" style="width:192px"><img src="assets/compat/red-os.png" alt="РЕД ОС" style="width:170px"><img src="assets/compat/alt-linux.png" alt="Alt Linux" style="width:183px"><img src="assets/compat/rosa.png" alt="РОСА" style="width:224px"><img src="assets/compat/ubuntu.png" alt="Ubuntu" style="width:180px"><img src="assets/compat/debian.png" alt="Debian" style="width:207px"><img src="assets/compat/rocky-linux.png" alt="Rocky Linux" style="width:224px"></div>
       <div><img src="assets/compat/red-hat.png" alt="Red Hat" style="width:220px"><img src="assets/compat/oracle-linux.png" alt="Oracle Linux" style="width:147px"><img src="assets/compat/kaspersky.png" alt="Kaspersky" style="width:224px"><img src="assets/compat/positive-technologies.png" alt="Positive Technologies" style="width:220px"><img src="assets/compat/luntry.png" alt="Luntry" style="width:177px"><img src="assets/compat/monq.png" alt="monq" style="width:224px"></div>
   </div>
-  <div class="foot"><span>Актуальный список на&nbsp;docs.shturval.tech</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide sec g-tl oct-bg" id="sec-tco" data-title="03 Лучшее TCO">
@@ -2395,7 +2533,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       <div class="card t ce-wide rv" style="--d:300ms"><b>Кадры</b><span>инженеры, которые уже знают Штурвал</span></div>
     </div>
   </div>
-  <div class="foot"><span>Ограничения: не&nbsp;входит в&nbsp;реестр российского ПО, нужен доступ в&nbsp;интернет</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 
@@ -2438,7 +2576,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <h2 class="h2 rv">Штурвал <span class="hl">в&nbsp;продуктиве</span></h2>
   <div class="logos rv" style="--d:80ms">
     <div class="lg"><img src="assets/logos/sovcombank.png" alt="Совкомбанк"></div>
-    <div class="lg"><img src="assets/logos/pochtabank.png" alt="Почта Банк"></div>
+    <div class="lg lg-sm"><img src="assets/logos/pochtabank.png" alt="Почта Банк"></div>
     <div class="lg"><img src="assets/logos/novikombank.png" alt="Новикомбанк"></div>
     <div class="lg"><img src="assets/logos/centrinvest.png" alt="Банк Центр-инвест"></div>
     <div class="lg"><img src="assets/logos/chelyabinvestbank.png" alt="Челябинвестбанк"></div>
@@ -2448,11 +2586,11 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     <div class="lg"><img src="assets/logos/goznak.jpg" alt="Гознак"></div>
     <div class="lg"><img src="assets/logos/sheremetyevo.png" alt="Шереметьево"></div>
     <div class="lg"><img src="assets/logos/kazakhtelecom.png" alt="Казахтелеком"></div>
-    <div class="lg"><img src="assets/logos/sts-media.png" alt="СТС Медиа"></div>
+    <div class="lg lg-sm"><img src="assets/logos/sts-media.png" alt="СТС Медиа"></div>
     <div class="lg"><img src="assets/logos/mosgorgeotrest.png" alt="Мосгоргеотрест"></div>
     <div class="lg more"><span>и&nbsp;другие</span></div>
   </div>
-  <div class="foot"><span class="no-print">Слайд отключается кнопкой «Логотипы» перед отправкой</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-r" id="license" data-title="Лицензия и поддержка">
@@ -2474,7 +2612,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     <li>Уровень поддержки выбирается <b>для&nbsp;каждого кластера</b></li>
     <li>Гарантия входит в&nbsp;лицензию, а&nbsp;поддержка идёт отдельным сервисом</li>
   </ul>
-  <div class="foot"><span>Подробно в&nbsp;руководстве по&nbsp;лицензированию v.2026-10</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide poster" id="steps" data-title="Дальнейшие шаги">
@@ -2580,7 +2718,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   deck.addEventListener('click', function (e) {
     var g = e.target.closest('[data-go]');
     if (g) { e.preventDefault(); go(g.getAttribute('data-go')); return; }
-    if (e.target.closest('a, button, .gui, .dev2, .pv, .pr')) return;
+    if (e.target.closest('a, button, .gui, .dev2, .pv, .pr, .cd')) return;
     var r = deck.getBoundingClientRect();
     if (e.clientX - r.left > r.width * 0.5) show(cur + 1); else show(cur - 1);
   });
@@ -2796,6 +2934,55 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   }); });
   document.addEventListener('click', function (e) { if (!e.target.closest('.sl-tip')) closeAll(); }, true);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+})();
+</script>
+<script>
+/* Дашборд кластера на слайде «Рутину делает платформа» */
+(function () {
+  var cd = document.querySelector('.cd'); if (!cd) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var scn = 'ok', evf = 'all', paused = false;
+  // [подпись, значение, пояснение, значение при сбое, пояснение при сбое, состояние при сбое]
+  var KPI = [
+    ['Ingress', '2 из 2', 'Ready · nginx'],
+    ['Gateways', '1 из 1', 'Programmed', '0 из 1', 'NoAddress', 'warn'],
+    ['Доступность', '≥99,99%', 'за 30 дней', '99,2%', 'просадка 3 мин', 'warn'],
+    ['Модули', '58 из 58', 'работают', '57 из 58', '1 не работает', 'warn'],
+    ['Алерты', '0', 'активных', '5', 'TargetDown 2h', 'err'],
+    ['Сертификаты', '120 дн.', 'до ротации'],
+    ['Kubernetes', 'v1.36.3', 'Штурвал 2.15'],
+    ['MHC', '2 группы', 'ремедиация вкл.', '2 группы', 'заменяет узел', 'warn']
+  ];
+  var CP = [['etcd', 'доступность 99,9%'], ['API server', 'kube-apiserver'], ['Scheduler', 'kube-scheduler', 'Leader lost · 3 мин'], ['Controller', 'kube-controller']];
+  var EV = {
+    ok: [['', 'ScalingReplicaSet', 'Deployment/payments-api', '2м'], ['', 'CertificateIssued', 'Certificate/ingress-tls', '18м'], ['', 'BackupCompleted', 'Schedule/nightly-velero', '3ч']],
+    bad: [['e', 'SchedulerUnhealthy ×4', 'Pod/kube-scheduler-cp-0', '3м'], ['w', 'MachineHealthCheck', 'Machine/workers-6: замена узла', '4м'], ['w', 'FailedBinding ×2', 'Pod/monitoring-agent-x7k', '12м'], ['w', 'CPUThrottlingHigh ×5', 'Pod/prometheus-server-0', '5м'], ['', 'ScalingReplicaSet', 'Deployment/payments-api', '2м']]
+  };
+  function tile(lbl, v, sub, st) { return '<div class="cd-t' + (st ? ' ' + st : '') + '"><small>' + lbl + '</small><b>' + v + '</b><span>' + sub + '</span></div>'; }
+  function bar(l, v, max, u) { return '<div class="cd-bar"><small>' + l + '<b>' + v + ' / ' + max + u + '</b></small><i style="--w:' + Math.round(v / max * 100) + '%"></i></div>'; }
+  function render() {
+    var bad = scn === 'bad';
+    $('cd-kpi').innerHTML = KPI.map(function (k) { return bad && k[3] ? tile(k[0], k[3], k[4], k[5]) : tile(k[0], k[1], k[2]); }).join('');
+    $('cd-cp').innerHTML = CP.map(function (c) { return bad && c[2] ? tile(c[0], 'Ошибка', c[2], 'err') : tile(c[0], 'Работает', c[1]); }).join('');
+    $('cd-cps').textContent = bad ? '3 из 4 работают' : '4 из 4 работают';
+    $('cd-ng').innerHTML =
+      '<div class="cd-row"><div><b>control-plane</b><p><span>oVirt</span><span class="ok">Available</span></p></div>' + bar('CPU', 1.5, 4, '') + bar('RAM', 7, 16, ' Gi') + '<span class="cd-st">3 из 3</span></div>' +
+      '<div class="cd-row"><div><b>workers <small>автоскейлинг 3–10</small></b><p><span>oVirt</span>' + (bad ? '<span class="warn">замена узла</span>' : '<span class="ok">Available</span>') + '</p></div>' + bar('CPU', bad ? 11.8 : 9.2, 24, '') + bar('RAM', bad ? 52 : 41, 96, ' Gi') + '<span class="cd-st' + (bad ? ' w' : '') + '">' + (bad ? '5' : '6') + ' из 6</span></div>' +
+      '<div class="cd-row"><div><b>infra</b><p><span>oVirt</span><span class="ok">Available</span></p></div>' + bar('CPU', 2.1, 8, '') + bar('RAM', 11, 32, ' Gi') + '<span class="cd-st">2 из 2</span></div>';
+    var list = EV[scn].filter(function (e) { return evf === 'all' || e[0]; });
+    var w = EV[scn].filter(function (e) { return e[0] === 'w'; }).length, er = EV[scn].filter(function (e) { return e[0] === 'e'; }).length;
+    $('cd-evc').innerHTML = '<span class="w">⚠ ' + w + '</span> <span class="e">⛔ ' + er + '</span>';
+    $('cd-evl').innerHTML = list.length ? list.map(function (e) { return '<li class="' + e[0] + '"><b>' + e[1] + '</b><em>' + e[3] + '</em><span>' + e[2] + '</span></li>'; }).join('') : '<li class="cd-empty">Предупреждений и&nbsp;ошибок нет</li>';
+    var r = $('cd-ready'); r.textContent = bad ? 'Ready: False' : 'Ready'; r.classList.toggle('err', bad);
+  }
+  function seg(el, b) { el.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); }
+  cd.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.s) { scn = b.dataset.s; seg($('cd-scn'), b); render(); return; }
+    if (b.dataset.f) { evf = b.dataset.f; seg($('cd-evf'), b); render(); return; }
+    if (b.id === 'cd-pause') { paused = !paused; b.textContent = paused ? 'Возобновить реконсиляцию' : 'Приостановить реконсиляцию'; var rc = $('cd-rec'); rc.textContent = paused ? 'приостановлена' : 'активна'; rc.classList.toggle('w', paused); }
+  });
+  render();
 })();
 </script>
 </body>
