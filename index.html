@@ -65,11 +65,11 @@ html.js .slide.active .rv { animation: rv-in .45s ease both; animation-delay: va
 @supports (-webkit-touch-callout: none) { .card, .layer { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
 
 /* Фоны: свечение из угла, точечный принт, полоса */
-.slide::before { content: ""; position: absolute; z-index: -2; inset: 0; pointer-events: none; }
-.g-tl::before { background: radial-gradient(circle 760px at 0 0, rgba(28,242,222,.22), rgba(28,242,222,0)); }
-.g-br::before { background: radial-gradient(circle 820px at 100% 100%, rgba(28,242,222,.2), rgba(28,242,222,0)); }
-.g-r::before { background: radial-gradient(circle 700px at 100% 30%, rgba(28,242,222,.18), rgba(28,242,222,0)), radial-gradient(circle 520px at 0 100%, rgba(38,104,255,.13), rgba(38,104,255,0)); }
-.g-blue::before { background: radial-gradient(circle 640px at 100% 0, rgba(38,104,255,.16), rgba(38,104,255,0)), radial-gradient(circle 760px at 0 100%, rgba(28,242,222,.16), rgba(28,242,222,0)); }
+.slide::before { content: ""; position: absolute; z-index: -2; inset: 0; pointer-events: none; --ox: 0px; --oy: 0px; }
+.g-tl::before { background: radial-gradient(circle 760px at var(--ox) var(--oy), rgba(28,242,222,0.22) 0%, rgba(28,242,222,0.163) 20%, rgba(28,242,222,0.101) 42%, rgba(28,242,222,0.048) 64%, rgba(28,242,222,0.015) 84%, rgba(28,242,222,0.0) 100%); }
+.g-br::before { background: radial-gradient(circle 820px at calc(100% - var(--ox)) calc(100% - var(--oy)), rgba(28,242,222,0.2) 0%, rgba(28,242,222,0.148) 20%, rgba(28,242,222,0.092) 42%, rgba(28,242,222,0.044) 64%, rgba(28,242,222,0.014) 84%, rgba(28,242,222,0.0) 100%); }
+.g-r::before { background: radial-gradient(circle 700px at calc(100% - var(--ox)) calc(var(--oy) + 324px), rgba(28,242,222,0.18) 0%, rgba(28,242,222,0.133) 20%, rgba(28,242,222,0.083) 42%, rgba(28,242,222,0.04) 64%, rgba(28,242,222,0.013) 84%, rgba(28,242,222,0.0) 100%), radial-gradient(circle 520px at var(--ox) calc(100% - var(--oy)), rgba(38,104,255,0.13) 0%, rgba(38,104,255,0.096) 20%, rgba(38,104,255,0.06) 42%, rgba(38,104,255,0.029) 64%, rgba(38,104,255,0.009) 84%, rgba(38,104,255,0.0) 100%); }
+.g-blue::before { background: radial-gradient(circle 640px at calc(100% - var(--ox)) var(--oy), rgba(38,104,255,0.16) 0%, rgba(38,104,255,0.118) 20%, rgba(38,104,255,0.074) 42%, rgba(38,104,255,0.035) 64%, rgba(38,104,255,0.011) 84%, rgba(38,104,255,0.0) 100%), radial-gradient(circle 760px at var(--ox) calc(100% - var(--oy)), rgba(28,242,222,0.16) 0%, rgba(28,242,222,0.118) 20%, rgba(28,242,222,0.074) 42%, rgba(28,242,222,0.035) 64%, rgba(28,242,222,0.011) 84%, rgba(28,242,222,0.0) 100%); }
 .band { background: var(--raised); }
 /* Фон-контур: два восьмигранника знака в углу, вектор без размытия */
 .oct-bg::after { content: ""; position: absolute; z-index: -1; right: -260px; bottom: -300px; width: 900px; height: 900px; pointer-events: none;
@@ -394,7 +394,7 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
 
 /* Четыре свойства: постер */
 .pp-poster { background: #000; }
-.pp-poster::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 58%; width: 1100px; height: 1100px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(28,242,222,.10), transparent 62%); pointer-events: none; }
+.pp-poster::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 58%; width: 1100px; height: 1100px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(28,242,222,0.1) 0%, rgba(28,242,222,0.074) 14%, rgba(28,242,222,0.046) 29%, rgba(28,242,222,0.022) 45%, rgba(28,242,222,0.007) 59%, rgba(28,242,222,0.0) 70%); pointer-events: none; }
 .pp-poster .h2 { max-width: 30ch; font-size: 56px; }
 .pp { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; margin-top: 36px; }
 .pp::before, .pp::after { content: ""; position: absolute; background: rgba(28,242,222,.35); pointer-events: none; }
@@ -627,7 +627,7 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
 .dp-ni span, .dp-ng, .dp-mut, .dp-l, .dp-head h4 span, .dp-n span, .dp-n small, .dp-m small, .dp-panel h5, .dp-panel h5 span { color: #a3acbd; }
 .dp-ng.open { color: #E8ECF1; }
 .dp-tabs { border-bottom-color: #2A3548; } .dp-bar { border-bottom-color: #2A3548; }
-.dp-graph { background-color: #151D2B; background-image: radial-gradient(#22304a 1px, transparent 1px); }
+.dp-graph { background-color: #151D2B; background-image: none; }
 .dp-right { background: #0F1419; border-left-color: #2A3548; }
 .dp-panel { background: #1A2332; box-shadow: inset 0 0 0 1px #2A3548; }
 .dp-n { background: #182230; box-shadow: inset 0 0 0 1px #2A3548; }
@@ -1604,11 +1604,19 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 
 /* Обложка: у крупных букв боковой отступ ~11 px, сдвигаем заголовок, чтобы он стоял ровно под «Vendor Agnostic» */
 .cv-h { margin-left: -11px; }
+
+/* Фон за краем слайда: на экранах не 16:9 (Mac 16:10) свечение и серый фон продолжаются в поля, без резкой границы по краю слайда */
+.deck-bg { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; transform: translate(-50%, -50%); pointer-events: none; }
+.deck-bg::before { content: ""; position: absolute; pointer-events: none; }
+.deck-bg:not(.pp-poster)::before { inset: -2000px; --ox: 2000px; --oy: 2000px; }
+.deck-bg.band { box-shadow: 0 0 0 3000px var(--raised); }
+@media print { .deck-bg { display: none; } .pp-poster::before { left: 0; top: 0; width: 1920px; height: 1080px; transform: none; background: radial-gradient(circle 545px at 50% 58%, #0a2c29 0%, #061c1a 29%, #031110 60%, #000 100%) !important; } }
 </style>
 </head>
 <body>
 <div class="progress" id="progress"></div>
 <div class="stage">
+<div class="deck-bg" id="deckbg" aria-hidden="true"></div>
 <main class="deck" id="deck">
 
 <section class="slide cv" id="cover" data-title="Обложка">
@@ -2669,7 +2677,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 <script>
 (function () {
   document.documentElement.classList.add('js');
-  var deck = document.getElementById('deck');
+  var deck = document.getElementById('deck'), deckbg = document.getElementById('deckbg');
   var all = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
   var slides = [], cur = 0;
 
@@ -2710,10 +2718,11 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 
   function fit() {
     var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-    deck.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+    deck.style.transform = deckbg.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
   }
   function show(i) {
     cur = Math.max(0, Math.min(slides.length - 1, i));
+    deckbg.className = 'deck-bg ' + ['g-tl', 'g-br', 'g-r', 'g-blue', 'pp-poster', 'band'].filter(function (c) { return slides[cur].classList.contains(c); }).join(' ');
     all.forEach(function (s) { var on = s === slides[cur]; s.classList.toggle('active', on); s.setAttribute('aria-hidden', on ? 'false' : 'true'); });
     document.getElementById('cnt').textContent = (cur + 1) + ' / ' + slides.length;
     document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
