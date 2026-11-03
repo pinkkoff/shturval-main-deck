@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="only dark">
 <meta name="supported-color-schemes" content="dark">
 <meta name="darkreader-lock">
-<title>Штурвал – Kubernetes-платформа Enterprise-уровня</title>
+<title>Штурвал. Enterprise Kubernetes платформа</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <style>
@@ -121,10 +121,10 @@ html.js .slide.active .rv { opacity: 1; transform: none; }
 .cover .art-glow { position: absolute; z-index: -2; right: 80px; top: 200px; width: 640px; height: 640px; background: var(--shturval); clip-path: var(--oct); filter: blur(140px); opacity: .22; }
 .cover .badge { display: inline-flex; align-items: center; gap: 14px; align-self: flex-start; font-size: 18px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 12px 20px; border-radius: 14px; background: var(--tint-2); }
 .cover .badge i { width: 12px; height: 12px; background: var(--shturval); clip-path: var(--oct); }
-.cover .h1 { margin-top: 44px; max-width: 13ch; }
+.cover .h1 { margin-top: 44px; max-width: 16ch; font-size: 84px; }
 .cover .h1 em { font-style: normal; color: var(--shturval); display: block; }
 .cover .lead { max-width: 44ch; margin-top: 36px; font-size: 28px; }
-.cover .facts { display: grid; grid-template-columns: repeat(3, 300px); gap: 16px; margin-top: auto; }
+.cover .facts { display: grid; grid-template-columns: repeat(4, 300px); gap: 16px; margin-top: auto; }
 .cover .facts .card { padding: 24px 26px; border-radius: 18px; }
 .cover .facts b { display: block; font-size: 36px; line-height: 1.1; }
 .cover .facts span { display: block; margin-top: 8px; font-size: 18px; line-height: 1.4; color: var(--muted); }
@@ -387,6 +387,435 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
 .progress { position: fixed; z-index: 10; left: 0; top: 0; height: 3px; background: var(--shturval); transition: width .35s ease; box-shadow: 0 0 12px rgba(28,242,222,.6); }
 :focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
 
+
+/* Четыре свойства: постер */
+.pp-poster { background: #000; }
+.pp-poster::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 58%; width: 1100px; height: 1100px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(28,242,222,.10), transparent 62%); pointer-events: none; }
+.pp-poster .h2 { max-width: 30ch; font-size: 56px; }
+.pp { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; margin-top: 36px; }
+.pp::before, .pp::after { content: ""; position: absolute; background: rgba(28,242,222,.35); pointer-events: none; }
+.pp::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+.pp::after { top: 50%; left: 0; right: 0; height: 1px; }
+.pp-q { display: flex; align-items: center; gap: 36px; padding: 24px 72px 24px 8px; color: inherit; text-decoration: none; }
+.pp-q:nth-child(2n) { padding: 24px 8px 24px 72px; }
+.pp-n { flex: none; width: 120px; font-size: 190px; font-weight: 700; line-height: .8; color: transparent; -webkit-text-stroke: 2px var(--shturval); text-align: center; }
+.pp-q h3 { font-size: 32px; line-height: 1.15; transition: color .2s; }
+.pp-q ul { list-style: none; margin-top: 14px; display: grid; gap: 4px; }
+.pp-q li { font-size: 19px; line-height: 1.4; color: var(--muted); }
+.pp-mark { position: absolute; left: 50%; top: 50%; width: 132px; height: 132px; transform: translate(-50%, -50%); display: grid; place-items: center; background: #000; clip-path: var(--oct); }
+.pp-mark img { width: 84px; filter: drop-shadow(0 0 24px rgba(28,242,222,.55)); }
+.pp-rule { margin: 20px 0 52px; text-align: center; font-size: 22px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--shturval); }
+
+/* Работа с инфраструктурой: компактно слева, планшет справа */
+.ss2 { flex: 1; min-height: 0; display: grid; grid-template-columns: 640px minmax(0, 1fr); gap: 56px; align-items: center; margin-bottom: 48px; }
+.ss2-l { display: flex; flex-direction: column; gap: 30px; }
+.ss2-l .h2 { font-size: 50px; max-width: none; }
+.ss2-user { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+.ss2-user p { font-size: 22px; line-height: 1.4; color: var(--muted); }
+.ss2-user div { display: flex; gap: 10px; }
+.ss2-user span { padding: 12px 18px; border-radius: 12px; font-size: 19px; font-weight: 700; color: var(--black); background: var(--shturval); white-space: nowrap; }
+.ss2-flow { list-style: none; counter-reset: ss2; margin: 0; padding: 0; display: grid; gap: 16px; }
+.ss2-flow li { counter-increment: ss2; position: relative; padding-left: 58px; font-size: 19px; line-height: 1.35; color: var(--muted); }
+.ss2-flow li::before { content: counter(ss2); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 40px; height: 40px; font-size: 16px; font-weight: 700; color: var(--black); background: var(--shturval); clip-path: var(--oct); }
+.ss2-flow b { display: block; font-size: 23px; line-height: 1.2; color: var(--ink); }
+.ss2-no { padding-top: 26px; border-top: 1px solid var(--line); }
+.ss2-no ul { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 26px; }
+.ss2-no li { font-size: 20px; font-weight: 700; text-decoration: line-through; text-decoration-color: var(--shturval); text-decoration-thickness: 1.5px; }
+.ss2-r { display: grid; place-items: center; }
+.tablet { position: relative; width: 984px; padding: 22px; border-radius: 40px; background: linear-gradient(160deg, #2a2a2a, #121212); box-shadow: inset 0 0 0 1.5px #3a3a3a, inset 0 0 0 7px #0b0b0b, 0 40px 120px rgba(0,0,0,.6), 0 0 90px rgba(28,242,222,.12); }
+.tablet::before { content: ""; position: absolute; left: 50%; top: 9px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: #2c2c2c; }
+.tablet img { display: block; width: 100%; border-radius: 18px; }
+
+/* Планшет: конфигурация группы узлов, вёрстка интерфейса в стиле бренда */
+.gui-wrap { width: 940px; height: 666px; overflow: hidden; border-radius: 18px; background: #070707; }
+.gui { width: 1200px; height: 850px; transform: scale(.78333); transform-origin: 0 0; color: #e8e8e8; font-size: 16px; line-height: 1.3; background: radial-gradient(900px 500px at 100% 0, rgba(28,242,222,.07), transparent 60%), #070707; cursor: default; }
+.gui button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.g-bar { display: flex; justify-content: space-between; align-items: center; height: 56px; padding: 0 32px; border-bottom: 1px solid #1f1f1f; background: #0d0d0d; font-size: 15px; color: #8f8f8f; }
+.g-crumbs b { margin: 0 10px; font-weight: 500; color: #555; } .g-crumbs span { color: #cfcfcf; }
+.g-user { color: #e8e8e8; }
+.g-head { display: flex; justify-content: space-between; align-items: center; padding: 26px 32px 20px; }
+.g-head h4 { display: flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 700; color: #fff; }
+.g-back { display: grid; place-items: center; width: 40px; height: 40px; font-size: 22px; color: var(--shturval); border-radius: 50%; box-shadow: inset 0 0 0 2px var(--shturval); }
+.g-doc { font-size: 15px; color: var(--shturval); }
+.g-panel { margin: 0 32px; padding: 6px 30px 26px; border-radius: 18px; background: #111; box-shadow: inset 0 0 0 1px #232323; }
+.g-tabs { display: flex; gap: 6px; border-bottom: 1px solid #262626; }
+.g-tabs button { padding: 16px 18px 14px; font-size: 16px; color: #9a9a9a; box-shadow: inset 0 -2px 0 transparent; transition: color .2s, box-shadow .2s; }
+.g-tabs button.on { color: var(--shturval); font-weight: 700; box-shadow: inset 0 -2px 0 var(--shturval); }
+.g-tabs button:hover { color: #fff; }
+.g-state { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0 8px; }
+.g-state dl { display: grid; grid-template-columns: auto auto; gap: 6px 14px; font-size: 16px; } .g-state dt { color: #9a9a9a; } .g-state dd { font-weight: 700; color: #fff; }
+.g-l { font-size: 14px; color: #9a9a9a; margin-bottom: 7px; } .g-l i { font-style: normal; color: #ff6b6b; }
+.g-chips { display: flex; gap: 8px; }
+.g-ok { padding: 4px 11px; border-radius: 7px; font-size: 14px; font-weight: 700; color: var(--shturval); background: rgba(28,242,222,.1); box-shadow: inset 0 0 0 1px rgba(28,242,222,.45); transition: opacity .3s; }
+.g-ok.off { color: #ffb74d; background: rgba(255,183,77,.1); box-shadow: inset 0 0 0 1px rgba(255,183,77,.45); }
+.g-cols { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 36px; margin-top: 8px; }
+.g-seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 12px; background: #1b1b1b; margin-bottom: 18px; }
+.g-seg button { padding: 11px 0; border-radius: 9px; font-size: 16px; color: #a9a9a9; transition: background .2s, color .2s; }
+.g-seg button.on { background: var(--shturval); color: #000; font-weight: 700; }
+.g-seg button:not(.on):hover { color: #fff; }
+.g-reps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+.g-num { display: flex; align-items: stretch; gap: 8px; height: 82px; }
+.g-num span { flex: 1; display: grid; place-items: center; border-radius: 12px; background: #1b1b1b; box-shadow: inset 0 0 0 1px #2a2a2a; font-size: 34px; font-weight: 700; color: #fff; transition: color .3s; }
+.g-fact span { color: #cfcfcf; } .g-fact.busy span { color: #ffb74d; }
+.g-arrows { display: grid; gap: 6px; } .g-arrows button { width: 44px; border-radius: 10px; background: #1b1b1b; box-shadow: inset 0 0 0 1px #2a2a2a; color: var(--shturval); font-size: 13px; transition: background .15s; }
+.g-arrows button:hover { background: #242424; } .g-arrows button:active { background: rgba(28,242,222,.2); }
+.g-arrows button:disabled { color: #444; cursor: default; }
+.g-auto { min-height: 22px; margin-bottom: 14px; font-size: 14px; color: var(--shturval); visibility: hidden; } .gui.g-autoscale .g-auto { visibility: visible; }
+.g-v { font-size: 18px; color: #fff; margin-bottom: 18px; }
+.g-in { display: flex; align-items: center; height: 44px; padding: 0 14px; border-radius: 10px; background: #1b1b1b; box-shadow: inset 0 0 0 1px #2a2a2a; font-size: 16px; color: #fff; }
+.g-ph { color: #5e5e5e; }
+.g-tags span { padding: 4px 10px; border-radius: 7px; font-size: 14px; color: var(--shturval); background: rgba(28,242,222,.1); }
+.g-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; }
+.g-tm { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto; align-items: center; gap: 8px; } .g-tm i { font-style: normal; font-size: 14px; color: #8f8f8f; }
+.g-save { display: flex; justify-content: flex-end; margin-top: 22px; }
+.g-save button { padding: 13px 40px; border-radius: 12px; font-size: 16px; font-weight: 700; background: var(--shturval); color: #000; transition: opacity .2s, background .2s; }
+.g-save button:disabled { background: #1f1f1f; color: #5e5e5e; cursor: default; }
+.g-save button.done { background: #1f1f1f; color: var(--shturval); }
+
+/* Планшет: светлая схема интерфейса */
+.gui { --gt: #0a9e91; color: #1d2329; background: radial-gradient(900px 500px at 100% 0, rgba(28,242,222,.12), transparent 60%), #f3f5f6; }
+.gui-wrap { background: #f3f5f6; }
+.g-bar { background: #fff; border-bottom-color: #e3e7ea; color: #7a838b; }
+.g-crumbs b { color: #b9c0c6; } .g-crumbs span { color: #3a434b; } .g-user { color: #1d2329; }
+.g-head h4 { color: #11171c; }
+.g-back { color: var(--gt); box-shadow: inset 0 0 0 2px var(--gt); }
+.g-doc { color: var(--gt); }
+.g-panel { background: #fff; box-shadow: 0 1px 2px rgba(17,23,28,.06), 0 8px 28px rgba(17,23,28,.06), inset 0 0 0 1px #e3e7ea; }
+.g-tabs { border-bottom-color: #e3e7ea; }
+.g-tabs button { color: #6b747c; } .g-tabs button:hover { color: #11171c; }
+.g-tabs button.on { color: var(--gt); box-shadow: inset 0 -2px 0 var(--gt); }
+.g-state dt, .g-l { color: #6b747c; } .g-state dd { color: #11171c; }
+.g-ok { color: #08776d; background: rgba(28,242,222,.16); box-shadow: inset 0 0 0 1px rgba(10,158,145,.45); }
+.g-ok.off { color: #9a5b00; background: rgba(255,183,77,.18); box-shadow: inset 0 0 0 1px rgba(214,140,20,.5); }
+.g-seg { background: #eef1f3; }
+.g-seg button { color: #59626a; } .g-seg button:not(.on):hover { color: #11171c; }
+.g-seg button.on { background: var(--shturval); color: #04201d; box-shadow: 0 1px 3px rgba(10,158,145,.35); }
+.g-num span, .g-in, .g-arrows button { background: #f6f8f9; box-shadow: inset 0 0 0 1px #dde2e6; color: #11171c; }
+.g-fact span { color: #3a434b; } .g-fact.busy span { color: #b86e00; }
+.g-arrows button { color: var(--gt); } .g-arrows button:hover { background: #eaf7f6; } .g-arrows button:active { background: rgba(28,242,222,.3); }
+.g-arrows button:disabled { color: #c3c9ce; }
+.g-auto { color: var(--gt); } .g-v { color: #11171c; }
+.g-ph { color: #a2aab1; }
+.g-tags span { color: #08776d; background: rgba(28,242,222,.16); }
+.g-tm i { color: #7a838b; }
+.g-save button { background: var(--shturval); color: #04201d; }
+.g-save button:disabled { background: #eef1f3; color: #a2aab1; }
+.g-save button.done { background: #eaf7f6; color: #08776d; }
+
+/* Из коробки: компактно слева, главный экран в планшете справа */
+.bx2 { flex: 1; min-height: 0; display: grid; grid-template-columns: 640px minmax(0, 1fr); gap: 56px; align-items: center; margin-bottom: 48px; }
+.bx2-l { display: flex; flex-direction: column; gap: 22px; }
+.bx2-l .h2 { font-size: 44px; max-width: none; }
+.bx2-lead { font-size: 21px; line-height: 1.4; color: var(--muted); }
+.bx2-g { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 26px; }
+.bx2-g .k { margin-bottom: 10px; }
+.bx2-g .chips { gap: 6px; }
+.bx2-g .chip { font-size: 15px; padding: 5px 10px; white-space: normal; }
+.bx2-cyc { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+.bx2-cyc b { display: block; font-size: 26px; line-height: 1.1; color: var(--shturval); }
+.bx2-cyc span { display: block; margin-top: 4px; font-size: 16px; line-height: 1.35; color: var(--muted); }
+.bx2-r { display: grid; place-items: center; }
+#box .tablet { width: 764px; padding: 22px; }
+#box .gui-wrap { width: 720px; height: 510px; }
+#box .hm { transform: scale(.6); }
+/* Главный экран Штурвала, светлая схема */
+.hm { --gt: #0a9e91; position: relative; width: 1200px; height: 850px; transform: scale(.78333); transform-origin: 0 0; color: #1d2329; font-size: 15px; line-height: 1.35; background: radial-gradient(900px 500px at 100% 0, rgba(28,242,222,.12), transparent 60%), #f3f5f6; cursor: default; overflow: hidden; }
+.hm button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.hm-bar-top { display: flex; justify-content: space-between; align-items: center; height: 56px; padding: 0 28px; background: #fff; border-bottom: 1px solid #e3e7ea; }
+.hm-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: #11171c; } .hm-brand img { width: 24px; } .hm-brand span { font-weight: 500; color: #7a838b; }
+.hm-user { display: flex; align-items: center; gap: 12px; font-size: 14px; } .hm-doc { padding: 6px 12px; border-radius: 8px; box-shadow: inset 0 0 0 1px #dde2e6; color: #3a434b; }
+.hm-av { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(28,242,222,.2); color: #08776d; font-size: 12px; font-weight: 700; }
+.hm-body { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; padding: 20px 28px; }
+.hm-main, .hm-side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.hm-card { padding: 18px 20px; border-radius: 16px; background: #fff; box-shadow: 0 1px 2px rgba(17,23,28,.05), 0 8px 24px rgba(17,23,28,.05), inset 0 0 0 1px #e6eaed; }
+.hm-plat-h { display: flex; gap: 16px; align-items: center; } .hm-plat-h img { width: 46px; padding: 9px; border-radius: 12px; background: #eaf7f6; }
+.hm-plat-h h4 { font-size: 19px; font-weight: 700; color: #11171c; } .hm-plat-h em { font-style: normal; margin-left: 6px; padding: 2px 8px; border-radius: 6px; font-size: 13px; color: #08776d; background: rgba(28,242,222,.16); }
+.hm-plat-h p { margin-top: 4px; font-size: 14px; color: #6b747c; } .hm-plat-h p b { color: #11171c; }
+.hm-ok { display: flex; gap: 12px; align-items: center; margin-top: 14px; padding: 11px 14px; border-radius: 12px; background: #eaf7f6; box-shadow: inset 0 0 0 1px rgba(10,158,145,.3); }
+.hm-ok > span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--shturval); color: #04201d; font-weight: 700; }
+.hm-ok b { display: block; font-size: 15px; color: #11171c; } .hm-ok small { font-size: 13px; color: #59626a; }
+.hm-tabs { display: flex; justify-content: space-between; align-items: center; } .hm-tabs > div { display: flex; gap: 4px; }
+.hm-tabs [data-t] { padding: 8px 14px; border-radius: 10px; font-weight: 700; color: #6b747c; } .hm-tabs [data-t] i { font-style: normal; margin-left: 4px; color: #a2aab1; }
+.hm-tabs [data-t].on { color: #08776d; background: rgba(28,242,222,.16); } .hm-tabs [data-t]:not(.on):hover { color: #11171c; }
+.hm-cta { padding: 9px 16px; border-radius: 10px; font-weight: 700; background: var(--shturval) !important; color: #04201d !important; box-shadow: 0 2px 8px rgba(10,158,145,.3); transition: transform .1s; } .hm-cta:active { transform: scale(.97); }
+.hm-cl-h { display: flex; align-items: center; gap: 10px; } .hm-cl-h b { font-size: 17px; color: #11171c; }
+.hm-dot { width: 10px; height: 10px; border-radius: 50%; background: #22b573; box-shadow: 0 0 0 4px rgba(34,181,115,.15); }
+.hm-cl-h em { font-style: normal; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--gt); }
+.hm-run { margin-left: auto; font-size: 13px; font-weight: 700; color: #1d8f5a; }
+.hm-bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 14px 0 14px; }
+.hm-bar p { display: flex; justify-content: space-between; font-size: 13px; color: #59626a; } .hm-bar p b { color: #11171c; }
+.hm-bar i { display: block; height: 6px; margin: 6px 0 4px; border-radius: 3px; background: #eef1f3; overflow: hidden; } .hm-bar u { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--gt), var(--shturval)); }
+.hm-bar small { font-size: 12px; color: #8a939b; }
+.hm-nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hm-node { position: relative; padding: 9px 12px 9px 24px; border-radius: 10px; background: #f6f8f9; box-shadow: inset 0 0 0 1px #e3e7ea; transition: box-shadow .15s, background .15s; }
+.hm-node:hover { background: #fff; box-shadow: inset 0 0 0 1px rgba(10,158,145,.5); }
+.hm-node::before { content: ""; position: absolute; left: 11px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: #22b573; }
+.hm-node b { display: block; font-size: 13px; color: #11171c; } .hm-node i { display: inline-block; margin-top: 4px; padding: 1px 6px; border-radius: 5px; font-style: normal; font-size: 11px; color: #08776d; background: rgba(28,242,222,.14); }
+.hm-node span { display: block; margin-top: 2px; font-size: 11px; color: #8a939b; }
+.hm-facts { display: grid; grid-template-columns: repeat(4, auto) 1fr; gap: 26px; margin-top: 14px; padding-top: 12px; border-top: 1px solid #eef1f3; }
+.hm-facts dt { font-size: 12px; color: #8a939b; } .hm-facts dd { font-size: 14px; font-weight: 700; color: #11171c; }
+.hm [hidden] { display: none !important; }
+.hm-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 70px 40px; text-align: center; } .hm-empty b { font-size: 18px; color: #11171c; } .hm-empty span { max-width: 44ch; color: #6b747c; } .hm-empty .hm-cta { margin-top: 10px; }
+.hm-side h5 { font-size: 15px; font-weight: 700; color: #11171c; margin-bottom: 8px; }
+.hm-set { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid #eef1f3; }
+.hm-set b { display: block; font-size: 13px; color: #11171c; } .hm-set span { display: block; font-size: 12px; color: #8a939b; }
+.hm-set button { flex: none; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #08776d; background: rgba(28,242,222,.14); transition: background .15s; } .hm-set button:hover { background: rgba(28,242,222,.3); }
+.hm-set button.done { color: #fff; background: var(--gt); }
+.hm-news { list-style: none; display: grid; gap: 9px; } .hm-news li { font-size: 13px; color: #1d2329; }
+.hm-news i { display: inline-block; margin-right: 8px; padding: 1px 7px; border-radius: 5px; font-style: normal; font-size: 11px; font-weight: 700; color: #08776d; background: rgba(28,242,222,.16); } .hm-news i.fix { color: #59626a; background: #eef1f3; }
+.hm-toast { position: absolute; left: 50%; bottom: 24px; padding: 12px 20px; border-radius: 12px; background: #11171c; color: #fff; font-size: 14px; font-weight: 700; transform: translate(-50%, 20px); opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; } .hm-toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* Слайд 7: два экрана стопкой */
+.dev2 { position: relative; width: 984px; height: 750px; }
+.dev { position: absolute; transition: left .45s cubic-bezier(.2,.7,.2,1), top .45s cubic-bezier(.2,.7,.2,1), filter .3s, transform .3s; }
+.dev-front { left: 0; top: 196px; z-index: 2; }
+.dev-back { left: 220px; top: 0; z-index: 1; filter: brightness(.55) saturate(.8); cursor: pointer; }
+.dev-back:hover { filter: brightness(.8); transform: translateY(-4px); }
+.dev-back .gui-wrap > * { pointer-events: none; }
+.tablet-dark { background: linear-gradient(160deg, #3a3a3a, #161616); }
+#box .tablet-dark .gui-wrap { background: #070707; }
+/* Обзор Deployment, тёмная схема */
+.dp { --gt: var(--shturval); position: relative; display: grid; grid-template-columns: 220px minmax(0, 1fr); width: 1200px; height: 850px; transform: scale(.6); transform-origin: 0 0; color: #e8e8e8; font-size: 14px; line-height: 1.3; background: #070707; overflow: hidden; }
+.dp button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.dp-side { display: flex; flex-direction: column; gap: 4px; padding: 18px 14px; background: #0d0d0d; border-right: 1px solid #1f1f1f; }
+.dp-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 20px; font-weight: 700; color: #fff; } .dp-logo img { width: 26px; }
+.dp-ns { display: flex; justify-content: space-between; margin-bottom: 14px; padding: 9px 12px; border-radius: 10px; background: rgba(28,242,222,.12); box-shadow: inset 0 0 0 1px rgba(28,242,222,.35); font-weight: 700; color: #fff; } .dp-ns i { font-style: normal; }
+.dp-ng { display: flex; justify-content: space-between; padding: 8px 6px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9a9a9a; } .dp-ng.open { color: #fff; } .dp-ng i { font-style: normal; }
+.dp-ni { display: grid; gap: 2px; margin: 0 0 6px 6px; } .dp-ni span { padding: 6px 10px; border-radius: 8px; color: #a9a9a9; } .dp-ni span.on { color: var(--gt); background: rgba(28,242,222,.1); font-weight: 700; }
+.dp-collapse { margin-top: auto; font-size: 13px; color: #6f6f6f; }
+.dp-main { display: flex; flex-direction: column; min-width: 0; }
+.dp-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 18px 22px 12px; }
+.dp-head h4 { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #fff; } .dp-head h4 span { color: #9a9a9a; }
+.dp-head p { display: flex; gap: 10px; align-items: center; margin-top: 10px; font-size: 13px; }
+.dp-st, .dp-ok { padding: 3px 10px; border-radius: 20px; font-weight: 700; color: #3ddc97; background: rgba(61,220,151,.12); box-shadow: inset 0 0 0 1px rgba(61,220,151,.4); }
+.dp-st.warn, .dp-ok.warn { color: #ffb74d; background: rgba(255,183,77,.12); box-shadow: inset 0 0 0 1px rgba(255,183,77,.45); }
+.dp-mut { color: #8a8a8a; font-size: 13px; }
+.dp-acts { display: flex; gap: 8px; align-items: center; }
+.dp-seg { display: flex; padding: 3px; border-radius: 10px; background: #1b1b1b; } .dp-seg button { padding: 6px 12px; border-radius: 8px; font-size: 13px; color: #a9a9a9; } .dp-seg button.on { background: var(--gt); color: #000; font-weight: 700; }
+.dp .dp-btn { padding: 7px 12px; border-radius: 9px; font-size: 13px; background: #1b1b1b; box-shadow: inset 0 0 0 1px #2c2c2c; color: #e8e8e8; white-space: nowrap; transition: background .15s; } .dp .dp-btn:hover { background: #262626; }
+.dp .dp-del { color: #ff7b7b; box-shadow: inset 0 0 0 1px rgba(255,107,107,.45); }
+.dp-tabs { display: flex; gap: 2px; padding: 0 22px; border-bottom: 1px solid #222; } .dp-tabs button { padding: 10px 12px; font-size: 13px; color: #9a9a9a; box-shadow: inset 0 -2px 0 transparent; } .dp-tabs button.on { color: var(--gt); font-weight: 700; box-shadow: inset 0 -2px 0 var(--gt); } .dp-tabs button:hover { color: #fff; }
+.dp-bar { display: flex; align-items: center; gap: 12px; padding: 10px 22px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+.dp-l { color: #9a9a9a; } .dp-l b { color: #fff; }
+.dp-rep { display: flex; align-items: center; border-radius: 9px; background: #1b1b1b; box-shadow: inset 0 0 0 1px #2c2c2c; } .dp-rep button { width: 28px; height: 28px; color: var(--gt); font-size: 16px; } .dp-rep b { min-width: 24px; text-align: center; color: #fff; }
+.dp-chip { padding: 3px 9px; border-radius: 20px; font-size: 12px; color: #a9a9a9; box-shadow: inset 0 0 0 1px #333; } .dp-sp { flex: 1; }
+.dp-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 250px; }
+.dp-graph { position: relative; overflow: hidden; background-image: radial-gradient(#1c1c1c 1px, transparent 1px); background-size: 22px 22px; }
+.dp-lines { position: absolute; left: 0; top: 0; width: 700px; height: 600px; } .dp-lines path { fill: none; stroke: rgba(28,242,222,.55); stroke-width: 1.5; }
+.dp-n { position: absolute; padding: 9px 12px; border-radius: 11px; background: #121212; box-shadow: inset 0 0 0 1px #2a2a2a; }
+.dp-n small { display: block; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a8a8a; } .dp-n b { display: block; margin-top: 3px; font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dp-n span { display: block; margin-top: 2px; font-size: 12px; color: #9a9a9a; }
+.dp-n em { position: absolute; right: 10px; top: 9px; font-style: normal; font-size: 10px; padding: 1px 6px; border-radius: 5px; color: #3ddc97; background: rgba(61,220,151,.12); }
+.dp-dep { background: rgba(28,242,222,.09); box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.6); } .dp-dep.warn { background: rgba(255,183,77,.08); box-shadow: inset 0 0 0 1.5px rgba(255,183,77,.6); }
+.dp-att-h { position: absolute; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #6f6f6f; } .dp-att { background: #0f0f0f; }
+.dp-pod { left: 90px; width: 210px; } .dp-pod::before { content: ""; position: absolute; left: -12px; top: 18px; width: 8px; height: 8px; border-radius: 50%; background: #3ddc97; } .dp-pod.bad::before { background: #ff6b6b; } .dp-pod.busy::before { background: #ffb74d; }
+.dp-pod.bad span { color: #ff8f8f; } .dp-more { position: absolute; left: 90px; font-size: 12px; color: #8a8a8a; }
+.dp-right { display: flex; flex-direction: column; gap: 12px; padding: 14px; border-left: 1px solid #1a1a1a; background: #0b0b0b; }
+.dp-panel { padding: 12px 14px; border-radius: 12px; background: #121212; box-shadow: inset 0 0 0 1px #232323; } .dp-panel h5 { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #9a9a9a; } .dp-panel h5 span { letter-spacing: 0; text-transform: none; color: #8a8a8a; }
+.dp-m { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; } .dp-m small { display: block; font-size: 11px; color: #8a8a8a; } .dp-m b { font-size: 22px; color: #fff; }
+.dp-spark { width: 100%; height: 50px; } .dp-spark path { fill: rgba(28,242,222,.15); stroke: var(--gt); stroke-width: 1.5; }
+.dp-filters { display: flex; gap: 6px; margin: 10px 0; } .dp-filters span { padding: 3px 8px; border-radius: 7px; font-size: 11px; color: #9a9a9a; background: #1b1b1b; } .dp-filters span.on { color: var(--gt); background: rgba(28,242,222,.1); }
+.dp-ev { list-style: none; display: grid; gap: 8px; } .dp-ev li { font-size: 12px; color: #b9b9b9; padding-left: 10px; border-left: 2px solid #333; } .dp-ev li.w { border-left-color: #ffb74d; } .dp-ev li.e { border-left-color: #ff6b6b; } .dp-ev li b { display: block; color: #fff; }
+
+/* Обзор Deployment: фоны из исходного прототипа */
+.dp { background: #0F1419; color: #E8ECF1; }
+#box .tablet-dark .gui-wrap { background: #0F1419; }
+.dp-side { background: #172033; border-right-color: #2A3548; }
+.dp-ni span, .dp-ng, .dp-mut, .dp-l, .dp-head h4 span, .dp-n span, .dp-n small, .dp-m small, .dp-panel h5, .dp-panel h5 span { color: #8B95A8; }
+.dp-ng.open { color: #E8ECF1; }
+.dp-tabs { border-bottom-color: #2A3548; } .dp-bar { border-bottom-color: #2A3548; }
+.dp-graph { background-color: #151D2B; background-image: radial-gradient(#22304a 1px, transparent 1px); }
+.dp-right { background: #0F1419; border-left-color: #2A3548; }
+.dp-panel { background: #1A2332; box-shadow: inset 0 0 0 1px #2A3548; }
+.dp-n { background: #182230; box-shadow: inset 0 0 0 1px #2A3548; }
+.dp-route { background: #1E3A5F; } .dp-svc { background: #1A3050; } .dp-rsn { background: #1A2838; } .dp-att { background: #1E2433; }
+.dp-dep { background: #1A3D2E; box-shadow: inset 0 0 0 1.5px rgba(28,242,222,.6); }
+.dp-seg, .dp-rep, .dp-filters span, .dp .dp-btn { background: #1A2332; } .dp .dp-btn:hover { background: #22304a; }
+.dp-rep, .dp .dp-btn { box-shadow: inset 0 0 0 1px #2A3548; }
+
+
+/* Что такое Штурвал: больше места тексту, сводка платформы в экране */
+.wh2 { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 720px; gap: 56px; align-items: center; margin-bottom: 48px; }
+.wh2-l { display: flex; flex-direction: column; gap: 44px; }
+.wh2-l .h2 { font-size: 54px; max-width: none; }
+.wh2-lead { font-size: 22px; line-height: 1.45; color: var(--muted); }
+.wh2-l .plus2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 40px; }
+.wh2-l .plus2 { border-top: 0; }
+.wh2-l .plus2 li { font-size: 23px; line-height: 1.3; border-bottom: 0; }
+.wh2-facts { list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 20px; padding-top: 24px; border-top: 1px solid var(--line); }
+.wh2-facts b { display: block; font-size: 32px; color: var(--shturval); }
+.wh2-facts span { display: block; margin-top: 6px; font-size: 17px; line-height: 1.35; color: var(--muted); max-width: 19ch; }
+.wh2-r { display: grid; place-items: center; }
+#what .tablet { width: 720px; padding: 18px; border-radius: 32px; }
+#what .gui-wrap { width: 684px; height: 479px; border-radius: 14px; }
+/* Сводка платформы, светлая схема */
+.pv { --gt: #0a9e91; display: grid; grid-template-columns: 236px minmax(0, 1fr); width: 1200px; height: 840px; transform: scale(.57); transform-origin: 0 0; color: #1d2329; font-size: 14px; line-height: 1.35; background: #f3f5f6; overflow: hidden; cursor: default; position: relative; }
+.pv button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
+.pv [hidden] { display: none !important; }
+.pv-side { display: flex; flex-direction: column; padding: 12px 12px; background: #fff; border-right: 1px solid #e3e7ea; overflow: hidden; }
+.pv-logo { display: flex; align-items: center; gap: 10px; padding: 0 8px 10px; font-size: 18px; font-weight: 700; color: #11171c; } .pv-logo img { width: 24px; }
+.pv-dash { margin: 0 0 6px; padding: 8px 10px; border-radius: 9px; font-weight: 700; color: #08776d; background: rgba(28,242,222,.16); }
+.pv-g { width: 100%; display: flex; justify-content: space-between; padding: 8px 10px 4px; font-size: 13px; font-weight: 700; color: #11171c; } .pv-g i { font-style: normal; color: #a2aab1; transition: transform .2s; } .pv-g.closed i { transform: rotate(-90deg); }
+.pv-items { display: grid; padding: 0 0 4px; } .pv-items span { padding: 3px 10px 3px 18px; border-radius: 8px; font-size: 13px; color: #59626a; } .pv-items span:hover { background: #f3f5f6; color: #11171c; }
+.pv-side-lic { margin-top: auto; padding: 12px 10px 0; border-top: 1px solid #eef1f3; font-size: 12px; color: #8a939b; } .pv-side-lic b { display: block; font-size: 14px; color: #11171c; }
+.pv { grid-template-rows: minmax(0, 1fr); }
+.pv-main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.pv-top { display: flex; justify-content: flex-end; align-items: center; gap: 10px; height: 52px; padding: 0 24px; background: #fff; border-bottom: 1px solid #e3e7ea; font-size: 13px; }
+.pv-av { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(28,242,222,.2); color: #08776d; font-size: 12px; font-weight: 700; }
+.pv-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px 22px; }
+.pv-h { display: flex; align-items: center; gap: 14px; } .pv-h h4 { font-size: 22px; font-weight: 700; color: #11171c; margin-right: auto; }
+.pv-seg { display: flex; padding: 3px; border-radius: 10px; background: #e7ebee; } .pv-seg button { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; color: #59626a; } .pv-seg button.on { background: #fff; color: #08776d; box-shadow: 0 1px 3px rgba(17,23,28,.12); }
+.pv-chk { font-size: 12px; color: #8a939b; }
+.pv-card { padding: 14px 18px; border-radius: 14px; background: #fff; box-shadow: 0 1px 2px rgba(17,23,28,.05), 0 6px 20px rgba(17,23,28,.05), inset 0 0 0 1px #e6eaed; }
+.pv-card h5 { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; font-weight: 700; color: #11171c; margin-bottom: 10px; } .pv-card h5 small { font-weight: 500; color: #8a939b; } .pv-card h5 button { font-size: 12px; color: var(--gt); }
+.pv-sum { display: grid; grid-template-columns: 230px minmax(0, 1fr); align-items: center; gap: 20px; }
+.pv-total small { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a939b; } .pv-total b { display: block; font-size: 52px; line-height: 1.05; color: #11171c; } .pv-total span { font-size: 13px; color: #59626a; }
+.pv-st { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding-left: 20px; border-left: 1px solid #eef1f3; }
+.pv-st div b { display: flex; align-items: center; gap: 7px; font-size: 26px; color: #11171c; } .pv-st div b::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--c); } .pv-st div span { font-size: 12px; color: #6b747c; }
+.pv-cols { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 12px; }
+.pv-colm, .pv-colr { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.pv-tbl { width: 100%; border-collapse: collapse; font-size: 13px; } .pv-tbl th { padding: 0 0 6px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #8a939b; } .pv-tbl td { padding: 7px 0; border-top: 1px solid #eef1f3; color: #11171c; } .pv-tbl td:first-child { font-weight: 700; color: var(--gt); } .pv-ok { color: #1d8f5a; font-weight: 700; }
+.pv-infra { flex: 1; min-height: 0; overflow: hidden; }
+.pv-inf { display: grid; grid-template-columns: 150px 110px minmax(0, 1fr); align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #eef1f3; font-size: 13px; }
+.pv-inf > b { color: #11171c; } .pv-inf > span { color: #6b747c; } .pv-inf > span em { font-style: normal; font-weight: 700; color: #11171c; }
+.pv-chips { display: flex; gap: 5px; overflow: hidden; white-space: nowrap; } .pv-chips i { flex: none; padding: 2px 8px; border-radius: 6px; font-style: normal; font-size: 11.5px; color: #3a434b; background: #f0f3f5; } .pv-chips i.more { color: #08776d; background: rgba(28,242,222,.14); }
+.pv-kv { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-top: 1px solid #eef1f3; font-size: 13px; } .pv-kv small { display: block; font-size: 11.5px; color: #8a939b; } .pv-kv b { color: #11171c; }
+.pv-kv button { padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #08776d; background: rgba(28,242,222,.14); transition: background .15s; } .pv-kv button:hover { background: rgba(28,242,222,.3); } .pv-kv button.done { color: #fff; background: var(--gt); }
+.pv-ver { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-top: 1px solid #eef1f3; } .pv-ver b { display: block; font-size: 13px; color: #11171c; } .pv-ver small { font-size: 11.5px; color: #8a939b; } .pv-ver em { font-style: normal; font-size: 18px; font-weight: 700; color: #11171c; }
+.pv-lic { display: flex; justify-content: space-between; align-items: center; } .pv-lic small { display: block; font-size: 11.5px; color: #8a939b; } .pv-lic b { font-size: 15px; color: #11171c; } .pv-lic span { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #1d8f5a; background: rgba(34,181,115,.12); }
+
+/* Безопасность: группы слева, отчёт по политикам в экране справа */
+.sx { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 812px; gap: 52px; align-items: center; margin-bottom: 48px; }
+.sx-l { display: flex; flex-direction: column; gap: 26px; }
+.sx-l .h2 { font-size: 54px; max-width: none; }
+.sx-g { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 30px; }
+.sx-g > div { padding-top: 18px; border-top: 1px solid var(--line); }
+.sx-g > .wide { grid-column: 1 / -1; }
+.sx-g h3 { display: flex; align-items: center; gap: 12px; font-size: 22px; margin-bottom: 12px; } .sx-g h3 .ico { width: 30px; height: 30px; color: var(--shturval); }
+.sx-g ul { list-style: none; display: grid; gap: 8px; } .sx-g .wide ul { grid-template-columns: 1fr 1fr; gap: 8px 30px; }
+.sx-g li { position: relative; padding-left: 20px; font-size: 17px; line-height: 1.38; color: var(--muted); } .sx-g li::before { content: ""; position: absolute; left: 0; top: 8px; width: 9px; height: 9px; background: var(--shturval); clip-path: var(--oct); } .sx-g li b { color: var(--ink); }
+.sx-r { display: grid; place-items: center; }
+#security-tech .tablet { width: 812px; padding: 20px; border-radius: 36px; }
+#security-tech .gui-wrap { width: 772px; height: 540px; border-radius: 16px; }
+/* Отчёт по политикам Kyverno, светлая схема */
+.pr { --gt: #0a9e91; position: relative; display: flex; flex-direction: column; width: 1200px; height: 840px; transform: scale(.64333); transform-origin: 0 0; color: #1d2329; font-size: 14px; line-height: 1.35; background: radial-gradient(900px 500px at 100% 0, rgba(28,242,222,.12), transparent 60%), #f3f5f6; overflow: hidden; cursor: default; }
+.pr button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
+.pr-top { flex: none; display: flex; align-items: center; gap: 14px; height: 52px; padding: 0 24px; background: #fff; border-bottom: 1px solid #e3e7ea; font-size: 13px; color: #8a939b; }
+.pr-top b { display: flex; align-items: center; gap: 9px; font-size: 17px; color: #11171c; } .pr-top img { width: 22px; } .pr-top span em { font-style: normal; color: #3a434b; }
+.pr-top .pr-user { margin-left: auto; display: flex; align-items: center; gap: 8px; color: #1d2329; } .pr-av { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: rgba(28,242,222,.2); color: #08776d; font-size: 11px; font-weight: 700; }
+.pr-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px 24px; }
+.pr-h { display: flex; align-items: flex-end; gap: 14px; } .pr-h > div:first-child { margin-right: auto; } .pr-h h4 { font-size: 22px; font-weight: 700; color: #11171c; } .pr-h p { margin-top: 3px; font-size: 13px; color: #6b747c; }
+.pr-seg { display: flex; padding: 3px; border-radius: 10px; background: #e7ebee; } .pr-seg button { padding: 6px 11px; border-radius: 8px; font-size: 12.5px; font-weight: 700; color: #59626a; } .pr-seg button.on { background: #fff; color: #08776d; box-shadow: 0 1px 3px rgba(17,23,28,.12); }
+.pr-dl { padding: 8px 14px; border-radius: 10px; font-weight: 700; background: var(--shturval) !important; color: #04201d !important; box-shadow: 0 2px 8px rgba(10,158,145,.3); }
+.pr-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.pr-card { padding: 14px 18px; border-radius: 14px; background: #fff; box-shadow: 0 1px 2px rgba(17,23,28,.05), 0 6px 20px rgba(17,23,28,.05), inset 0 0 0 1px #e6eaed; }
+.pr-kpi .pr-card { display: flex; align-items: baseline; gap: 12px; } .pr-kpi b { font-size: 34px; line-height: 1; color: #11171c; } .pr-kpi span { font-size: 13px; color: #6b747c; } .pr-kpi .bad b { color: #e5484d; }
+.pr-charts { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; }
+.pr-card h5 { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #11171c; margin-bottom: 10px; } .pr-card h5 small { font-weight: 500; color: #8a939b; }
+.pr-bars { display: grid; gap: 6px; }
+.pr-bar { display: grid; grid-template-columns: 210px minmax(0, 1fr) 30px; align-items: center; gap: 10px; font-size: 12px; color: #3a434b; width: 100%; padding: 1px 4px; border-radius: 6px; }
+.pr-bar span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .pr-bar span small { color: #8a939b; }
+.pr-bar i { display: block; height: 10px; border-radius: 5px; background: #eef1f3; overflow: hidden; } .pr-bar u { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--gt), var(--shturval)); }
+.pr-bar b { text-align: right; color: #11171c; }
+.pr-cl .pr-bar { grid-template-columns: 110px minmax(0, 1fr) 30px; } .pr-cl .pr-bar:hover { background: #eaf7f6; } .pr-cl .pr-bar.on { background: rgba(28,242,222,.18); } .pr-cl .pr-bar.on span { font-weight: 700; color: #08776d; }
+.pr-tbl { flex: 1; min-height: 0; display: flex; flex-direction: column; padding-bottom: 6px; }
+.pr-th, .pr-row { display: grid; grid-template-columns: minmax(0, 1.6fr) 1.1fr 0.9fr 90px 100px 24px; align-items: center; gap: 10px; }
+.pr-th { padding: 0 6px 8px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #8a939b; border-bottom: 1px solid #eef1f3; }
+.pr-rows { flex: 1; min-height: 0; overflow: auto; }
+.pr-row { width: 100%; padding: 9px 6px; border-bottom: 1px solid #eef1f3; font-size: 13px; color: #3a434b; transition: background .15s; } .pr-row:hover { background: #f6f8f9; }
+.pr-row b { color: #11171c; } .pr-row .n { font-weight: 700; color: #11171c; } .pr-row .ar { color: #a2aab1; transition: transform .2s; } .pr-row.open .ar { transform: rotate(90deg); color: var(--gt); }
+.pr-sev { justify-self: start; padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 700; } .pr-sev.High { color: #c2333a; background: rgba(229,72,77,.12); } .pr-sev.Medium { color: #9a5b00; background: rgba(255,183,77,.2); }
+.pr-det { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 22px; padding: 10px 12px 14px; background: #f6f8f9; border-bottom: 1px solid #eef1f3; font-size: 12.5px; color: #3a434b; }
+.pr-det small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #8a939b; margin-bottom: 3px; } .pr-det code { font-family: var(--f-mono); font-size: 11.5px; color: #c2333a; }
+.pr-objs { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 5px; } .pr-objs i { padding: 2px 8px; border-radius: 6px; font-style: normal; font-size: 11.5px; background: #fff; box-shadow: inset 0 0 0 1px #e3e7ea; }
+.pr-empty { padding: 20px 6px; color: #8a939b; }
+.pr-toast { position: absolute; left: 50%; bottom: 22px; padding: 11px 18px; border-radius: 12px; background: #11171c; color: #fff; font-size: 13px; font-weight: 700; transform: translate(-50%, 16px); opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; } .pr-toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+.tco-link { display: inline-block; margin-top: 14px; padding: 10px 18px; border-radius: 12px; font-size: 18px; font-weight: 700; color: var(--black); background: var(--shturval); text-decoration: none; }
+.tco-link:hover { filter: brightness(1.1); }
+/* Короткое резюме: когда нужен Штурвал + график TCO */
+.sm2 { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 760px; gap: 64px; margin-bottom: 48px; }
+.sm2-l { display: flex; flex-direction: column; gap: 34px; }
+.sm2-l .h2 { font-size: 56px; max-width: none; }
+.sm2-list { list-style: none; display: grid; gap: 24px; }
+.sm2-list li { position: relative; padding-left: 42px; font-size: 30px; line-height: 1.3; font-weight: 700; }
+.sm2-list li::before { content: ""; position: absolute; left: 0; top: 11px; width: 18px; height: 18px; background: var(--shturval); clip-path: var(--oct); }
+.sm2-facts { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.sm2-facts .card { padding: 22px 26px; border-radius: 18px; } .sm2-facts b { display: block; font-size: 30px; } .sm2-facts span { display: block; margin-top: 6px; font-size: 17px; line-height: 1.4; color: var(--muted); }
+.sm2-chart { margin: 0; }
+.sm2-chart .sm2-k { font-size: 30px; line-height: 1.2; font-weight: 700; color: var(--ink); margin-bottom: 12px; } .sm2-k b { color: var(--shturval); white-space: nowrap; }
+.sm2-chart h4 { font-size: 18px; }
+.sm2-chart .bar-names { font-size: 17px; }
+
+/* Обложка-постер */
+.cv { padding: 0; background: #000; }
+.cv-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.cv-bg::before { content: ""; position: absolute; inset: 0; background: radial-gradient(1100px 700px at 0% 0%, rgba(28,242,222,.10), transparent 60%), radial-gradient(900px 900px at 72% 50%, rgba(28,242,222,.06), transparent 70%); }
+.cv-art { position: absolute; left: 1380px; top: 540px; width: 1200px; height: 1200px; transform: translate(-50%, -50%); }
+.cv-ring { fill: none; stroke: #1cf2de; stroke-width: 1.5; }
+.cv-dot { fill: #1cf2de; opacity: .55; } .cv-dot.hot { opacity: 1; filter: drop-shadow(0 0 8px #1cf2de); }
+.cv-orb { transform-origin: 600px 600px; animation: cvspin 120s linear infinite; } .cv-orb.ccw { animation-direction: reverse; }
+@keyframes cvspin { to { transform: rotate(360deg); } }
+.cv-sign { position: absolute; left: 1380px; top: 540px; width: 230px; transform: translate(-50%, -50%); filter: drop-shadow(0 0 40px rgba(28,242,222,.75)) drop-shadow(0 0 120px rgba(28,242,222,.45)); }
+.cv-brand { position: absolute; z-index: 2; left: 120px; right: 120px; top: 64px; display: flex; justify-content: space-between; align-items: center; } .cv-brand img { height: 40px; } .cv-brand .cv-lch { height: 34px; opacity: .8; }
+.cv-text { position: absolute; z-index: 2; left: 120px; top: 230px; }
+.cv-eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 26px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; color: var(--shturval); }
+.cv-eyebrow::before { content: ""; width: 56px; height: 2px; background: var(--shturval); }
+.cv-h { margin-top: 26px; display: flex; flex-direction: column; font-size: 132px; line-height: .94; font-weight: 700; letter-spacing: -.01em; text-transform: uppercase; }
+.cv-h .cv-o { color: transparent; -webkit-text-stroke: 2.5px var(--shturval); text-shadow: 0 0 60px rgba(28,242,222,.35); }
+.cv-facts { position: absolute; z-index: 2; left: 120px; right: 120px; bottom: 100px; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgba(28,242,222,.35); }
+.cv-facts li { padding: 22px 28px 0 0; } .cv-facts li + li { padding-left: 28px; border-left: 1px solid rgba(255,255,255,.12); }
+.cv-facts b { display: block; font-size: 30px; } .cv-facts span { display: block; margin-top: 6px; font-size: 17px; line-height: 1.4; color: var(--muted); }
+@media print { .cv-orb { animation: none; } .cv-h .cv-o { text-shadow: none; } .cv-dot.hot, .cv-sign { filter: none; } }
+
+/* Обложка, вариант 2: знак и его эхо */
+.cv-art2 { position: absolute; left: 1430px; top: 500px; width: 1200px; height: 1200px; transform: translate(-50%, -50%); overflow: visible; }
+.cv-echo { fill: none; stroke: #1cf2de; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.cv-core { fill: url(#cvf); filter: drop-shadow(0 0 60px rgba(28,242,222,.35)); }
+.cv-pulse { transform-origin: 600px 600px; opacity: 0; animation: cvpulse 6s cubic-bezier(.2,.6,.3,1) infinite; }
+.cv-pulse .cv-echo { stroke-width: 2; }
+@keyframes cvpulse { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(3.6); opacity: 0; } }
+@media print { .cv-pulse { display: none; } .cv-core { filter: none; } }
+
+/* Короткое резюме без стекла */
+#summary .card { background: #0c0c0c; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: inset 0 0 0 1px #2a2a2a; }
+#summary .card.t { background: #0c0c0c; box-shadow: inset 0 0 0 1px rgba(28,242,222,.45); }
+
+/* Отказ и DR: схема без стекла */
+#dr .dr-grid > .card { background: #0c0c0c; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: inset 0 0 0 1px #2a2a2a; }
+#dr .dr-grid > .card.t { box-shadow: inset 0 0 0 1px rgba(28,242,222,.45); }
+#dr .dr-grid > .card:nth-child(2) { background: #080808; box-shadow: none; border: 1.5px dashed #333; }
+#dr .dr-grid > .card:nth-child(2) .k { color: #6a6a6a !important; }
+#dr .dr-grid > .card:nth-child(2) .ticks li { color: #6a6a6a; }
+#dr .dr-grid > .card:nth-child(2) .ticks li::before { background: #3a3a3a; }
+#dr .dr-grid > .diagram-card { background: none; box-shadow: none; border: 0; }
+
+/* Безопасность по слоям */
+.sl-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 56px; }
+.sl-head .h2 { font-size: 52px; max-width: none; white-space: nowrap; }
+.sl-lead { margin-top: 12px; font-size: 21px; line-height: 1.45; color: var(--muted); max-width: 62ch; }
+.sl-facts { display: grid; gap: 12px; } .sl-facts div { display: flex; align-items: baseline; justify-content: flex-end; gap: 16px; } .sl-facts b { font-size: 28px; color: var(--shturval); white-space: nowrap; } .sl-facts span { font-size: 18px; color: var(--muted); white-space: nowrap; }
+.sl-main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 64px 480px; grid-template-rows: minmax(0, 1fr); margin: 32px 0 48px; }
+.sl-stack { display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 14px; min-height: 0; }
+.sl-layer { position: relative; display: grid; grid-template-columns: 400px 1fr; align-items: center; gap: 28px; padding: 0 34px; border-radius: 22px; background: #171717; }
+.sl-mark { flex: none; display: block; width: 16px; height: 16px; background: var(--shturval); clip-path: var(--oct); }
+.sl-name { display: flex; align-items: center; gap: 18px; } .sl-name h3 { font-size: 25px; line-height: 1.2; } .sl-name p { margin-top: 3px; font-size: 16px; line-height: 1.4; color: var(--muted); }
+.sl-checks { display: grid; gap: 8px; } .sl-catch { font-size: 17px; line-height: 1.4; color: var(--muted); }
+.sl-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.sl-tags button { font: 500 16px var(--f-mono); color: var(--shturval); padding: 5px 11px; border-radius: 7px; border: 1px solid rgba(28,242,222,.28); background: rgba(28,242,222,.08); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.sl-tags button:hover, .sl-tags button[aria-expanded="true"] { background: var(--shturval); border-color: var(--shturval); color: #000; }
+.sl-daily { margin-left: 4px; padding: 4px 11px; border-radius: 100px; font-size: 13px; font-weight: 700; color: #000; background: var(--shturval); white-space: nowrap; }
+.sl-tip { position: absolute; left: 460px; top: calc(100% - 12px); z-index: 5; width: 460px; display: grid; gap: 8px; padding: 18px 22px; border-radius: 18px; background: #171717; border: 1px solid rgba(28,242,222,.28); box-shadow: 0 18px 48px rgba(0,0,0,.6); }
+.sl-layer.up .sl-tip { top: auto; bottom: calc(100% - 12px); }
+.sl-tip[hidden] { display: none; } .sl-tip b { font-size: 18px; color: var(--shturval); } .sl-tip p { font-size: 17px; line-height: 1.45; color: var(--muted); }
+.sl-bridge { display: grid; } .sl-bridge svg { width: 64px; height: 100%; overflow: visible; }
+.sl-panel { display: flex; flex-direction: column; min-height: 0; padding: 28px 34px; border-radius: 22px; background: #171717; border: 1px solid rgba(28,242,222,.28); }
+.sl-ph { font-size: 16px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--shturval); }
+.sl-panel h3 { margin-top: 10px; font-size: 29px; line-height: 1.2; }
+.sl-flow { list-style: none; position: relative; margin-top: auto; display: grid; gap: 20px; }
+.sl-flow::before { content: ""; position: absolute; left: 9px; top: 12px; bottom: 12px; width: 2px; background: linear-gradient(180deg, rgba(28,242,222,.25), var(--shturval)); }
+.sl-flow li { position: relative; display: grid; grid-template-columns: 20px 1fr; gap: 20px; } .sl-flow .sl-mark { width: 20px; height: 20px; margin-top: 3px; }
+.sl-flow b { display: block; font-size: 22px; } .sl-flow span { display: block; margin-top: 4px; font-size: 17px; line-height: 1.4; color: var(--muted); }
+
 /* Печать / PDF: каждый слайд – отдельная страница */
 @media print {
   @page { size: 1920px 1080px; margin: 0; }
@@ -396,7 +825,7 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
   .slide { position: relative; opacity: 1 !important; visibility: visible !important; width: 1920px; height: 1080px; page-break-after: always; break-after: page; }
   html.js .slide .rv { opacity: 1 !important; transform: none !important; }
   html.js .slide:not(.active) .bars .b i { transform: none; }
-  .ui, .progress { display: none; }
+  .ui, .progress, .no-print { display: none; }
 }
 
 /* ===== Печать / PDF: без прозрачности, размытий и теней – сплошные цвета ===== */
@@ -650,6 +1079,7 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 /* Кто мы */
 .about3 { display: grid; grid-template-columns: repeat(4, auto) minmax(0, 1fr); gap: 56px; align-items: end; margin-top: 52px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
 .about3 b { display: block; font-size: 56px; line-height: 1; }
+.about3 b small { font-size: 40px; }
 .about3 span { display: block; font-size: 18px; color: var(--muted); margin-top: 10px; }
 .about3 .gr { justify-self: end; text-align: right; }
 .about3 .gr b { font-size: 40px; color: var(--shturval); }
@@ -751,7 +1181,8 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 
 /* ===== v5: мультиЦОД ===== */
 .multi { display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 56px; flex: 1; min-height: 0; margin-top: 40px; margin-bottom: 40px; }
-.multi .plain { align-content: start; gap: 22px; }
+.multi .plain { align-content: space-between; gap: 22px; padding: 11px 0 22px; }
+#multi .multi .plain li { font-size: 20px; line-height: 1.45; }
 .multi { grid-template-rows: minmax(0, 1fr); }
 .multi .diagram { min-height: 0; height: 100%; }
 .multi .diagram svg { position: absolute; inset: 0; height: 100%; width: 100%; }
@@ -800,13 +1231,16 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 .facts2 span { font-size: 19px; line-height: 1.35; color: var(--muted); }
 
 /* Слайд 5: пять колонок сервисов */
-#stack .stk-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+#stack .stk-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 8px; }
 #stack .stk-grid > span { padding: 13px 13px; font-size: 16px; }
 #stack .stk small { font-size: 14px; }
 #stack .stk-mgmt { grid-auto-rows: auto; grid-template-rows: auto repeat(7, minmax(0, 1fr)); align-content: stretch; }
 #stack .stk-mgmt span { display: flex; flex-direction: column; justify-content: center; padding: 8px 16px; font-size: 17px; }
 #stack .stk-net { margin-top: 8px; }
 #stack .stk-net span { padding: 6px; }
+#stack .oss { display: inline-block; width: 20px; height: 20px; object-fit: contain; vertical-align: -5px; margin-right: 6px; }
+#stack .stk-net .oss { width: 22px; height: 22px; vertical-align: -6px; }
+#stack .oss-t { width: 24px; height: 24px; vertical-align: -5px; margin-right: 8px; }
 
 /* Слайд 7: три свойства */
 .props3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 48px; margin-bottom: 64px; flex: 1; min-height: 0; }
@@ -924,7 +1358,9 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 #cover .art { right: 150px; width: 470px; transform: translateY(-58%); filter: drop-shadow(0 0 22px rgba(28,242,222,.75)) drop-shadow(0 0 80px rgba(28,242,222,.5)); }
 #cover .art-glow { right: 170px; top: 160px; width: 440px; height: 440px; }
 .cover .facts { margin-bottom: 72px; }
-#questions .h2 { font-size: 50px; }
+#questions .h2 { font-size: 46px; max-width: none; white-space: nowrap; }
+#questions .qs { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; grid-auto-rows: auto; gap: 26px; margin-top: 150px; }
+#questions .qs li { font-size: 28px; }
 .qs { flex: none; margin: 56px 0 0; grid-template-rows: repeat(3, auto); gap: 40px 96px; }
 .qs li { grid-template-columns: 46px minmax(0, 1fr); font-size: 26px; line-height: 1.32; }
 .what3 { gap: 208px; grid-template-columns: minmax(0, 1fr) 500px; }
@@ -972,6 +1408,10 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 #about .prod { grid-template-columns: 280px minmax(0, 1fr); padding: 24px 32px; border-radius: 20px; }
 #about .prod img { height: 54px; }
 #about .prod p { font-size: 20px; padding-left: 22px; }
+#about .prods { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+#about .prod { grid-template-columns: 1fr; gap: 22px; align-content: start; padding: 28px 28px 30px; }
+#about .prod img { height: 46px; }
+#about .prod p { font-size: 19px; padding-left: 18px; }
 .qs { margin-top: 136px; }
 #ideas .ideas { flex: none; margin-block: auto 150px; }
 #ideas .ideas .card { padding: 40px 36px; min-height: 180px; }
@@ -1016,14 +1456,13 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 
 /* Версия 2, правка 12: постер принципов */
 .ip { flex: 1; min-height: 0; display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); margin-top: 20px; margin-bottom: 48px; border-bottom: 2px solid var(--shturval); }
-.ip a { display: flex; align-items: center; border-top: 2px solid var(--shturval); font-size: 134px; line-height: 1; font-weight: 700; letter-spacing: -.005em; text-transform: uppercase; white-space: nowrap; color: var(--ink); text-decoration: none; cursor: pointer; transition: color .15s; }
-.ip a:hover { color: var(--shturval); }
+.ip > div { display: flex; align-items: center; border-top: 2px solid var(--shturval); font-size: 134px; line-height: 1; font-weight: 700; letter-spacing: -.005em; text-transform: uppercase; white-space: nowrap; color: var(--ink); text-decoration: none; cursor: pointer; transition: color .15s; }
 
 /* Версия 2, правка 13: проход impeccable */
 ::selection { background: var(--shturval); color: var(--black); }
 .poster ::selection { background: var(--black); color: var(--shturval); }
 .poster :focus-visible { outline-color: var(--black); }
-a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outline-offset: 4px; }
+a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); outline-offset: 4px; }
 .ip-h { font-weight: 500; }
 .k, .pil3 .k, .ss-no .k { font-size: 16px; }
 .prod p, #about .prod p { border-left-width: 1px; }
@@ -1044,28 +1483,26 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 <div class="stage">
 <main class="deck" id="deck">
 
-<section class="slide cover g-tl" id="cover" data-title="Обложка">
-  <div class="brandline rv">
-    <img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo">
-    <img src="assets/chislitel-horizontal-white.svg" alt="Лаборатория Числитель" class="logo" style="height:34px;opacity:.8">
+<section class="slide cv" id="cover" data-title="Обложка">
+  <div class="cv-bg" aria-hidden="true"><svg class="cv-art2" viewBox="0 0 1200 1200" aria-hidden="true"><defs><path id="cv-p" d="M62.00 2.63L57.81 12.99C56.25 16.87 57.15 21.30 60.11 24.26L68.40 32.54C68.87 33.01 69.13 33.64 69.13 34.31L69.13 52.21C69.13 52.88 68.86 53.51 68.40 53.98L57.64 64.73C56.80 65.56 55.37 64.97 55.37 63.79L55.37 32.54C55.37 31.10 54.20 29.94 52.76 29.94L37.22 29.94C35.78 29.94 34.62 31.10 34.62 32.54L34.62 63.79C34.62 64.96 33.19 65.56 32.35 64.73L21.59 53.98C21.12 53.51 20.86 52.88 20.86 52.21L20.86 34.31C20.86 33.64 21.12 33.01 21.59 32.54L30.04 24.10C33.02 21.12 33.92 16.65 32.31 12.75L28.08 2.51C27.26 0.52 24.67 0.00 23.15 1.52L2.96 21.69C1.07 23.58 0.00 26.15 0.00 28.83L0.00 57.70C0.00 60.38 1.07 62.94 2.96 64.84L23.40 85.25C25.30 87.14 27.87 88.21 30.55 88.21L59.46 88.21C62.14 88.21 64.71 87.14 66.61 85.25L87.04 64.84C88.94 62.94 90.00 60.38 90.00 57.70L90.00 28.83C90.00 26.15 88.94 23.58 87.04 21.69L66.94 1.63C65.41 0.10 62.81 0.62 62.00 2.63Z"/><radialGradient id="cvg2" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1cf2de" stop-opacity=".22"/><stop offset=".5" stop-color="#1cf2de" stop-opacity=".05"/><stop offset="1" stop-color="#1cf2de" stop-opacity="0"/></radialGradient><linearGradient id="cvf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ff9ee"/><stop offset="1" stop-color="#12c9b8"/></linearGradient></defs><circle cx="600" cy="600" r="520" fill="url(#cvg2)"/><use href="#cv-p" class="cv-core" transform="translate(600 600) scale(4.8) translate(-45 -44.1)"/></svg></div>
+  <div class="cv-brand rv"><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал"><img src="assets/chislitel-horizontal-white.svg" alt="Лаборатория Числитель" class="cv-lch"></div>
+  <div class="cv-text">
+    <p class="cv-eyebrow rv" style="--d:60ms">Vendor Agnostic</p>
+    <h1 class="cv-h rv" style="--d:120ms"><span>Enterprise</span><span class="cv-o">Kubernetes</span><span>Платформа</span></h1>
   </div>
-  <div class="art-glow"></div>
-  <img class="art" src="assets/shturval-sign.svg" alt="">
-  <div class="body" style="padding-top:96px">
-    <h1 class="h1 rv" style="--d:80ms;margin-top:24px">Kubernetes-платформа <em>Enterprise-уровня</em></h1>
-    <div class="facts">
-      <div class="card rv" style="--d:240ms"><b>500+</b><span>кластеров под&nbsp;одним управлением</span></div>
-      <div class="card rv" style="--d:300ms"><b>№ 13933</b><span>в&nbsp;реестре российского ПО&nbsp;с&nbsp;2022 года</span></div>
-      <div class="card t rv" style="--d:360ms"><b>ФСТЭК</b><span>сертификат (под&nbsp;именем Kuberbox)</span></div>
-    </div>
-  </div>
+  <ul class="cv-facts rv" style="--d:260ms">
+    <li><b>№ 13933</b><span>в&nbsp;реестре российского ПО с&nbsp;2022 года</span></li>
+    <li><b>ФСТЭК</b><span>сертификат (под&nbsp;именем Kuberbox)</span></li>
+    <li><b>ML / AI</b><span>Kubeflow, MLflow и&nbsp;общий пул GPU из&nbsp;коробки</span></li>
+    <li><b>DR</b><span>Disaster Recovery</span></li>
+  </ul>
 </section>
 
 <section class="slide g-r" id="about" data-title="Кто мы">
   <div class="top"><div class="eyebrow">Кто мы</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Лаборатория Числитель&nbsp;– <span class="hl">российский разработчик</span> инфраструктурного ПО</h2>
+  <h2 class="h2 rv" style="max-width:none">Лаборатория Числитель: <span class="hl">российский разработчик</span> инфраструктурного ПО</h2>
   <div class="about3 rv" style="--d:60ms">
-    <div><b>2019</b><span>на&nbsp;рынке</span></div>
+    <div><b><small>с</small>&nbsp;2019</b><span>года на&nbsp;рынке</span></div>
     <div><b>70+</b><span>разработчиков</span></div>
     <div><b>85+</b><span>заказчиков</span></div>
     <div><b>10 000+</b><span>развёрнутых экземпляров продуктов</span></div>
@@ -1076,12 +1513,12 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     <div class="prod rv" style="--d:220ms;--pc:#ffb900"><img src="assets/products/grafinya-horizontal-on-dark.svg" alt="Графиня"><p>Визуализация и&nbsp;анализ данных, аналог Grafana</p></div>
     <div class="prod rv" style="--d:270ms;--pc:#56d878"><img src="assets/products/nimbius-horizontal-on-dark.svg" alt="Нимбиус"><p>Платформа для&nbsp;частных и&nbsp;гибридных облаков</p></div>
   </div>
-  <div class="foot"><span>Все продукты&nbsp;– в&nbsp;реестре российского ПО</span><span class="pg"></span></div>
+  <div class="foot"><span>Все продукты в&nbsp;реестре российского ПО</span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-tl" id="questions" data-title="Расскажите о себе">
-  <div class="top"><div class="eyebrow">Сначала&nbsp;– о&nbsp;вас</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Расскажите о&nbsp;себе&nbsp;– <span class="hl">чтобы говорить о&nbsp;вашем</span>, а&nbsp;не&nbsp;о&nbsp;нашем</h2>
+  <div class="top"><div class="eyebrow">Сначала о&nbsp;вас</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <h2 class="h2 rv">Расскажите о&nbsp;себе, <span class="hl">чтобы говорить о&nbsp;вашем</span>, а&nbsp;не&nbsp;о&nbsp;нашем</h2>
   <ol class="qs">
     <li class="rv" style="--d:60ms">Сколько у&nbsp;вас кластеров сейчас и&nbsp;сколько будет через год?</li>
     <li class="rv" style="--d:110ms">Есть ли закрытые или&nbsp;изолированные сегменты сети?</li>
@@ -1093,88 +1530,89 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
-<section class="slide g-r" id="summary" data-title="Коротко">
-  <div class="top"><div class="eyebrow">Коротко</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Кластеров становится больше, <span class="hl">команда&nbsp;– нет</span></h2>
-  <div class="sum3">
-    <div class="rv" style="--d:80ms"><b>1,5 <small>инженера</small></b><span>эксплуатируют 24+ кластера в&nbsp;Почта Банке</span></div>
-    <div class="rv" style="--d:140ms"><b>20 <small>минут</small></b><span>новый кластер, готовый к&nbsp;запуску приложений</span></div>
-    <div class="rv" style="--d:200ms"><b>384 <small>млн ₽</small></b><span>высвобождается за&nbsp;5 лет против своей сборки: 20 кластеров, 140 узлов, без&nbsp;лицензии Штурвала</span></div>
-  </div>
-  <div class="sum-cards">
-    <div class="card rv" style="--d:260ms">ФСТЭК</div>
-    <div class="card rv" style="--d:300ms">ML</div>
-    <div class="card rv" style="--d:340ms">CNCF</div>
-    <div class="card rv" style="--d:380ms">DR конфигурация</div>
-    <div class="card rv" style="--d:420ms">Vendor-agnostic</div>
-    <div class="card rv" style="--d:460ms">Встроенная ИБ</div>
-  </div>
-  <div class="foot"><span></span><span class="pg"></span></div>
-</section>
 
 <section class="slide g-blue" id="what" data-title="Что такое Штурвал">
   <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Собственный продукт <span class="hl">на&nbsp;основе Kubernetes</span></h2>
-  <p class="lead rv" style="--d:60ms;max-width:72ch">Enterprise-платформа для&nbsp;создания и&nbsp;управления кластерами Kubernetes из&nbsp;одной точки&nbsp;– от&nbsp;одного кластера до&nbsp;сотен. Как&nbsp;vCenter, только для&nbsp;Kubernetes.</p>
-  <div class="what3">
-    <div class="rv" style="--d:100ms">
-      <p class="k">Что&nbsp;мы добавили к&nbsp;Kubernetes</p>
-      <ul class="plus2">
+  <div class="wh2">
+    <div class="wh2-l">
+      <h2 class="h2 rv">Собственный продукт <span class="hl">на&nbsp;основе Kubernetes</span></h2>
+      <p class="wh2-lead rv" style="--d:60ms">Enterprise-платформа для&nbsp;создания и&nbsp;управления кластерами Kubernetes из&nbsp;одной точки, от&nbsp;одного кластера до&nbsp;сотен. Как&nbsp;vCenter, только для&nbsp;Kubernetes.</p>
+      <div class="rv" style="--d:100ms"><p class="k" style="margin-bottom:14px">Что&nbsp;мы добавили к&nbsp;Kubernetes</p><ul class="plus2">
         <li>Графический интерфейс управления</li>
         <li>Протестированная и&nbsp;стабильная сборка</li>
         <li>Простой установщик Kubernetes</li>
         <li>Встроенные инструменты ИБ</li>
         <li>Работа на&nbsp;отечественных ОС и&nbsp;виртуализации</li>
         <li>Автоматизированные обновления</li>
-      </ul>
-    </div>
-    <div class="rv" style="--d:160ms">
-      <ul class="card facts2">
-        <li><b>№ 13933</b><span>в&nbsp;реестре российского ПО&nbsp;с&nbsp;14.06.2022</span></li>
+      </ul></div>
+      <ul class="wh2-facts rv" style="--d:160ms">
+        <li><b>№ 13933</b><span>в&nbsp;реестре российского ПО с&nbsp;14.06.2022</span></li>
         <li><b>ФСТЭК</b><span>сертификат № 5045 от&nbsp;24.02.2026</span></li>
         <li><b>CNCF</b><span>сертифицированный Kubernetes</span></li>
-        <li><b>&gt;10 млн $</b><span>вложено в&nbsp;собственную разработку</span></li>
+        <li><b>&gt;15 млн $</b><span>вложено в&nbsp;собственную разработку</span></li>
       </ul>
     </div>
+    <div class="wh2-r rv" style="--d:120ms">
+      <div class="tablet"><div class="gui-wrap"><div class="pv" aria-label="Интерфейс Штурвала: сводка платформы">
+        <aside class="pv-side"><div class="pv-logo"><img src="assets/shturval-sign.svg" alt="">Штурвал</div><div class="pv-dash">Дашборд</div><button type="button" class="pv-g">Управление доступом<i>▾</i></button><div class="pv-items"><span>Менеджер доступов</span><span>Управление ролями</span><span>Менеджер сессий</span><span>Интеграция с LDAP</span><span>Интеграция с OIDC</span><span>Дерево доступов</span></div><button type="button" class="pv-g">Провайдеры<i>▾</i></button><div class="pv-items"><span>Конфигурация</span><span>Пулы IP-адресов</span></div><button type="button" class="pv-g">Сводные отчёты<i>▾</i></button><div class="pv-items"><span>Ресурсы кластеров</span><span>Анализ образов кластеров</span><span>Отчёт по политикам безопасности</span></div><button type="button" class="pv-g">Профили кластеров<i>▾</i></button><div class="pv-items"><span>Профили конфигурации</span></div><button type="button" class="pv-g">О системе<i>▾</i></button><div class="pv-items"><span>Лицензирование</span></div><div class="pv-side-lic"><b>Лицензия</b>Enterprise · до&nbsp;06.11.2027</div></aside>
+        <div class="pv-main">
+          <div class="pv-top"><span class="pv-av">AD</span>admin</div>
+          <div class="pv-body">
+            <div class="pv-h"><h4>Сводка платформы</h4><div class="pv-seg"><button type="button" data-v="9">9 кластеров</button><button type="button" class="on" data-v="146">146 кластеров</button></div><span class="pv-chk">проверка 12 сек назад</span></div>
+            <div class="pv-card pv-sum"><div class="pv-total"><small>Всего кластеров</small><b id="pv-total">146</b><span id="pv-sub"></span></div><div class="pv-st"><div style="--c:#3b82f6"><b>0</b><span>создаются</span></div><div style="--c:#22b573"><b>0</b><span>работают без ошибок</span></div><div style="--c:#ffb74d"><b>0</b><span>обновляются</span></div><div style="--c:#a2aab1"><b>0</b><span>удаляются</span></div><div style="--c:#ff6b6b"><b>0</b><span>требуют внимания</span></div></div></div>
+            <div class="pv-cols">
+              <div class="pv-colm">
+                <div class="pv-card"><h5>Кластеры управления</h5><table class="pv-tbl"><thead><tr><th>Имя</th><th>Провайдер</th><th>Узлы</th><th>Статус</th></tr></thead><tbody id="pv-mgmt"></tbody></table></div>
+                <div class="pv-card pv-infra"><h5>Инфраструктура <small id="pv-infn"></small></h5><div id="pv-inf"></div></div>
+              </div>
+              <div class="pv-colr">
+                <div class="pv-card"><h5>Аутентификация</h5><div class="pv-kv"><div><small>Сейчас</small><b>Внутренний + LDAP</b></div></div><div class="pv-kv"><div><small>Внешний OIDC</small><b>не&nbsp;подключён</b></div><button type="button">Подключить</button></div><div class="pv-kv"><div><small>Время жизни токена</small><b>12 ч</b></div><button type="button">Изменить</button></div><div class="pv-kv"><div><small>Активные сессии</small><b id="pv-ses">86</b></div><button type="button">Открыть</button></div></div>
+                <div class="pv-card"><h5>Версии кластеров</h5><div id="pv-ver"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div></div></div>
+    </div>
   </div>
-  <div class="foot"><span></span><span class="pg"></span></div>
+  <div class="foot"><span>Интерфейс Штурвала: сводка платформы</span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-tl" id="stack" data-title="Не только Kubernetes">
   <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Штурвал&nbsp;– это <span class="hl">совсем не&nbsp;только Kubernetes</span></h2>
+  <h2 class="h2 rv" style="max-width:none">Штурвал <span class="hl">гораздо больше, чем Kubernetes</span></h2>
   <div class="stk rv" style="--d:80ms">
     <div class="stk-mgmt">
       <p class="stk-cap">Подсистема управления кластерами</p>
       <span>Интерфейс управления платформой<small>GUI, CLI, REST API</small></span>
-      <span>Управление инфраструктурой<small>Cluster API и&nbsp;провайдеры</small></span>
+      <span>Управление инфраструктурой<small><nobr><img class="oss" src="assets/oss/cluster-api.svg" alt="">Cluster API</nobr> и&nbsp;провайдеры</small></span>
       <span>Управление конфигурацией кластеров</span>
       <span>Управление доступом<small>LDAP, OIDC, RBAC, менеджер сессий</small></span>
       <span>Построение отчётов</span>
-      <span>Обработка и&nbsp;отображение метрик<small>VictoriaMetrics Cluster, Grafana</small></span>
-      <span>Обработка и&nbsp;отображение журналов<small>VictoriaLogs</small></span>
+      <span>Обработка и&nbsp;отображение метрик<small><nobr><img class="oss" src="assets/oss/victoriametrics.svg" alt="">VictoriaMetrics Cluster</nobr>, <nobr><img class="oss" src="assets/oss/grafana.svg" alt="">Grafana</nobr></small></span>
+      <span>Обработка и&nbsp;отображение журналов<small><nobr><img class="oss" src="assets/oss/victoriametrics.svg" alt="">VictoriaLogs</nobr></small></span>
     </div>
     <div class="stk-main">
       <div class="stk-cl">
         <p class="stk-cap">Клиентский кластер</p>
         <div class="stk-grid">
-          <span class="k8s">Kubernetes API<small>это и&nbsp;есть «ванильный» Kubernetes</small></span>
-          <span>Ingress и&nbsp;Gateway API<small>Ingress NGINX</small></span>
+          <span class="k8s"><img class="oss oss-t" src="assets/oss/kubernetes.svg" alt="">Kubernetes<small>это и&nbsp;есть «ванильный» Kubernetes</small></span>
+          <span>Ingress и&nbsp;Gateway API<small><nobr><img class="oss" src="assets/oss/nginx.svg" alt="">Ingress NGINX</nobr> и <nobr><img class="oss" src="assets/oss/cilium.svg" alt="">Cilium</nobr> Gateway API</small></span>
           <span>Локальные DNS<small>NodeLocal DNS</small></span>
-          <span>VIP и&nbsp;балансировка<small>Kube-VIP, Descheduler</small></span>
+          <span>VIP и&nbsp;балансировка<small><nobr><img class="oss" src="assets/oss/kube-vip.png" alt="">Kube-VIP</nobr>, Descheduler</small></span>
           <span>Хранилище<small>RawFile CSI, NFS CSI, Ceph CSI, CSI Snapshotter</small></span>
           <span>Управление доступом (RBAC)</span>
-          <span>Сбор метрик<small>VictoriaMetrics Agent</small></span>
-          <span>Сбор логов<small>Vector</small></span>
-          <span>Безопасность<small>Kyverno, Trivy</small></span>
-          <span>Бэкапы<small>Velero</small></span>
+          <span>Сбор метрик<small><nobr><img class="oss" src="assets/oss/victoriametrics.svg" alt="">VictoriaMetrics Agent</nobr></small></span>
+          <span>Сбор логов<small><nobr><img class="oss" src="assets/oss/vector.svg" alt="">Vector</nobr></small></span>
+          <span>Безопасность<small><nobr><img class="oss" src="assets/oss/kyverno.svg" alt="">Kyverno</nobr>, <nobr><img class="oss" src="assets/oss/trivy.svg" alt="">Trivy</nobr></small></span>
+          <span>Бэкапы<small><nobr><img class="oss" src="assets/oss/velero.svg" alt="">Velero</nobr></small></span>
           <span>Конфигурация системных сервисов</span>
           <span>Конфигурация узлов</span>
           <span>Обновление кластера</span>
-          <span>Доставка приложений<small>Argo CD, Argo Rollouts</small></span>
-          <span>Сертификаты<small>cert-manager, trust-manager, X.509 Certificate Exporter</small></span>
+          <span>Доставка приложений<small><nobr><img class="oss" src="assets/oss/argo.svg" alt="">Argo CD</nobr>, Argo Rollouts</small></span>
+          <span>Сертификаты<small><nobr><img class="oss" src="assets/oss/cert-manager.svg" alt="">cert-manager</nobr>, trust-manager</small></span>
         </div>
-        <div class="stk-net"><i>node</i><i>node</i><i>node</i><i>node</i><i>node</i><i>node</i><span>Сеть: Cilium, Multus, SR-IOV</span></div>
+        <div class="stk-net"><i>node</i><i>node</i><i>node</i><i>node</i><i>node</i><i>node</i><span>Сеть: <nobr><img class="oss" src="assets/oss/cilium.svg" alt="">Cilium</nobr>, <nobr><img class="oss" src="assets/oss/multus.png" alt="">Multus</nobr>, SR-IOV</span></div>
       </div>
       <div class="stk-infra">
         <div><p class="stk-cap">Вычислительная инфраструктура</p><div class="chips"><span class="chip">bare metal</span><span class="chip">vSphere</span><span class="chip">zVirt</span><span class="chip">oVirt</span><span class="chip">RedVirt</span><span class="chip">OpenStack</span><span class="chip">vCloud Director</span><span class="chip">Basis</span><span class="chip">HostVM</span><span class="chip">RosaVirt</span><span class="chip">Yandex Cloud</span></div></div>
@@ -1183,35 +1621,120 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     </div>
     <div class="stk-bottom"><span>Модуль первоначального развёртывания</span><span>Модуль установки без&nbsp;доступа в&nbsp;интернет</span></div>
   </div>
-  <div class="foot"><span>Kubernetes API&nbsp;– один блок из&nbsp;многих. Всё остальное в&nbsp;своей сборке собирают и&nbsp;сопровождают сами</span><span class="pg"></span></div>
+  <div class="foot"><span>Всё, кроме Kubernetes, в&nbsp;своей сборке собирают и&nbsp;сопровождают сами</span><span class="pg"></span></div>
 </section>
 
-<section class="slide g-blue" id="box" data-title="Из коробки">
-  <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Что&nbsp;есть в&nbsp;каждом кластере <span class="hl">с&nbsp;первой минуты</span></h2>
-  <p class="lead rv" style="--d:60ms">Системные сервисы ставятся при&nbsp;создании кластера и&nbsp;обновляются вместе с&nbsp;ним. Набор настраивается под&nbsp;кластер.</p>
-  <div class="grid box4">
-    <div class="card rv" style="--d:100ms"><p class="k">OPS</p><h3>Эксплуатация</h3><div class="chips"><span class="chip">container runtime</span><span class="chip">локальное хранилище</span><span class="chip">бэкапы Velero</span><span class="chip">Argo CD · Rollouts</span><span class="chip">NodeConfig</span><span class="chip">cert-manager</span></div></div>
-    <div class="card rv" style="--d:150ms"><p class="k">Observability</p><h3>Наблюдаемость</h3><div class="chips"><span class="chip">сбор метрик</span><span class="chip">дашборды Grafana с&nbsp;SSO</span><span class="chip">сбор логов</span><span class="chip">доставка логов вовне</span><span class="chip">алерты: Email, Telegram, Webhook</span></div></div>
-    <div class="card rv" style="--d:200ms"><p class="k">NET</p><h3>Сеть</h3><div class="chips"><span class="chip">Cilium</span><span class="chip">Ingress</span><span class="chip">локальные DNS</span><span class="chip">балансировщик</span><span class="chip">сетевые метрики</span></div></div>
-    <div class="card rv" style="--d:250ms"><p class="k">SEC</p><h3>Безопасность</h3><div class="chips"><span class="chip">Kyverno</span><span class="chip">сканирование образов Trivy</span><span class="chip">анализ конфигураций</span><span class="chip">анализ манифестов</span><span class="chip">управление сертификатами</span><span class="chip">аудит → SIEM</span></div></div>
-  </div>
-  <div class="cycle rv" style="--d:300ms">
-    <p class="k">Цикл релизов</p>
-    <div><b>3</b><span>минорных релиза в&nbsp;год, как&nbsp;у&nbsp;Kubernetes</span></div>
-    <div><b>2</b><span>последние версии на&nbsp;поддержке</span></div>
-    <div><b>патчи</b><span>по&nbsp;необходимости</span></div>
-    <div><b>тест → прод</b><span>обновления изолированно по&nbsp;кластерам</span></div>
+<section class="slide g-r" id="summary" data-title="Короткое резюме">
+  <div class="top"><div class="eyebrow">Короткое резюме</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="sm2">
+    <div class="sm2-l">
+      <h2 class="h2 rv">Когда вам нужен <span class="hl">именно Штурвал:</span></h2>
+      <ul class="sm2-list rv" style="--d:80ms"><li>Дорого делать свою платформу</li><li>Надо освободить людей для&nbsp;полезной работы</li><li>Нужен ML стек на&nbsp;Kubernetes</li><li>Хотите сделать мультисайтовую DR конфигурацию</li><li>Не&nbsp;любите экосистем и&nbsp;vendor-lock</li><li>Ваша инсталляция растёт</li></ul>
+      <div class="sm2-facts rv" style="--d:160ms">
+        <div class="card"><b>Реестр</b><span>№ 13933 в&nbsp;реестре российского ПО с&nbsp;2022 года</span></div>
+        <div class="card t"><b>ФСТЭК</b><span>сертификат № 5045 от&nbsp;24.02.2026</span></div>
+      </div>
+    </div>
+    <div class="card tco-chart sm2-chart rv" style="--d:120ms">
+      <p class="sm2-k">За&nbsp;5 лет высвобождается <b>384 млн ₽</b></p>
+      <h4>Расходы за&nbsp;5 лет, млн ₽ · 20 кластеров, 140 worker-узлов, 24×7</h4>
+      <div class="bars">
+        <div class="b"><span class="val">520</span><i style="--h:43%"></i></div>
+        <div class="b sh"><span class="val">137</span><i style="--h:11%"></i></div>
+        <div class="b"><span class="val">1 197</span><i style="--h:100%"></i></div>
+      </div>
+      <div class="bar-names"><span>своя сборка на&nbsp;ванильном K8s</span><span class="sh">Штурвал без&nbsp;лицензии</span><span>своя платформа с&nbsp;нуля</span></div>
+      <p class="small" style="margin-top:18px"><a href="https://shturval-tech.github.io/shturval-tco/" target="_blank" rel="noopener" style="color:inherit">Калькулятор TCO</a>, методика 2026.10.</p>
+    </div>
   </div>
   <div class="foot"><span></span><span class="pg"></span></div>
+</section>
+<section class="slide g-blue" id="box" data-title="Из коробки">
+  <div class="top"><div class="eyebrow">Что&nbsp;такое Штурвал</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="bx2">
+    <div class="bx2-l">
+      <h2 class="h2 rv">Что&nbsp;есть в&nbsp;каждом кластере <span class="hl">с&nbsp;первой минуты</span></h2>
+      <p class="bx2-lead rv" style="--d:60ms">Системные сервисы ставятся при&nbsp;создании кластера и&nbsp;обновляются вместе с&nbsp;ним.</p>
+      <div class="bx2-g rv" style="--d:100ms">
+        <div><p class="k">Эксплуатация</p><div class="chips"><span class="chip">container runtime</span><span class="chip">локальное хранилище</span><span class="chip">Velero</span><span class="chip">Argo CD</span><span class="chip">NodeConfig</span><span class="chip">cert-manager</span></div></div>
+        <div><p class="k">Наблюдаемость</p><div class="chips"><span class="chip">метрики</span><span class="chip">Grafana с&nbsp;SSO</span><span class="chip">логи</span><span class="chip">алерты: Email, Telegram, Webhook</span></div></div>
+        <div><p class="k">Сеть</p><div class="chips"><span class="chip">Cilium</span><span class="chip">Ingress</span><span class="chip">локальные DNS</span><span class="chip">балансировщик</span></div></div>
+        <div><p class="k">Безопасность</p><div class="chips"><span class="chip">Kyverno</span><span class="chip">Trivy</span><span class="chip">анализ конфигураций</span><span class="chip">аудит → SIEM</span></div></div>
+      </div>
+      <div class="bx2-cyc rv" style="--d:160ms">
+        <div><b>3</b><span>минорных релиза в&nbsp;год, как&nbsp;у&nbsp;Kubernetes</span></div>
+        <div><b>2</b><span>последние версии на&nbsp;поддержке</span></div>
+        <div><b>патчи</b><span>по&nbsp;необходимости</span></div>
+        <div><b>тест → прод</b><span>обновления изолированно по&nbsp;кластерам</span></div>
+      </div>
+    </div>
+    <div class="bx2-r rv" style="--d:120ms">
+      <div class="dev2" id="dev2">
+        <div class="dev dev-front" data-dev="dp"><div class="tablet tablet-dark"><div class="gui-wrap"><div class="dp" aria-label="Интерфейс Штурвала: обзор Deployment">
+        <aside class="dp-side"><div class="dp-logo"><img src="assets/shturval-sign.svg" alt="">штурвал</div><div class="dp-ns">cert-manager <i>▾</i></div><div class="dp-ng"><b>Администрирование</b><i>▸</i></div><div class="dp-ng open"><b>Нагрузки</b><i>▾</i></div><div class="dp-ni"><span class="on">Deployments</span><span>ReplicaSets</span><span>Pods</span><span>StatefulSets</span><span>DaemonSets</span><span>CronJobs</span><span>Jobs</span></div><div class="dp-ng"><b>Сеть</b><i>▸</i></div><div class="dp-ng"><b>Хранилище</b><i>▸</i></div><div class="dp-ng"><b>Безопасность</b><i>▸</i></div><div class="dp-ng"><b>Квоты</b><i>▸</i></div><div class="dp-ng"><b>Резервное копирование</b><i>▸</i></div><div class="dp-collapse">Свернуть панель</div></aside>
+        <div class="dp-main">
+          <div class="dp-head">
+            <div><h4><span>←</span>shturval-cert-manager</h4><p><span class="dp-st" id="dp-st">● Активный</span><span class="dp-mut">создан 11.09.2024 14:58</span><span class="dp-ok" id="dp-health">Состояние: OK</span></p></div>
+            <div class="dp-acts"><div class="dp-seg" id="dp-mode"><button class="on" type="button" data-m="ok">Healthy</button><button type="button" data-m="bad">Проблема</button></div><button type="button" class="dp-btn">Изменить</button><button type="button" class="dp-btn dp-del">✕ Удалить</button></div>
+          </div>
+          <div class="dp-tabs" data-group="dptab"><button class="on" type="button">Обзор</button><button type="button">Info</button><button type="button">Шаблон пода</button><button type="button">HPA</button><button type="button">VPA</button><button type="button">Репликасеты (1)</button><button type="button" id="dp-tabpods">Поды (2)</button><button type="button">События</button><button type="button">Манифест</button></div>
+          <div class="dp-bar"><span class="dp-l">Реплики</span><div class="dp-rep"><button type="button" data-r="-1">−</button><b id="dp-rep">2</b><button type="button" data-r="1">+</button></div><span class="dp-l">Стратегия: <b>Recreate</b></span><span class="dp-chip">HPA: выкл</span><span class="dp-chip">VPA</span><span class="dp-sp"></span><button type="button" class="dp-btn" id="dp-pause">❚❚ Приостановить</button><button type="button" class="dp-btn" id="dp-restart">↻ Перезапустить поды</button></div>
+          <div class="dp-body">
+            <div class="dp-graph" id="dp-graph">
+              <svg class="dp-lines" viewBox="0 0 700 600" preserveAspectRatio="none" aria-hidden="true"><path d="M220 55 H250"/><path d="M355 90 C355 115 175 105 175 130"/><path d="M175 204 V260"/><g id="dp-l-pods"></g></svg>
+              <div class="dp-n dp-route" style="left:20px;top:20px;width:200px"><small>HTTPRoute</small><b>cert-manager-route</b><span>cert.example.com /api</span></div>
+              <div class="dp-n dp-svc" style="left:250px;top:20px;width:210px"><small>Service</small><b>shturval-cert-manager</b><span>10.110.179.165:9402</span></div>
+              <div class="dp-n dp-dep" id="dp-dep" style="left:60px;top:130px;width:230px"><small>Deployment</small><b>shturval-cert-manager</b><span id="dp-dep-s">Ready 2/2 · Recreate · 3 labels</span></div>
+              <p class="dp-att-h" style="left:480px;top:112px">Attachments</p>
+              <div class="dp-n dp-att" style="left:480px;top:134px;width:200px"><small>HPA</small><b>cert-manager-hpa</b><span>не&nbsp;настроен</span></div>
+              <div class="dp-n dp-att" style="left:480px;top:206px;width:200px"><small>PDB</small><b>cert-manager-pdb</b><span>minAvailable 1</span></div>
+              <div class="dp-n dp-att" style="left:480px;top:278px;width:200px"><small>Тома и&nbsp;секреты</small><b>из&nbsp;pod template</b><span>CM 2 · Secret 1 · SA</span></div>
+              <div class="dp-n dp-rsn" id="dp-rs" style="left:60px;top:260px;width:230px"><small>ReplicaSet</small><b>shturval-cert-manager-7d8f9</b><span id="dp-rs-s">revision 3 · 2/2</span><em>current</em></div>
+              <div id="dp-pods"></div>
+            </div>
+            <div class="dp-right">
+              <div class="dp-panel"><h5>Метрики</h5><div class="dp-m"><div><small>Ready</small><b id="dp-ready">2/2</b></div><div><small>Restarts</small><b id="dp-restarts">0</b></div></div><svg class="dp-spark" viewBox="0 0 200 50" preserveAspectRatio="none" aria-hidden="true"><path id="dp-spark" d=""/></svg><p class="dp-mut">CPU, последний час</p></div>
+              <div class="dp-panel"><h5>События <span id="dp-evc">⚠ 0 · ⛔ 0</span></h5><div class="dp-filters"><span class="on">Warning + Error</span><span>1 час</span></div><ul class="dp-ev" id="dp-ev"></ul></div>
+            </div>
+          </div>
+        </div>
+      </div></div></div></div>
+        <div class="dev dev-back" data-dev="hm"><div class="tablet"><div class="gui-wrap"><div class="hm" aria-label="Интерфейс Штурвала: главный экран платформы">
+        <div class="hm-bar-top"><div class="hm-brand"><img src="assets/shturval-sign.svg" alt="">Штурвал<span>· Главная</span></div><div class="hm-user"><span class="hm-doc">Документация</span><span class="hm-av">AD</span>admin</div></div>
+        <div class="hm-body">
+          <div class="hm-main">
+            <div class="hm-card hm-plat">
+              <div class="hm-plat-h"><img src="assets/shturval-sign.svg" alt=""><div><h4>Kubernetes-платформа «Штурвал» <em>2.15.0</em></h4><p>Установлена <b>06.11.2024</b> · Kubernetes <b>v1.35.1</b> · <b>1</b> управляющий кластер</p></div></div>
+              <div class="hm-ok"><span>✓</span><div><b>Все системы работают штатно</b><small>1 кластер · 7 узлов · 92/92 подов</small></div></div>
+            </div>
+            <div class="hm-tabs"><div data-hm="tab"><button class="on" type="button" data-t="cl">Кластеры <i>1</i></button><button type="button" data-t="tn">Тенанты</button></div><button class="hm-cta" type="button" id="hm-create">+ Создать кластер</button></div>
+            <div class="hm-card hm-cl" data-pane="cl">
+              <div class="hm-cl-h"><span class="hm-dot"></span><b>shturval-platform</b><em>управляющий</em><span class="hm-run">Работает</span></div>
+              <div class="hm-bars"><div class="hm-bar"><p><span>CPU</span><b>38%</b></p><i><u style="width:38%"></u></i><small>18,2 из 48 vCPU</small></div><div class="hm-bar"><p><span>Память</span><b>61%</b></p><i><u style="width:61%"></u></i><small>117 из 192 ГиБ</small></div><div class="hm-bar"><p><span>Хранилище</span><b>24%</b></p><i><u style="width:24%"></u></i><small>0,7 из 3 ТиБ</small></div></div>
+              <div class="hm-nodes"><div class="hm-node"><b>shturval-platform-cp-1</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>control-plane</i></div><div class="hm-node"><b>shturval-platform-cp-2</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>control-plane</i></div><div class="hm-node"><b>shturval-platform-cp-3</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>control-plane</i></div><div class="hm-node"><b>shturval-platform-w-1</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>infra</i></div><div class="hm-node"><b>shturval-platform-w-2</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>worker</i></div><div class="hm-node"><b>shturval-platform-w-3</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>worker</i></div><div class="hm-node"><b>shturval-platform-w-4</b><span>RED OS 7.3.4 · v1.35.1 · containerd 2.2.1</span><i>worker</i></div></div>
+              <dl class="hm-facts"><div><dt>Релиз</dt><dd>2.15.0</dd></div><div><dt>Модули</dt><dd>20/20</dd></div><div><dt>Поды</dt><dd>92/92</dd></div><div><dt>Провайдер</dt><dd>vSphere</dd></div><div><dt>API</dt><dd>10.31.145.10:6443</dd></div></dl>
+            </div>
+            <div class="hm-card hm-empty" data-pane="tn" hidden><b>Тенантов пока нет</b><span>Тенант объединяет кластеры и&nbsp;неймспейсы команды под&nbsp;общими правами и&nbsp;лимитами</span><button type="button" class="hm-cta">+ Создать тенант</button></div>
+          </div>
+          <div class="hm-side">
+            <div class="hm-card"><h5>Платформа</h5><div class="hm-set"><div><b>Инфраструктура</b><span>1 провайдер подключён</span></div><button type="button">Подключить ещё</button></div><div class="hm-set"><div><b>Учёт пользователей</b><span>LDAP или OIDC для корпоративного входа</span></div><button type="button">Подключить</button></div><div class="hm-set"><div><b>Тенанты</b><span>Пространства команд с&nbsp;лимитами</span></div><button type="button">Создать</button></div><div class="hm-set"><div><b>Профили кластеров</b><span>Шаблоны для одинаковых кластеров</span></div><button type="button">Создать</button></div><div class="hm-set"><div><b>Доступы</b><span>1 пользователь</span></div><button type="button">Настроить</button></div><div class="hm-set"><div><b>Мониторинг</b><span>Дашборды метрик всех кластеров</span></div><button type="button">Включить</button></div></div>
+            <div class="hm-card"><h5>Что нового в&nbsp;2.15.0</h5><ul class="hm-news"><li><i class="">новое</i>Обновление кластеров на&nbsp;месте (InPlace)</li><li><i class="">новое</i>Главный экран платформы</li><li><i class="">новое</i>Kubernetes 1.35</li><li><i class="fix">исправлено</i>Модуль конфигурации узлов</li></ul></div>
+          </div>
+        </div>
+        <div class="hm-toast" id="hm-toast">Открываем мастер создания кластера…</div>
+      </div></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Интерфейс Штурвала: главный экран и&nbsp;обзор Deployment. Клик по&nbsp;заднему экрану выводит его вперёд</span><span class="pg"></span></div>
 </section>
 
 <section class="slide ideas-p" id="ideas" data-title="Основные идеи">
   <div class="top"><h2 class="eyebrow ip-h">Три принципа Штурвала</h2><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
   <div class="ip">
-    <a href="#sec-enterprise" class="rv go" style="--d:60ms" data-go="sec-enterprise">Enterprise во&nbsp;всём</a>
-    <a href="#sec-vendor" class="rv go" style="--d:160ms" data-go="sec-vendor">Vendor-agnostic</a>
-    <a href="#sec-tco" class="rv go" style="--d:260ms" data-go="sec-tco">Лучшее TCO</a>
+    <div class="rv" style="--d:60ms">Enterprise во&nbsp;всём</div>
+    <div class="rv" style="--d:160ms">Vendor-agnostic</div>
+    <div class="rv" style="--d:260ms">Лучшее TCO</div>
   </div>
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
@@ -1222,33 +1745,33 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 </section>
 
 
-<section class="slide g-tl" id="props" data-title="Четыре свойства">
+<section class="slide pp-poster" id="props" data-title="Четыре свойства">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Enterprise&nbsp;– это когда <span class="hl">все четыре свойства</span> выполнены одновременно</h2>
-  <p class="lead rv" style="--d:80ms">Мы сформулировали их по&nbsp;итогам пилотов и&nbsp;разговоров с&nbsp;крупными заказчиками. Отдельные пункты закрывают разные платформы.</p>
-  <div class="grid props3">
-    <a href="#center" class="card rv go" style="--d:120ms" data-go="center"><div class="oct-n">1</div><h3>Масштабирование не&nbsp;равно росту затрат</h3><ul class="ticks"><li>Единый центр управления</li><li>Сквозной RBAC</li><li>Инфраструктурой управляет платформа</li></ul></a>
-    <a href="#dr" class="card rv go" style="--d:180ms" data-go="dr"><div class="oct-n">2</div><h3>Нет единой точки отказа</h3><ul class="ticks"><li>Кластеры работают и&nbsp;без&nbsp;управления</li><li>DR кластера управления</li><li>Встроенный бэкап конфигураций</li></ul></a>
-    <a href="#security-tech" class="card rv go" style="--d:240ms" data-go="security-tech"><div class="oct-n">3</div><h3>ИБ в&nbsp;архитектуре, а&nbsp;не&nbsp;в&nbsp;наложенных средствах</h3><ul class="ticks"><li>Единая точка интеграций с&nbsp;инфраструктурой</li><li>Полная изоляция нагрузок</li><li>Встроенная ИБ</li></ul></a>
-    <a href="#never" class="card rv go" style="--d:300ms" data-go="never"><div class="oct-n">4</div><h3>Уход от&nbsp;team lock и&nbsp;vendor lock</h3><ul class="ticks"><li>Любой компонент можно заменить</li><li>Все на&nbsp;операторах и&nbsp;CRD</li><li>GUI для&nbsp;удобства, GitOps и&nbsp;IaC для&nbsp;серьёзной работы</li></ul></a>
+  <h2 class="h2 rv">Enterprise начинается, когда <span class="hl">все четыре свойства</span> выполнены одновременно</h2>
+  <div class="pp rv" style="--d:120ms">
+    <div class="pp-q"><span class="pp-n">1</span><div><h3>Масштабирование не&nbsp;равно росту затрат</h3><ul><li>Единый центр управления</li><li>Сквозной RBAC</li><li>Инфраструктурой управляет платформа</li></ul></div></div>
+    <div class="pp-q"><span class="pp-n">2</span><div><h3>Нет единой точки отказа</h3><ul><li>Кластеры работают и&nbsp;без&nbsp;управления</li><li>DR кластера управления</li><li>Встроенный бэкап конфигураций</li></ul></div></div>
+    <div class="pp-q"><span class="pp-n">3</span><div><h3>ИБ в&nbsp;архитектуре, а&nbsp;не&nbsp;в&nbsp;наложенных средствах</h3><ul><li>Единая точка интеграций с&nbsp;инфраструктурой</li><li>Полная изоляция нагрузок</li><li>Встроенная ИБ</li></ul></div></div>
+    <div class="pp-q"><span class="pp-n">4</span><div><h3>Уход от&nbsp;team lock и&nbsp;vendor lock</h3><ul><li>Любой компонент можно заменить</li><li>Всё на&nbsp;операторах и&nbsp;CRD</li><li>GUI для&nbsp;удобства, GitOps и&nbsp;IaC для&nbsp;серьёзной работы</li></ul></div></div>
+    <div class="pp-mark" aria-hidden="true"><img src="assets/shturval-sign.svg" alt=""></div>
   </div>
-  <div class="rule props-rule rv" style="--d:360ms"><p>Все свойства вместе только в&nbsp;Штурвале</p></div>
-  <div class="foot"><span>Карточки кликабельны</span><span class="pg"></span></div>
+  <p class="pp-rule rv" style="--d:240ms">Все свойства вместе только в&nbsp;Штурвале</p>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-blue" id="arch" data-title="Архитектура">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · архитектура</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Один кластер управления&nbsp;– <span class="hl">500+ клиентских</span></h2>
+  <h2 class="h2 rv" style="max-width:none">Один кластер управления <span class="hl">на&nbsp;500+ клиентских</span></h2>
   <div class="arch2">
     <div class="arch-side">
       <ul class="plain rv" style="--d:60ms">
         <li><b>Два уровня.</b> Кластер управления создаёт и&nbsp;обслуживает клиентские кластеры, держит доступы, метрики и&nbsp;логи.</li>
         <li><b>Клиентские кластеры независимы.</b> Свои версии Kubernetes, окна обновлений и&nbsp;сетевые сегменты.</li>
-        <li><b>Встраивается в&nbsp;ваш ИТ-ландшафт.</b> Каталог пользователей, IdP, SIEM, виртуализация, Git и&nbsp;репозиторий артефактов подключаются к&nbsp;кластеру управления один раз&nbsp;– для&nbsp;всех кластеров.</li>
+        <li><b>Встраивается в&nbsp;ваш ИТ-ландшафт.</b> Каталог пользователей, IdP, SIEM, виртуализация, Git и&nbsp;репозиторий артефактов подключаются к&nbsp;кластеру управления один раз сразу для&nbsp;всех кластеров.</li>
         <li><b>Ванильный API.</b> CNCF-сертифицированный Kubernetes: kubectl, Lens и&nbsp;ваши чарты работают как&nbsp;есть.</li>
       </ul>
       <div class="capi rv" style="--d:120ms">
-        <p class="k">В&nbsp;основе&nbsp;– Cluster API</p>
+        <p class="k">В&nbsp;основе Cluster API</p>
         <p>Стандарт Kubernetes-сообщества для&nbsp;управления жизненным циклом кластеров, доработанный нами. Этот подход выбирают большинство крупнейших компаний: Т-Банк, Wildberries, Авито, Ozon, VMware Tanzu и&nbsp;др.</p>
       </div>
     </div>
@@ -1314,45 +1837,73 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 </section>
 <section class="slide g-blue" id="selfservice" data-title="Работа с инфраструктурой">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · работа с&nbsp;инфраструктурой</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Нода или&nbsp;кластер по&nbsp;кнопке,<br><span class="hl">остальное делает Штурвал</span></h2>
-  <div class="ss">
-    <div class="card ss-user rv" style="--d:80ms">
-      <p class="k">Пользователь</p>
-      <h3>Есть права и&nbsp;квота</h3>
-      <div class="ss-btns"><span>+ Нода</span><span>+ Кластер</span></div>
-    </div>
-    <span class="ss-arr rv" style="--d:120ms">→</span>
-    <div class="ss-flow rv" style="--d:160ms">
-      <p class="k">Штурвал сам</p>
-      <ol>
-        <li><b>Создаёт машину</b>Идёт в&nbsp;систему виртуализации</li>
-        <li><b>Ставит сервисы</b>Все свои сервисы на&nbsp;новую машину</li>
-        <li><b>Добавляет в&nbsp;платформу</b>Нода сразу под&nbsp;управлением</li>
-        <li><b>Балансирует</b>При&nbsp;необходимости</li>
+  <div class="ss2">
+    <div class="ss2-l">
+      <h2 class="h2 rv">Нода или&nbsp;кластер по&nbsp;кнопке, <span class="hl">остальное делает Штурвал</span></h2>
+      <div class="ss2-user rv" style="--d:80ms"><p>Пользователь с&nbsp;правами и&nbsp;квотой нажимает кнопку. Дальше Штурвал&nbsp;сам:</p></div>
+      <ol class="ss2-flow rv" style="--d:140ms">
+        <li><b>Создаёт машину</b>идёт в&nbsp;систему виртуализации</li>
+        <li><b>Ставит сервисы</b>все свои сервисы на&nbsp;новую машину</li>
+        <li><b>Добавляет в&nbsp;платформу</b>нода сразу под&nbsp;управлением</li>
+        <li><b>Балансирует</b>при&nbsp;необходимости</li>
       </ol>
+      <div class="ss2-no rv" style="--d:200ms"><p class="k">Пользователю не&nbsp;нужны</p><ul><li>доступ в&nbsp;систему виртуализации</li><li>учётная запись в&nbsp;ней</li><li>сетевой доступ к&nbsp;ней</li></ul></div>
+    </div>
+    <div class="ss2-r rv" style="--d:120ms">
+      <div class="tablet"><div class="gui-wrap"><div class="gui" aria-label="Интерфейс Штурвала: конфигурация группы узлов">
+        <div class="g-bar"><div class="g-crumbs">Кластеры<b>›</b>clustername<b>›</b>Управление узлами<b>›</b><span>Конфигурация группы</span></div><div class="g-user">username ▾</div></div>
+        <div class="g-head"><h4><span class="g-back">←</span>clustername-default</h4><span class="g-doc">Документация</span></div>
+        <div class="g-panel">
+          <div class="g-tabs" data-group="tab"><button class="on" type="button">Конфигурация ClusterAPI</button><button type="button">InfraMachineTemplate</button><button type="button">MachineHealthCheck</button></div>
+          <div class="g-state">
+            <div><p class="g-l">Состояние</p><div class="g-chips"><span class="g-ok">Ready</span><span class="g-ok">Available</span><span class="g-ok" id="g-msr">MachineSetReady</span></div></div>
+            <dl><dt>Фаза:</dt><dd id="g-phase">Running</dd><dt>Готово реплик:</dt><dd id="g-ready">83</dd></dl>
+          </div>
+          <div class="g-cols">
+            <div class="g-left">
+              <p class="g-l">Масштабирование узлов</p>
+              <div class="g-seg" data-group="scale"><button class="on" type="button" data-v="manual">Ручное</button><button type="button" data-v="auto">Автоматическое</button></div>
+              <div class="g-reps">
+                <div><p class="g-l">Запрошено реплик</p><div class="g-num"><span id="g-req">83</span><div class="g-arrows"><button type="button" data-d="1" aria-label="Больше">▲</button><button type="button" data-d="-1" aria-label="Меньше">▼</button></div></div></div>
+                <div><p class="g-l">Фактически реплик</p><div class="g-num g-fact"><span id="g-fact">83</span></div></div>
+              </div>
+              <p class="g-auto" id="g-autonote">Число узлов подбирает автоскейлер по&nbsp;нагрузке</p>
+              <p class="g-l">Тип провайдера</p><p class="g-v">vSphere</p>
+              <p class="g-l">Роли узлов <i>*</i></p><div class="g-in g-tags"><span>workers ×</span></div>
+            </div>
+            <div class="g-right">
+              <p class="g-l">Тип восстановления</p>
+              <div class="g-seg" data-group="strategy"><button type="button">OnDelete</button><button class="on" type="button">RollingUpdate</button></div>
+              <div class="g-grid">
+                <div><p class="g-l">Максимально недоступных</p><span class="g-in">0</span></div>
+                <div><p class="g-l">Максимально дополнительных</p><span class="g-in">1</span></div>
+                <div><p class="g-l">minReadySeconds</p><span class="g-in">0</span></div>
+                <div><p class="g-l">nodeDeletionTimeout</p><div class="g-tm"><span class="g-in">0</span><i>ч</i><span class="g-in">10</span><i>мин</i><span class="g-in">0</span><i>сек</i></div></div>
+                <div><p class="g-l">progressDeadlineSeconds</p><span class="g-in">600</span></div>
+                <div><p class="g-l">nodeDrainTimeout</p><div class="g-tm"><span class="g-in">0</span><i>ч</i><span class="g-in">10</span><i>мин</i><span class="g-in">0</span><i>сек</i></div></div>
+                <div><p class="g-l">revisionHistoryLimit</p><span class="g-in g-ph">Введите значение</span></div>
+                <div><p class="g-l">nodeVolumeDetachTimeout</p><div class="g-tm"><span class="g-in">0</span><i>ч</i><span class="g-in">5</span><i>мин</i><span class="g-in">0</span><i>сек</i></div></div>
+              </div>
+              <div class="g-save"><button type="button" id="g-save" disabled>Сохранить</button></div>
+            </div>
+          </div>
+        </div>
+      </div></div></div>
     </div>
   </div>
-  <div class="ss-no rv" style="--d:240ms">
-    <p class="k">Пользователю не&nbsp;нужны</p>
-    <ul>
-      <li>Доступ в&nbsp;систему виртуализации</li>
-      <li>Учётная запись в&nbsp;ней</li>
-      <li>Сетевой доступ к&nbsp;ней</li>
-    </ul>
-  </div>
-  <div class="foot"><span></span><span class="pg"></span></div>
+  <div class="foot"><span>Интерфейс Штурвала</span><span class="pg"></span></div>
 </section>
 
 
 <section class="slide g-blue oct-bg" id="multi" data-title="МультиЦОД и мультиоблако">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · мультиЦОД и&nbsp;мультиоблако</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Все ЦОД и&nbsp;облака&nbsp;– <span class="hl">из&nbsp;одной точки</span></h2>
+  <h2 class="h2 rv" style="max-width:none">Все ЦОД и&nbsp;облака <span class="hl">из&nbsp;одной точки</span></h2>
   <div class="multi">
     <ul class="plain rv" style="--d:60ms">
-      <li><b>Один кластер управления на&nbsp;все площадки.</b> Права, политики, метрики, логи и&nbsp;обновления&nbsp;– одинаково для&nbsp;своих ЦОД, частного и&nbsp;публичного облака.</li>
-      <li><b>Кластеры там, где им место.</b> Прод&nbsp;– в&nbsp;своём ЦОД, тесты и&nbsp;пиковая нагрузка&nbsp;– в&nbsp;облаке. Разные провайдеры, одна модель работы.</li>
+      <li><b>Один кластер управления на&nbsp;все площадки.</b> Права, политики, метрики, логи и&nbsp;обновления работают одинаково для&nbsp;своих ЦОД, частного и&nbsp;публичного облака.</li>
+      <li><b>Кластеры там, где им место.</b> Прод в&nbsp;своём ЦОД, тесты и&nbsp;пиковая нагрузка в&nbsp;облаке. Разные провайдеры, одна модель работы.</li>
       <li><b>Гибридные кластеры.</b> Группы узлов на&nbsp;разной инфраструктуре в&nbsp;одном кластере: например, CPU на&nbsp;виртуализации и&nbsp;GPU на&nbsp;bare metal.</li>
-      <li><b>Потеря площадки&nbsp;– не&nbsp;потеря управления.</b> DR-копия управления во&nbsp;втором ЦОД, клиентские кластеры работают автономно. Бэкапы и&nbsp;миграция между кластерами&nbsp;– через Velero.</li>
+      <li><b>Потеря площадки не&nbsp;означает потерю управления.</b> DR-копия управления во&nbsp;втором ЦОД, клиентские кластеры работают автономно. Бэкапы и&nbsp;миграцию между кластерами делает Velero.</li>
     </ul>
     <div class="diagram rv" style="--d:140ms">
       <svg viewBox="0 0 1000 620" role="img" aria-label="Схема: кластер управления с резервной копией управляет клиентскими кластерами в двух ЦОД, частном и публичном облаке">
@@ -1463,7 +2014,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
       <li><b>Одно управление на&nbsp;все сегменты</b>Права, политики, метрики и&nbsp;логи сводятся в&nbsp;кластер управления.</li>
       <li><b>Одностороннего доступа достаточно</b>До&nbsp;PCI DSS и&nbsp;DMZ соединения открываются в&nbsp;одну сторону.</li>
       <li><b>Без&nbsp;интернета</b>Все сегменты обновляются из&nbsp;зеркала внутри: образы, пакеты, чарты.</li>
-      <li><b>Свои правила на&nbsp;сегмент</b>Политики Kyverno, Pod Security Standards и&nbsp;набор системных сервисов&nbsp;– для&nbsp;каждого кластера отдельно.</li>
+      <li><b>Свои правила на&nbsp;сегмент</b>Политики Kyverno, Pod Security Standards и&nbsp;набор системных сервисов задаются для&nbsp;каждого кластера отдельно.</li>
     </ul>
     <div class="diagram rv" style="--d:160ms">
       <svg viewBox="0 0 1000 580" role="img" aria-label="Схема: кластер управления через межсетевой экран связан с открытым и закрытым сегментами в обе стороны, с PCI DSS и DMZ в одну сторону, все сегменты обновляются из внутреннего зеркала">
@@ -1502,7 +2053,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
         </g>
         <rect x="20" y="502" width="960" height="74" rx="16" fill="#0b0b0b" stroke="#919191" stroke-dasharray="6 6"/>
         <text x="500" y="534" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Зеркало внутри вашего контура</text>
-        <text x="500" y="560" text-anchor="middle" fill="#919191" font-size="14">образы · пакеты · чарты – интернет не нужен ни одному сегменту</text>
+        <text x="500" y="560" text-anchor="middle" fill="#919191" font-size="14">образы · пакеты · чарты: интернет не нужен ни одному сегменту</text>
       </svg>
     </div>
   </div>
@@ -1514,18 +2065,18 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
   <div class="auto">
     <div class="auto-side">
       <h2 class="h2 rv" style="font-size:56px">Рутину делает <span class="hl">платформа</span></h2>
-      <p class="lead rv" style="--d:60ms;font-size:23px">Всё, что&nbsp;в&nbsp;своей сборке держится на&nbsp;скриптах и&nbsp;людях, в&nbsp;Штурвале&nbsp;– функция продукта. Инженеры занимаются развитием, а&nbsp;не&nbsp;поддержкой.</p>
+      <p class="lead rv" style="--d:60ms;font-size:23px">Всё, что&nbsp;в&nbsp;своей сборке держится на&nbsp;скриптах и&nbsp;людях, в&nbsp;Штурвале делает сам продукт. Инженеры занимаются развитием, а&nbsp;не&nbsp;поддержкой.</p>
       <div class="card t rv mt-auto" style="--d:120ms">
         <p class="k">Принцип</p>
-        <p style="font-size:21px;color:var(--ink);margin-top:10px">GUI, IaC и&nbsp;GitOps&nbsp;– равноправные способы. Всё, что&nbsp;делается кнопкой, можно описать манифестом и&nbsp;вызвать через REST API.</p>
+        <p style="font-size:21px;color:var(--ink);margin-top:10px">GUI, IaC и&nbsp;GitOps равноправны. Всё, что&nbsp;делается кнопкой, можно описать манифестом и&nbsp;вызвать через REST API.</p>
       </div>
     </div>
     <div class="auto-grid">
       <div class="card rv" style="--d:60ms"><h4>Создание кластера</h4><p>Из&nbsp;провайдера или&nbsp;на&nbsp;bare metal, сразу с&nbsp;сетью, Ingress, DNS, хранилищем и&nbsp;мониторингом.</p><span class="was">вместо <s>сборки по&nbsp;чек-листу</s></span></div>
-      <div class="card rv" style="--d:90ms"><h4>Обновление по&nbsp;кнопке</h4><p>Kubernetes и&nbsp;системные сервисы&nbsp;– по&nbsp;кнопке или&nbsp;расписанию, изолированно по&nbsp;кластерам.</p><span class="was">вместо <s>upgrade-проекта на&nbsp;квартал</s></span></div>
+      <div class="card rv" style="--d:90ms"><h4>Обновление по&nbsp;кнопке</h4><p>Kubernetes и&nbsp;системные сервисы обновляются по&nbsp;кнопке или&nbsp;расписанию, изолированно по&nbsp;кластерам.</p><span class="was">вместо <s>upgrade-проекта на&nbsp;квартал</s></span></div>
       <div class="card rv" style="--d:120ms"><h4>Группы узлов и&nbsp;автоскейлинг</h4><p>Worker-группы масштабируются по&nbsp;нагрузке, узлы вводятся и&nbsp;выводятся платформой.</p><span class="was">вместо <s>заявок на&nbsp;ВМ</s></span></div>
       <div class="card rv" style="--d:150ms"><h4>Самовосстановление</h4><p>MachineHealthCheck находит сбойный узел и&nbsp;пересоздаёт его.</p><span class="was">вместо <s>ночного разбора инцидента</s></span></div>
-      <div class="card rv" style="--d:180ms"><h4>Настройки узлов</h4><p>NodeConfig на&nbsp;группу: ядро, sysctl, runtime, метки и&nbsp;taints&nbsp;– декларативно.</p><span class="was">вместо <s>обхода узлов по&nbsp;SSH</s></span></div>
+      <div class="card rv" style="--d:180ms"><h4>Настройки узлов</h4><p>NodeConfig на&nbsp;группу: ядро, sysctl, runtime, метки и&nbsp;taints описываются декларативно.</p><span class="was">вместо <s>обхода узлов по&nbsp;SSH</s></span></div>
       <div class="card rv" style="--d:210ms"><h4>Сертификаты</h4><p>cert-manager выпускает и&nbsp;продлевает, сроки видны на&nbsp;дашборде.</p><span class="was">вместо <s>инцидентов из-за истёкших</s></span></div>
       <div class="card rv" style="--d:240ms"><h4>Бэкапы</h4><p>Velero по&nbsp;расписанию: ресурсы и&nbsp;PV, восстановление и&nbsp;миграция между кластерами.</p><span class="was">вместо <s>своих скриптов в&nbsp;cron</s></span></div>
       <div class="card rv" style="--d:270ms"><h4>Сквозной RBAC</h4><p>Роли из&nbsp;LDAP / OIDC сразу на&nbsp;платформу, тенанты, кластеры и&nbsp;неймспейсы.</p><span class="was">вместо <s>ролей в&nbsp;каждом кластере</s></span></div>
@@ -1540,7 +2091,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 
 <section class="slide band oct-bg" id="pochta" data-title="Почта Банк">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · масштаб без&nbsp;роста команды · Почта Банк</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Операции, которые занимали дни,&nbsp;– <span class="hl">минуты</span></h2>
+  <h2 class="h2 rv">Операции, которые занимали дни, <span class="hl">теперь занимают минуты</span></h2>
   <p class="lead rv" style="--d:60ms">Дистанционное банковское обслуживание Почта Банка работает на&nbsp;Штурвале: рост с&nbsp;2 до&nbsp;24+ кластеров. Все кластеры эксплуатируют <b>1,5 инженера</b>. Так выглядит их рутина:</p>
   <div class="grid ops">
     <div class="card rv" style="--d:100ms"><div class="stat">20<small>мин</small></div><div class="stat-l">новый кластер, готовый к&nbsp;запуску приложений</div></div>
@@ -1563,46 +2114,56 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 
 <section class="slide g-tl" id="security-tech" data-title="Безопасность: детали">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · безопасность</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Как&nbsp;устроена <span class="hl">безопасность</span></h2>
-  <div class="grid sec3" style="margin-top:40px">
-    <div class="card rv" style="--d:80ms">
-      <h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M24 4 40 10v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="m17 24 5 5 9-10" stroke-linecap="round"/></svg>Проверки</h3>
-      <ul class="ticks">
-        <li>Сканирование образов Trivy с&nbsp;базами <b>БДУ ФСТЭК</b> и&nbsp;NVD</li>
+  <div class="sx">
+    <div class="sx-l">
+      <h2 class="h2 rv">Как&nbsp;устроена <span class="hl">безопасность</span></h2>
+      <div class="sx-g rv" style="--d:80ms"><div><h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M24 4 40 10v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="m17 24 5 5 9-10" stroke-linecap="round"/></svg>Проверки</h3><ul><li>Сканирование образов Trivy с&nbsp;базами <b>БДУ ФСТЭК</b> и&nbsp;NVD</li>
         <li>CIS Kubernetes Benchmark, рекомендации NSA, Pod Security Standards</li>
         <li>Политики <b>Kyverno</b>: аудит или&nbsp;блокировка нарушений</li>
-        <li>CNCF-сертифицированный Kubernetes</li>
-      </ul>
-    </div>
-    <div class="card rv" style="--d:140ms">
-      <h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="8" y="20" width="32" height="22" rx="4"/><path d="M15 20v-6a9 9 0 0 1 18 0v6" stroke-linecap="round"/><circle cx="24" cy="31" r="3"/></svg>Закрытый контур</h3>
-      <ul class="ticks">
-        <li>Установка и&nbsp;обновления <b>без&nbsp;интернета</b>: своё зеркало или&nbsp;заливка релиза в&nbsp;ваш репозиторий артефактов</li>
+        <li>CNCF-сертифицированный Kubernetes</li></ul></div><div><h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="8" y="20" width="32" height="22" rx="4"/><path d="M15 20v-6a9 9 0 0 1 18 0v6" stroke-linecap="round"/><circle cx="24" cy="31" r="3"/></svg>Закрытый контур</h3><ul><li>Установка и&nbsp;обновления <b>без&nbsp;интернета</b>: своё зеркало или&nbsp;заливка релиза в&nbsp;ваш репозиторий артефактов</li>
         <li>Сборка всех компонентов <b>из&nbsp;исходников</b> в&nbsp;защищённом контуре в&nbsp;РФ</li>
-        <li>Совместимость с&nbsp;наложенными СЗИ: <b>Kaspersky</b>, <b>PT Container Security</b>, <b>Luntry</b></li>
-      </ul>
-    </div>
-    <div class="card rv" style="--d:200ms">
-      <h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><circle cx="18" cy="16" r="7"/><path d="M5 40c1-8 6-12 13-12s12 4 13 12"/><path d="M33 22h10M33 29h10M36 36h7"/></svg>Доступ и&nbsp;аудит</h3>
-      <ul class="ticks">
-        <li><b>Сквозной RBAC:</b> платформа → тенанты → кластеры → неймспейсы</li>
+        <li>Совместимость с&nbsp;наложенными СЗИ: <b>Kaspersky</b>, <b>PT Container Security</b>, <b>Luntry</b></li></ul></div><div class="wide"><h3><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><circle cx="18" cy="16" r="7"/><path d="M5 40c1-8 6-12 13-12s12 4 13 12"/><path d="M33 22h10M33 29h10M36 36h7"/></svg>Доступ и&nbsp;аудит</h3><ul><li><b>Сквозной RBAC:</b> платформа → тенанты → кластеры → неймспейсы</li>
         <li>LDAP: AD, OpenLDAP, FreeIPA, ALD Pro, SambaDC. OIDC: <b>Keycloak</b>, <b>Blitz</b></li>
         <li>Менеджер сессий, в&nbsp;том числе для&nbsp;Grafana и&nbsp;Argo CD</li>
         <li>Доступ в&nbsp;консоль и&nbsp;логам пода <b>даже без&nbsp;сетевого доступа</b> к&nbsp;нему</li>
         <li><b>Короткоживущие сертификаты</b> с&nbsp;автоматической ротацией</li>
-        <li>Аудит всех действий с&nbsp;выгрузкой в&nbsp;<b>SIEM</b>, syslog, Elasticsearch</li>
-      </ul>
+        <li>Аудит всех действий с&nbsp;выгрузкой в&nbsp;<b>SIEM</b>, syslog, Elasticsearch</li></ul></div></div>
+    </div>
+    <div class="sx-r rv" style="--d:120ms">
+      <div class="tablet"><div class="gui-wrap"><div class="pr" aria-label="Интерфейс Штурвала: отчёт по политикам безопасности">
+        <div class="pr-top"><b><img src="assets/shturval-sign.svg" alt="">Штурвал</b><span>Платформа / Сводные отчёты / <em>Отчёт по&nbsp;политикам безопасности</em></span><span class="pr-user"><span class="pr-av">AD</span>admin</span></div>
+        <div class="pr-body">
+          <div class="pr-h"><div><h4>Отчёт по&nbsp;политикам безопасности</h4><p>Политики Kyverno · все кластеры с&nbsp;shturval-policy-manager</p></div><div class="pr-seg"><button type="button" class="on">Все неймспейсы</button><button type="button">Пользовательские</button><button type="button">Системные</button></div><button type="button" class="pr-dl">Скачать отчёт ▾</button></div>
+          <div class="pr-kpi"><div class="pr-card bad"><b>128</b><span>нарушений (fail)</span></div><div class="pr-card"><b>18</b><span>политик Kyverno</span></div><div class="pr-card"><b>5</b><span>кластеров</span></div></div>
+          <div class="pr-charts"><div class="pr-card"><h5>Нарушения по&nbsp;политикам <small>топ-8</small></h5><div class="pr-bars" id="pr-pol"></div></div><div class="pr-card pr-cl"><h5>Нарушения по&nbsp;кластерам <small>клик фильтрует</small></h5><div class="pr-bars" id="pr-cls"></div></div></div>
+          <div class="pr-card pr-tbl"><h5>Нарушения <button type="button" id="pr-filter" style="font-size:12px;color:var(--gt);font-weight:700">все кластеры</button></h5><div class="pr-th"><span>Политика</span><span>Кластер</span><span>Неймспейс</span><span>Нарушений</span><span>Критичность</span><span></span></div><div class="pr-rows" id="pr-rows"></div></div>
+        </div>
+        <div class="pr-toast"></div>
+      </div></div></div>
     </div>
   </div>
-  <div class="foot"><span></span><span class="pg"></span></div>
+  <div class="foot"><span>Интерфейс Штурвала: сводный отчёт по&nbsp;политикам Kyverno</span><span class="pg"></span></div>
 </section>
 
+<section class="slide g-tl" id="sec-layers" data-title="Безопасность по слоям">
+  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · безопасная разработка</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
+  <div class="sl-head">
+    <div><h2 class="h2 rv">Каждый слой Штурвала <span class="hl">под&nbsp;контролем</span></h2><p class="sl-lead rv" style="--d:60ms">Проверяем всё, из&nbsp;чего состоит платформа: от&nbsp;исходного кода до&nbsp;работающего кластера управления</p></div>
+    <div class="sl-facts rv" style="--d:100ms"><div><b>Каждый день</b><span>мониторинг новых CVE</span></div><div><b>Каждый релиз</b><span>полный цикл проверки</span></div></div>
+  </div>
+  <div class="sl-main rv" style="--d:140ms">
+    <div class="sl-stack"><div class="sl-layer"><div class="sl-name"><i class="sl-mark"></i><div><h3>Исходный код</h3><p>Платформа, утилиты и&nbsp;плагины</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="SAST" aria-expanded="false">SAST</button><button type="button" data-term="Secrets" aria-expanded="false">Secrets</button></div><p class="sl-catch">Уязвимые конструкции и&nbsp;забытые ключи</p></div><div class="sl-tip" data-for="SAST" hidden><b>SAST · статический анализ кода</b><p>Ищет уязвимые конструкции и&nbsp;опасные потоки данных в&nbsp;исходном коде без&nbsp;запуска программы.</p></div><div class="sl-tip" data-for="Secrets" hidden><b>Secrets · поиск секретов</b><p>Находит токены, пароли и&nbsp;ключи, случайно оставленные в&nbsp;коде и&nbsp;конфигурациях.</p></div></div><div class="sl-layer"><div class="sl-name"><i class="sl-mark"></i><div><h3>Зависимости</h3><p>Сторонние библиотеки и&nbsp;компоненты</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="SCA" aria-expanded="false">SCA</button><span class="sl-daily">каждый день</span></div><p class="sl-catch">Известные CVE в&nbsp;день публикации</p></div><div class="sl-tip" data-for="SCA" hidden><b>SCA · анализ сторонних компонентов</b><p>Каждый день сверяет библиотеки и&nbsp;зависимости с&nbsp;базами известных уязвимостей (CVE).</p></div></div><div class="sl-layer up"><div class="sl-name"><i class="sl-mark"></i><div><h3>Образы контейнеров</h3><p>Системные сервисы платформы</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="Images" aria-expanded="false">Images</button></div><p class="sl-catch">Уязвимые пакеты и&nbsp;небезопасные настройки</p></div><div class="sl-tip" data-for="Images" hidden><b>Images · анализ образов</b><p>Проверяет образы контейнеров: пакеты, слои, базовый образ и&nbsp;небезопасные настройки.</p></div></div><div class="sl-layer up"><div class="sl-name"><i class="sl-mark"></i><div><h3>Работающая платформа</h3><p>API, интерфейс и&nbsp;сервисы</p></div></div><div class="sl-checks"><div class="sl-tags"><button type="button" data-term="DAST" aria-expanded="false">DAST</button><button type="button" data-term="Fuzzing" aria-expanded="false">Fuzzing</button></div><p class="sl-catch">Атаки снаружи и&nbsp;сбои на&nbsp;неожиданных данных</p></div><div class="sl-tip" data-for="DAST" hidden><b>DAST · динамический анализ</b><p>Атакует работающую платформу снаружи, так, как&nbsp;это сделал&nbsp;бы злоумышленник.</p></div><div class="sl-tip" data-for="Fuzzing" hidden><b>Fuzzing · фаззинг</b><p>Подаёт на&nbsp;вход случайные и&nbsp;искажённые данные, чтобы найти сбои и&nbsp;необработанные ошибки.</p></div></div></div>
+    <div class="sl-bridge" aria-hidden="true"><svg viewBox="0 0 64 600" preserveAspectRatio="none"><path d="M6 75 H26 V525 H6 M26 300 H56" fill="none" stroke="#1cf2de" stroke-opacity=".6" stroke-width="1.5" vector-effect="non-scaling-stroke"/><path d="M49 293 L57 300 L49 307" fill="none" stroke="#1cf2de" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></div>
+    <div class="sl-panel"><p class="sl-ph">Если что-то найдено</p><h3>Каждая находка проходит полный цикл</h3><ol class="sl-flow"><li><i class="sl-mark"></i><div><b>Оценка применимости</b><span>Эксперты проверяют, опасна&nbsp;ли уязвимость на&nbsp;деле</span></div></li><li><i class="sl-mark"></i><div><b>Исправление</b><span>Команда Штурвала закрывает подтверждённые уязвимости</span></div></li><li><i class="sl-mark"></i><div><b>Тестирование</b><span>Повторное сканирование и&nbsp;регрессионные тесты</span></div></li><li><i class="sl-mark"></i><div><b>Обновление</b><span>У&nbsp;заказчика по&nbsp;кнопке или&nbsp;по&nbsp;расписанию</span></div></li></ol></div>
+  </div>
+  <div class="foot"><span>Клик по&nbsp;метке раскрывает пояснение</span><span class="pg"></span></div>
+</section>
 <section class="slide g-br" id="center" data-title="Единый центр управления">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · единый центр управления</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Кластеров становится больше. <span class="hl">Сложность&nbsp;– нет</span></h2>
+  <h2 class="h2 rv">Кластеров становится больше. <span class="hl">Сложность не&nbsp;растёт</span></h2>
   <div class="scale" style="margin-top:36px">
     <div>
-      <p class="lead rv" style="margin-top:0;--d:40ms">Доступы, политики, логи, метрики и&nbsp;обновления всех кластеров&nbsp;– из&nbsp;одного места. <b>Как&nbsp;vCenter, только для&nbsp;Kubernetes.</b></p>
+      <p class="lead rv" style="margin-top:0;--d:40ms">Доступы, политики, логи, метрики и&nbsp;обновления всех кластеров в&nbsp;одном месте. <b>Как&nbsp;vCenter, только для&nbsp;Kubernetes.</b></p>
       <div class="stats" style="margin-top:32px">
         <div class="card rv" style="--d:80ms"><div class="stat">500+</div><div class="stat-l"><b>кластеров</b>под&nbsp;одним кластером управления</div></div>
         <div class="card rv" style="--d:140ms"><div class="stat">1000+</div><div class="stat-l"><b>узлов</b>в&nbsp;одной инсталляции</div></div>
@@ -1615,7 +2176,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     </div>
     <div class="card chart-card rv" style="--d:160ms">
       <p class="k" style="color:var(--muted)">Трудоёмкость эксплуатации</p>
-      <svg viewBox="0 0 680 470" style="width:100%;flex:1;margin-top:12px" role="img" aria-label="Схема: при раздельном управлении трудоёмкость растёт быстрее числа кластеров, со Штурвалом – почти не растёт">
+      <svg viewBox="0 0 680 470" style="width:100%;flex:1;margin-top:12px" role="img" aria-label="Схема: при раздельном управлении трудоёмкость растёт быстрее числа кластеров, а со Штурвалом почти не растёт">
         <g stroke="#333"><line x1="60" y1="60" x2="660" y2="60"/><line x1="60" y1="160" x2="660" y2="160"/><line x1="60" y1="260" x2="660" y2="260"/><line x1="60" y1="360" x2="660" y2="360"/></g>
         <line x1="60" y1="420" x2="660" y2="420" stroke="#454545"/><line x1="60" y1="20" x2="60" y2="420" stroke="#454545"/>
         <path d="M60 410 C 260 395, 400 330, 470 220 S 560 40, 590 20" fill="none" stroke="#7a7a7a" stroke-width="4" stroke-linecap="round"/>
@@ -1627,7 +2188,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
         <text x="660" y="452" fill="#919191" font-size="16" text-anchor="end">кластеры и узлы →</text>
         <text x="40" y="30" fill="#919191" font-size="16" transform="rotate(-90 40 30)" text-anchor="end">FTE ↑</text>
       </svg>
-      <p class="cap">Схема, не&nbsp;расчёт. Цифры для&nbsp;вашей конфигурации&nbsp;– в&nbsp;разделе TCO.</p>
+      <p class="cap">Схема, не&nbsp;расчёт. Цифры для&nbsp;вашей конфигурации есть в&nbsp;разделе TCO.</p>
     </div>
   </div>
   <div class="foot"><span></span><span class="pg"></span></div>
@@ -1639,15 +2200,31 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 </section>
 
 
-<section class="slide g-tl" id="ml-why" data-title="ML / AI: три вещи">
+
+<section class="slide g-blue" id="ml-stack" data-title="ML-стек">
   <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · ML / AI</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">ML уже встроен <span class="hl">в&nbsp;платформу</span></h2>
-  <div class="pil3">
-    <div class="card rv" style="--d:80ms"><span class="idx">01</span><span class="k">Запуск</span><h3>Весь ML-стек из&nbsp;коробки</h3><p>Администратор включает ML в&nbsp;клиентском кластере, платформа ставит драйверы, Kubeflow и&nbsp;MLflow.</p></div>
-    <div class="card rv" style="--d:140ms"><span class="idx">02</span><span class="k">Экономика</span><h3>Общий пул GPU вместо персональных серверов</h3><p>Карта становится ресурсом кластера. Её получает задача из&nbsp;очереди, а&nbsp;не&nbsp;человек, за&nbsp;которым она закреплена.</p></div>
-    <div class="card rv" style="--d:200ms"><span class="idx">03</span><span class="k">Эксплуатация</span><h3>Обновление по&nbsp;кнопке</h3><p>GPU- и&nbsp;ML-стек обновляется вместе с&nbsp;кластером.</p></div>
+  <h2 class="h2 rv">Полноценный ML-стек <span class="hl">ставится вместе с&nbsp;кластером</span></h2>
+  <div class="ml" style="margin-top:40px">
+    <div class="layers">
+      <div class="layer rv" style="--d:60ms"><h4>Доступ команд<small>кто и&nbsp;сколько ресурсов получает</small></h4><div class="chips"><span class="chip">Профили Kubeflow</span><span class="chip">квоты CPU / GPU</span><span class="chip">RBAC Штурвала</span><span class="chip">SSO · LDAP / OIDC</span></div></div>
+      <div class="layer rv" style="--d:100ms"><h4>Kubeflow<small>эксперименты, обучение, инференс</small></h4><div class="chips"><span class="chip on">Notebooks</span><span class="chip on">Pipelines</span><span class="chip on">Training Operator</span><span class="chip on">Katib</span><span class="chip on">KServe · vLLM</span></div></div>
+      <div class="layer rv" style="--d:140ms"><h4>MLflow<small>учёт моделей</small></h4><div class="chips"><span class="chip on">Tracking</span><span class="chip on">Model Registry</span></div></div>
+      <div class="layer hl-l rv" style="--d:180ms"><h4>Подготовка GPU<small>карта как ресурс планировщика</small></h4><div class="chips"><span class="chip on">NVIDIA GPU Operator</span><span class="chip">драйвер</span><span class="chip">Container Toolkit</span><span class="chip">NFD / GFD</span><span class="chip">Device Plugin</span><span class="chip">MIG Manager</span><span class="chip">MIG / Time-slice</span><span class="chip">DCGM Exporter</span></div></div>
+      <div class="layer rv" style="--d:220ms"><h4>Эксплуатация<small>общая для&nbsp;всех слоёв</small></h4><div class="chips"><span class="chip">мониторинг и&nbsp;логи</span><span class="chip">Trivy · Kyverno · аудит</span><span class="chip">Argo CD / Rollouts</span><span class="chip">Velero</span><span class="chip">метеринг потребления GPU</span></div></div>
+      <div class="layer rv" style="--d:260ms"><h4>Узлы<small>управляет Штурвал</small></h4><div class="chips"><span class="chip">CPU на&nbsp;виртуализации</span><span class="chip">GPU на&nbsp;bare metal</span><span class="chip">NVIDIA A100 / H100 / L40S</span><span class="chip">автомасштабирование по&nbsp;запросу GPU</span></div></div>
+    </div>
+    <div class="ml-side">
+      <p class="k rv" style="--d:100ms">Путь модели в&nbsp;одном кластере</p>
+      <ol class="mpath">
+        <li class="rv" style="--d:140ms"><span class="oct-n">1</span><div><b>Эксперимент</b><span class="tool">Kubeflow Notebooks</span></div></li>
+        <li class="rv" style="--d:180ms"><span class="oct-n">2</span><div><b>Обучение</b><span class="tool">Pipelines · Training Operator</span></div></li>
+        <li class="rv" style="--d:220ms"><span class="oct-n">3</span><div><b>Подбор параметров</b><span class="tool">Katib</span></div></li>
+        <li class="rv" style="--d:260ms"><span class="oct-n">4</span><div><b>Версия модели</b><span class="tool">MLflow</span></div></li>
+        <li class="rv" style="--d:300ms"><span class="oct-n">5</span><div><b>Инференс</b><span class="tool">KServe · vLLM · Argo CD</span></div></li>
+      </ol>
+    </div>
   </div>
-  <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
+  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide band" id="ml" data-title="ML / AI">
@@ -1669,7 +2246,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
         <div class="srv"><span class="lbl">team-c-01</span><div class="gpus"><i class="gpu c"></i><i class="gpu"></i><i class="gpu"></i><i class="gpu"></i></div></div>
         <div class="srv"><span class="lbl">team-c-02</span><div class="gpus"><i class="gpu c"></i><i class="gpu"></i><i class="gpu"></i><i class="gpu"></i></div></div>
       </div>
-      <p class="cap"><b>6 серверов, 24 карты</b> – заняты 9, остальные простаивают</p>
+      <p class="cap"><b>6 серверов, 24 карты:</b> заняты 9, остальные простаивают</p>
     </div>
     <div class="arrow rv" style="--d:340ms"><svg viewBox="0 0 64 40" fill="none" stroke="#1cf2de" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h52M42 6l14 14-14 14"/></svg></div>
     <div class="card t rv" style="--d:380ms">
@@ -1678,44 +2255,18 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
         <div class="srv"><span class="lbl">pool-01</span><div class="gpus"><i class="gpu a"></i><i class="gpu a"></i><i class="gpu a"></i><i class="gpu b"></i></div></div>
         <div class="srv"><span class="lbl">pool-02</span><div class="gpus"><i class="gpu b"></i><i class="gpu b"></i><i class="gpu mig"><i class="a"></i><i class="c"></i></i><i class="gpu"></i></div></div>
       </div>
-      <p class="cap"><b>2 сервера, 7 карт</b> – те же 9 задач, две лёгкие делят карту через MIG</p>
+      <p class="cap"><b>2 сервера, 7 карт:</b> те же 9 задач, две лёгкие делят карту через MIG</p>
     </div>
     <div class="pool-note rv" style="--d:420ms">
       <ul class="ticks">
         <li><b>Квоты, MIG и&nbsp;Time-slice</b> вместо отдельного сервера на&nbsp;команду</li>
-        <li><b>DCGM-метрики</b> по&nbsp;каждой карте&nbsp;– закупки по&nbsp;фактической загрузке</li>
+        <li><b>DCGM-метрики</b> по&nbsp;каждой карте: закупки по&nbsp;фактической загрузке</li>
         <li><b>Потребление GPU видно</b> для&nbsp;внутреннего биллинга</li>
       </ul>
-      <p class="small">Экономия&nbsp;– от&nbsp;загрузки карт и&nbsp;меньшей ручной работы, а&nbsp;не&nbsp;от&nbsp;ускорения обучения.</p>
+      <p class="small">Экономия идёт от&nbsp;загрузки карт и&nbsp;меньшей ручной работы, а&nbsp;не&nbsp;от&nbsp;ускорения обучения.</p>
     </div>
   </div>
   <div class="foot"><span>Редакция Штурвал Enterprise ML</span><span class="pg"></span></div>
-</section>
-
-<section class="slide g-blue" id="ml-stack" data-title="ML-стек">
-  <div class="top"><div class="eyebrow"><span class="n">01</span>Enterprise во&nbsp;всём · ML / AI</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Полноценный ML-стек <span class="hl">ставится вместе с&nbsp;кластером</span></h2>
-  <div class="ml" style="margin-top:40px">
-    <div class="layers">
-      <div class="layer rv" style="--d:60ms"><h4>Доступ команд<small>кто и&nbsp;сколько ресурсов получает</small></h4><div class="chips"><span class="chip">Профили Kubeflow</span><span class="chip">квоты CPU / GPU</span><span class="chip">RBAC Штурвала</span><span class="chip">SSO · LDAP / OIDC</span></div></div>
-      <div class="layer rv" style="--d:100ms"><h4>Kubeflow<small>эксперименты, обучение, инференс</small></h4><div class="chips"><span class="chip on">Notebooks</span><span class="chip on">Pipelines</span><span class="chip on">Training Operator</span><span class="chip on">Katib</span><span class="chip on">KServe · vLLM</span></div></div>
-      <div class="layer rv" style="--d:140ms"><h4>MLflow<small>учёт моделей</small></h4><div class="chips"><span class="chip on">Tracking</span><span class="chip on">Model Registry</span></div></div>
-      <div class="layer hl-l rv" style="--d:180ms"><h4>Подготовка GPU<small>карта&nbsp;– ресурс планировщика</small></h4><div class="chips"><span class="chip on">NVIDIA GPU Operator</span><span class="chip">драйвер</span><span class="chip">Container Toolkit</span><span class="chip">NFD / GFD</span><span class="chip">Device Plugin</span><span class="chip">MIG Manager</span><span class="chip">MIG / Time-slice</span><span class="chip">DCGM Exporter</span></div></div>
-      <div class="layer rv" style="--d:220ms"><h4>Эксплуатация<small>общая для&nbsp;всех слоёв</small></h4><div class="chips"><span class="chip">мониторинг и&nbsp;логи</span><span class="chip">Trivy · Kyverno · аудит</span><span class="chip">Argo CD / Rollouts</span><span class="chip">Velero</span><span class="chip">метеринг потребления GPU</span></div></div>
-      <div class="layer rv" style="--d:260ms"><h4>Узлы<small>управляет Штурвал</small></h4><div class="chips"><span class="chip">CPU на&nbsp;виртуализации</span><span class="chip">GPU на&nbsp;bare metal</span><span class="chip">NVIDIA A100 / H100 / L40S</span><span class="chip">автомасштабирование по&nbsp;запросу GPU</span></div></div>
-    </div>
-    <div class="ml-side">
-      <p class="k rv" style="--d:100ms">Путь модели в&nbsp;одном кластере</p>
-      <ol class="mpath">
-        <li class="rv" style="--d:140ms"><span class="oct-n">1</span><div><b>Эксперимент</b><span class="tool">Kubeflow Notebooks</span></div></li>
-        <li class="rv" style="--d:180ms"><span class="oct-n">2</span><div><b>Обучение</b><span class="tool">Pipelines · Training Operator</span></div></li>
-        <li class="rv" style="--d:220ms"><span class="oct-n">3</span><div><b>Подбор параметров</b><span class="tool">Katib</span></div></li>
-        <li class="rv" style="--d:260ms"><span class="oct-n">4</span><div><b>Версия модели</b><span class="tool">MLflow</span></div></li>
-        <li class="rv" style="--d:300ms"><span class="oct-n">5</span><div><b>Инференс</b><span class="tool">KServe · vLLM · Argo CD</span></div></li>
-      </ol>
-    </div>
-  </div>
-  <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-blue" id="ml-llm" data-title="LLM и инференс">
@@ -1754,13 +2305,13 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
 </section>
 
 <section class="slide stmt" id="eco" data-title="Против экосистем">
-  <h2 class="stmt-t rv">Мы не&nbsp;делаем экосистем и&nbsp;<span class="hl">вообще против них</span></h2>
+  <h2 class="stmt-t rv">Штурвал подходит тем, <span class="hl">кто не&nbsp;любит экосистемы</span></h2>
 </section>
 
 
 <section class="slide band" id="never" data-title="Чего не будет">
   <div class="top"><div class="eyebrow"><span class="n">02</span>Vendor-agnostic · никаких экосистем</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Чего у&nbsp;Штурвала нет <span class="hl">и&nbsp;не&nbsp;будет&nbsp;– принципиально</span></h2>
+  <h2 class="h2 rv" style="max-width:none">Чего у&nbsp;Штурвала нет <span class="hl">и&nbsp;не&nbsp;планируется</span></h2>
   <ul class="never rv" style="--d:80ms">
     <li><b>Своей операционной системы</b><span>Работаем на&nbsp;ваших: Astra Linux, РЕД ОС, Alt Linux, РОСА и&nbsp;других</span></li>
     <li><b>Своей виртуализации</b><span>Интегрируемся с&nbsp;той, что&nbsp;у&nbsp;вас есть, и&nbsp;с&nbsp;той, что&nbsp;появится</span></li>
@@ -1768,7 +2319,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     <li><b>Своего программного хранилища</b><span>Используем ваше: СХД, SDS, S3</span></li>
     <li><b>«На&nbsp;нашем стеке работает лучше»</b><span>Одинаковая интеграция с&nbsp;любой платформой, без&nbsp;доплаты за&nbsp;«родную»</span></li>
   </ul>
-  <div class="rule never-rule rv" style="--d:160ms"><p><span class="hl">Мы делаем одну вещь&nbsp;– управление Kubernetes</span></p><p>и&nbsp;делаем это хорошо</p></div>
+  <div class="rule never-rule rv" style="--d:160ms"><p><span class="hl">Мы делаем одну вещь: управление Kubernetes</span></p><p>и&nbsp;делаем это хорошо</p></div>
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
@@ -1781,7 +2332,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
       <div><img src="assets/compat/astra-linux.png" alt="Astra Linux" style="width:192px"><img src="assets/compat/red-os.png" alt="РЕД ОС" style="width:170px"><img src="assets/compat/alt-linux.png" alt="Alt Linux" style="width:183px"><img src="assets/compat/rosa.png" alt="РОСА" style="width:224px"><img src="assets/compat/ubuntu.png" alt="Ubuntu" style="width:180px"><img src="assets/compat/debian.png" alt="Debian" style="width:207px"><img src="assets/compat/rocky-linux.png" alt="Rocky Linux" style="width:224px"></div>
       <div><img src="assets/compat/red-hat.png" alt="Red Hat" style="width:220px"><img src="assets/compat/oracle-linux.png" alt="Oracle Linux" style="width:147px"><img src="assets/compat/kaspersky.png" alt="Kaspersky" style="width:224px"><img src="assets/compat/positive-technologies.png" alt="Positive Technologies" style="width:220px"><img src="assets/compat/luntry.png" alt="Luntry" style="width:177px"><img src="assets/compat/monq.png" alt="monq" style="width:224px"></div>
   </div>
-  <div class="foot"><span>Актуальный список&nbsp;– docs.shturval.tech</span><span class="pg"></span></div>
+  <div class="foot"><span>Актуальный список на&nbsp;docs.shturval.tech</span><span class="pg"></span></div>
 </section>
 
 <section class="slide sec g-tl oct-bg" id="sec-tco" data-title="03 Лучшее TCO">
@@ -1796,38 +2347,12 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
   <div class="grid cost3">
     <div class="card rv" style="--d:80ms"><div class="oct-n">1</div><h3>Собрать</h3><p>Сеть, хранилище, мониторинг, доступы, ИБ, автоматизация. Это <b>2+ года</b> сильной платформенной команды.</p></div>
     <div class="card rv" style="--d:140ms"><div class="oct-n">2</div><h3>Обновлять</h3><p>Совместимость всех компонентов на&nbsp;каждом релизе Kubernetes, ОС и&nbsp;модулей. <b>Главная операционная боль.</b></p></div>
-    <div class="card rv" style="--d:200ms"><div class="oct-n">3</div><h3>Закрывать уязвимости</h3><p>Не&nbsp;разовое событие, а&nbsp;<b>постоянный процесс</b> и&nbsp;отдельная команда ИБ.</p></div>
+    <div class="card rv" style="--d:200ms"><div class="oct-n">3</div><h3>Закрывать уязвимости</h3><p><b>Постоянный процесс</b> и&nbsp;отдельная команда ИБ.</p></div>
   </div>
-  <div class="rule rv" style="--d:260ms;margin-top:auto;margin-bottom:40px"><p>Ванильный Kubernetes&nbsp;– это API и&nbsp;оркестратор. В&nbsp;проде на&nbsp;нём одном никто не&nbsp;живёт.</p><p>Поэтому сравнивать имеет смысл со&nbsp;своей сборкой или&nbsp;с&nbsp;платформой&nbsp;– и&nbsp;по&nbsp;всем трём статьям сразу.</p></div>
+  <div class="rule rv" style="--d:260ms;margin-top:auto;margin-bottom:40px"><p>Ванильный Kubernetes состоит из&nbsp;API и&nbsp;оркестратора. В&nbsp;проде на&nbsp;нём одном никто не&nbsp;живёт.</p><p>Поэтому сравнивать имеет смысл со&nbsp;своей сборкой или&nbsp;с&nbsp;платформой, причём по&nbsp;всем трём статьям сразу.</p></div>
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
-<section class="slide g-r" id="updates" data-title="Обновления и уязвимости">
-  <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · дешевле своей сборки</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv" style="max-width:none">Самая дорогая часть эксплуатации <span class="hl">уже заложена в&nbsp;продукт</span></h2>
-  <div class="two">
-    <div class="card rv" style="--d:80ms">
-      <h3><span class="oct-o"><span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#1cf2de" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></span></span>Обновления</h3>
-      <div class="big-in"><span class="stat">~60%</span><p style="font-size:20px;color:var(--muted);max-width:28ch">бюджета разработки Штурвала уходит на&nbsp;совместимость компонентов при&nbsp;каждом обновлении</p></div>
-      <ul class="ticks">
-        <li><b>3 минорных релиза в&nbsp;год</b>, как&nbsp;у&nbsp;Kubernetes, и&nbsp;патчи по&nbsp;необходимости. Поддерживаем две последние минорные версии.</li>
-        <li><b>Изолированно по&nbsp;кластерам:</b> сначала тест, потом прод. Один кластер не&nbsp;тянет за&nbsp;собой остальные.</li>
-        <li>Затраты на&nbsp;совместимость <b>делятся между всеми заказчиками</b>, а&nbsp;не&nbsp;ложатся на&nbsp;вашу команду.</li>
-      </ul>
-    </div>
-    <div class="card rv" style="--d:160ms">
-      <h3><span class="oct-o"><span>!</span></span>Уязвимости</h3>
-      <div class="big-in"><span class="stat">24 ч</span><p style="font-size:20px;color:var(--muted);max-width:28ch">каждое утро&nbsp;– разбор новых уязвимостей за&nbsp;сутки у&nbsp;технического директора продукта</p></div>
-      <ul class="ticks">
-        <li><b>Разметка, воспроизведение, оценка риска</b> и&nbsp;при&nbsp;необходимости&nbsp;– security-патч.</li>
-        <li>Компоненты <b>собираются из&nbsp;исходников</b> в&nbsp;защищённом контуре в&nbsp;РФ по&nbsp;практикам DevSecOps.</li>
-        <li>Исправления уходят заказчикам и&nbsp;в&nbsp;апстрим Kubernetes и&nbsp;модулей.</li>
-      </ul>
-    </div>
-  </div>
-  <div class="rule rv" style="--d:240ms;margin-top:24px;padding:28px 40px"><p>Своя сборка платит за&nbsp;это целиком на&nbsp;каждый релиз. Или&nbsp;не&nbsp;обновляется&nbsp;– и&nbsp;копит риски.</p></div>
-  <div class="foot"><span></span><span class="pg"></span></div>
-</section>
 
 <section class="slide g-br" id="tco" data-title="TCO">
   <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · дешевле своей сборки</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
@@ -1835,8 +2360,8 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     <div style="display:flex;flex-direction:column">
       <h2 class="h2 rv" style="font-size:58px">За&nbsp;5 лет высвобождается <span class="hl" style="white-space:nowrap">384 млн ₽</span></h2>
       <p class="lead rv" style="--d:60ms;font-size:23px">Сборка, обновления и&nbsp;уязвимости уже заложены в&nbsp;продукт и&nbsp;разделены между всеми заказчиками. Чем больше кластеров и&nbsp;команд, тем заметнее разница.</p>
-      <div class="rule rv" style="--d:140ms;margin-top:auto;padding:28px 36px;font-size:24px"><p>Если вы обновляетесь и&nbsp;закрываете уязвимости&nbsp;– Штурвал дешевле своей сборки.</p><p>Если нет&nbsp;– своя сборка может выглядеть дешевле, но&nbsp;копит технический долг и&nbsp;риски ИБ. Мы считаем оба сценария.</p></div>
-      <div class="card t rv" style="--d:200ms;margin-top:16px;margin-bottom:40px;padding:22px 30px"><p class="k">Предложение</p><p style="font-size:20px;color:var(--ink);margin-top:8px"><b>Рассчитаем TCO для&nbsp;вас</b> на&nbsp;ваших параметрах: кластеры, узлы, рост, команда, 24×7. Методику покажем целиком.</p></div>
+      <div class="rule rv" style="--d:140ms;margin-top:auto;padding:28px 36px;font-size:24px"><p>Если вы обновляетесь и&nbsp;закрываете уязвимости, Штурвал дешевле своей сборки.</p><p>Если нет, своя сборка может выглядеть дешевле, но&nbsp;копит технический долг и&nbsp;риски ИБ. Мы считаем оба сценария.</p></div>
+      <div class="card t rv" style="--d:200ms;margin-top:16px;margin-bottom:40px;padding:22px 30px"><p class="k">Предложение</p><p style="font-size:20px;color:var(--ink);margin-top:8px"><b>Рассчитаем TCO для&nbsp;вас</b> на&nbsp;ваших параметрах: кластеры, узлы, рост, команда, 24×7. Методику покажем целиком.</p><a class="tco-link" href="https://shturval-tech.github.io/shturval-tco/" target="_blank" rel="noopener">Открыть калькулятор TCO →</a></div>
     </div>
     <div class="card tco-chart rv" style="--d:120ms;margin-bottom:40px">
       <h4>Расходы за&nbsp;5 лет, млн ₽ · 20 кластеров, 140 worker-узлов, 24×7</h4>
@@ -1846,7 +2371,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
         <div class="b"><span class="val">1 197</span><i style="--h:100%"></i></div>
       </div>
       <div class="bar-names"><span>своя сборка на&nbsp;ванильном K8s</span><span class="sh">Штурвал без&nbsp;лицензии</span><span>своя платформа с&nbsp;нуля</span></div>
-      <p class="small" style="margin-top:22px">Калькулятор TCO, методика 2026.10.</p>
+      <p class="small" style="margin-top:22px"><a href="https://shturval-tech.github.io/shturval-tco/" target="_blank" rel="noopener" style="color:inherit">Калькулятор TCO</a>, методика 2026.10.</p>
     </div>
   </div>
   <div class="foot"><span></span><span class="pg"></span></div>
@@ -1927,7 +2452,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     <div class="lg"><img src="assets/logos/mosgorgeotrest.png" alt="Мосгоргеотрест"></div>
     <div class="lg more"><span>и&nbsp;другие</span></div>
   </div>
-  <div class="foot"><span>Слайд отключается кнопкой «Логотипы» перед отправкой</span><span class="pg"></span></div>
+  <div class="foot"><span class="no-print">Слайд отключается кнопкой «Логотипы» перед отправкой</span><span class="pg"></span></div>
 </section>
 
 <section class="slide g-r" id="license" data-title="Лицензия и поддержка">
@@ -1947,9 +2472,9 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
     <li><b>Бессрочная:</b> поддержка обязательна на&nbsp;первый год, дальше продление на&nbsp;1, 3 или&nbsp;5 лет</li>
     <li>Без&nbsp;поддержки <b>нет обновлений</b>, включая исправления безопасности</li>
     <li>Уровень поддержки выбирается <b>для&nbsp;каждого кластера</b></li>
-    <li>Гарантия входит в&nbsp;лицензию, поддержка&nbsp;– отдельный сервис</li>
+    <li>Гарантия входит в&nbsp;лицензию, а&nbsp;поддержка идёт отдельным сервисом</li>
   </ul>
-  <div class="foot"><span>Подробно&nbsp;– в&nbsp;руководстве по&nbsp;лицензированию v.2026-10</span><span class="pg"></span></div>
+  <div class="foot"><span>Подробно в&nbsp;руководстве по&nbsp;лицензированию v.2026-10</span><span class="pg"></span></div>
 </section>
 
 <section class="slide poster" id="steps" data-title="Дальнейшие шаги">
@@ -2055,7 +2580,7 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
   deck.addEventListener('click', function (e) {
     var g = e.target.closest('[data-go]');
     if (g) { e.preventDefault(); go(g.getAttribute('data-go')); return; }
-    if (e.target.closest('a, button')) return;
+    if (e.target.closest('a, button, .gui, .dev2, .pv, .pr')) return;
     var r = deck.getBoundingClientRect();
     if (e.clientX - r.left > r.width * 0.5) show(cur + 1); else show(cur - 1);
   });
@@ -2067,6 +2592,210 @@ a.go:focus-visible, .ip a:focus-visible { outline-color: var(--shturval); outlin
   fit();
   var h = location.hash.slice(1);
   rebuild(/^\d+$/.test(h) ? (all[+h - 1] || all[0]).id : (h || all[0].id));
+})();
+</script>
+<script>
+/* Планшет на слайде «Работа с инфраструктурой»: кнопки интерфейса работают */
+(function () {
+  var g = document.querySelector('.gui'); if (!g) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var req = 83, fact = 83, timer = null, save = $('g-save');
+  function dirty() { save.disabled = false; save.classList.remove('done'); save.textContent = 'Сохранить'; }
+  function paint() {
+    $('g-req').textContent = req; $('g-fact').textContent = fact; $('g-ready').textContent = fact;
+    var busy = req !== fact;
+    $('g-phase').textContent = busy ? 'ScalingUp' : 'Running';
+    if (busy && req < fact) $('g-phase').textContent = 'ScalingDown';
+    $('g-msr').classList.toggle('off', busy);
+    g.querySelector('.g-fact').classList.toggle('busy', busy);
+    var auto = g.classList.contains('g-autoscale');
+    g.querySelectorAll('.g-arrows button').forEach(function (b) { b.disabled = auto || (b.dataset.d === '-1' && req <= 0) || (b.dataset.d === '1' && req >= 200); });
+  }
+  function converge() {
+    clearTimeout(timer);
+    if (fact === req) return paint();
+    timer = setTimeout(function () { fact += fact < req ? 1 : -1; paint(); converge(); }, 700);
+  }
+  g.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || b.disabled) return;
+    var grp = b.parentElement.dataset.group;
+    if (grp) {
+      b.parentElement.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      if (grp === 'scale') { g.classList.toggle('g-autoscale', b.dataset.v === 'auto'); paint(); }
+      if (grp !== 'tab') dirty();
+      return;
+    }
+    if (b.dataset.d) { req = Math.max(0, Math.min(200, req + Number(b.dataset.d))); paint(); dirty(); converge(); return; }
+    if (b === save) { save.disabled = true; save.classList.add('done'); save.textContent = 'Сохранено ✓'; }
+  });
+  paint();
+})();
+</script>
+<script>
+/* Главный экран в планшете на слайде «Из коробки» */
+(function () {
+  var h = document.querySelector('.hm'); if (!h) return;
+  var toast = document.getElementById('hm-toast'), tt = null;
+  function say(s) { toast.textContent = s; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('on'); }, 1600); }
+  h.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.t) {
+      b.parentElement.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      h.querySelectorAll('[data-pane]').forEach(function (p) { p.hidden = p.dataset.pane !== b.dataset.t; });
+      return;
+    }
+    if (b.classList.contains('hm-cta')) { say(b.id === 'hm-create' ? 'Открываем мастер создания кластера…' : 'Открываем мастер создания тенанта…'); return; }
+    if (b.closest('.hm-set')) { b.classList.add('done'); b.textContent = 'Готово ✓'; }
+  });
+})();
+</script>
+<script>
+/* Слайд 7: стопка экранов и обзор Deployment */
+(function () {
+  var stack = document.getElementById('dev2'); if (!stack) return;
+  stack.addEventListener('click', function (e) {
+    var d = e.target.closest('.dev'); if (!d || !d.classList.contains('dev-back')) return;
+    e.preventDefault(); e.stopPropagation();
+    stack.querySelectorAll('.dev').forEach(function (x) { var front = x === d; x.classList.toggle('dev-back', !front); x.classList.toggle('dev-front', front); });
+  }, true);
+  var dp = stack.querySelector('.dp'); if (!dp) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var rep = 2, bad = false, paused = false, restarts = 0, busy = false;
+  var hash = ['abc12', 'def34', 'gh7k2', 'mn9p1', 'qr4t8', 'st2v6', 'wx8y3', 'za5b7'];
+  function spark() {
+    var p = 'M0 50', v;
+    for (var i = 0; i <= 20; i++) { v = 30 - rep * 2 - Math.sin(i * 0.9 + rep) * 8 - (bad && i > 14 ? 14 : 0); p += ' L' + (i * 10) + ' ' + Math.max(4, Math.min(48, v)).toFixed(1); }
+    $('dp-spark').setAttribute('d', p + ' L200 50 Z');
+  }
+  function paint() {
+    var ready = busy ? 0 : (bad ? Math.max(0, rep - 1) : rep);
+    $('dp-rep').textContent = rep; $('dp-ready').textContent = ready + '/' + rep; $('dp-restarts').textContent = restarts;
+    $('dp-dep-s').textContent = 'Ready ' + ready + '/' + rep + ' · Recreate · 3 labels';
+    $('dp-rs-s').textContent = 'revision 3 · ' + ready + '/' + rep;
+    $('dp-tabpods').textContent = 'Поды (' + rep + ')';
+    var warn = bad || busy;
+    $('dp-dep').classList.toggle('warn', warn);
+    $('dp-health').classList.toggle('warn', warn);
+    $('dp-health').textContent = busy ? 'Состояние: перезапуск' : (bad ? 'Состояние: Warning' : 'Состояние: OK');
+    $('dp-st').classList.toggle('warn', paused); $('dp-st').textContent = paused ? '❚❚ Приостановлен' : '● Активный';
+    var html = '', lines = '', show = Math.min(rep, 4);
+    for (var i = 0; i < show; i++) {
+      var y = 370 + i * 56, isBad = bad && i === 0;
+      var cls = isBad ? ' bad' : (busy ? ' busy' : '');
+      var st = isBad ? 'CrashLoopBackOff · 0/1' : (busy ? 'ContainerCreating · 0/1' : 'Running · 1/1');
+      html += '<div class="dp-n dp-pod' + cls + '" style="top:' + y + 'px"><small>Pod</small><b>shturval-cert-manager-7d8f9-' + hash[i] + '</b><span>' + st + ' · worker-' + 'abcd'[i] + '</span></div>';
+      lines += '<path d="M175 334 V' + (y + 22) + ' H90"/>';
+    }
+    if (rep > show) html += '<p class="dp-more" style="top:' + (370 + show * 56) + 'px">+ ещё ' + (rep - show) + '</p>';
+    if (!rep) html = '<p class="dp-more" style="top:372px">Подов нет: реплик 0</p>';
+    $('dp-pods').innerHTML = html; $('dp-l-pods').innerHTML = lines;
+    var ev = bad ? [['e', 'BackOff', 'Back-off restarting failed container'], ['w', 'Unhealthy', 'Readiness probe failed: HTTP 503']] : [];
+    if (busy) ev.unshift(['w', 'Killing', 'Перезапуск подов по запросу']);
+    var w = ev.filter(function (x) { return x[0] === 'w'; }).length, er = ev.length - w;
+    $('dp-evc').textContent = '⚠ ' + w + ' · ⛔ ' + er;
+    $('dp-ev').innerHTML = ev.length ? ev.map(function (x) { return '<li class="' + x[0] + '"><b>' + x[1] + '</b>' + x[2] + '</li>'; }).join('') : '<li>Предупреждений и ошибок за час нет</li>';
+    spark();
+  }
+  dp.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.r) { rep = Math.max(0, Math.min(8, rep + Number(b.dataset.r))); paint(); return; }
+    if (b.dataset.m) { $('dp-mode').querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); bad = b.dataset.m === 'bad'; if (bad) restarts = Math.max(restarts, 7); paint(); return; }
+    if (b.parentElement.dataset.group === 'dptab') { b.parentElement.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); return; }
+    if (b.id === 'dp-pause') { paused = !paused; b.textContent = paused ? '▶ Возобновить' : '❚❚ Приостановить'; paint(); return; }
+    if (b.id === 'dp-restart' && !busy) { busy = true; restarts += rep; paint(); setTimeout(function () { busy = false; paint(); }, 1600); }
+  });
+  paint();
+})();
+</script>
+<script>
+/* Сводка платформы в экране на слайде «Что такое Штурвал» */
+(function () {
+  var pv = document.querySelector('.pv'); if (!pv) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var D = {
+    146: { total: 146, sub: '2 кластера управления · 144 клиентских', st: [8, 119, 11, 3, 5], ses: 86,
+      mgmt: [['shturval-mgmt', 'Shturval v2', 6], ['shturval-mgmt-dr', 'Shturval v2', 4]],
+      inf: [['Shturval v2', 12, 186, ['shturval-mgmt', 'shturval-mgmt-dr', 'cl-07', 'cl-15'], 17], ['oVirt', 18, 224, ['cl-08', 'cl-16', 'cl-24', 'cl-32'], 16], ['VMware vSphere', 9, 168, ['cl-01', 'cl-09', 'cl-17', 'cl-25'], 14], ['Yandex Cloud', 5, 42, ['cl-05', 'cl-13', 'cl-21', 'cl-29'], 14], ['zVirt', 4, 24, ['cl-06', 'cl-14', 'cl-22', 'cl-30'], 14], ['VK Cloud', 6, 84, ['cl-02', 'cl-10', 'cl-18', 'cl-26'], 13], ['vCloud Director', 4, 48, ['cl-03', 'cl-11', 'cl-19', 'cl-27'], 13], ['Basis Dynamix', 3, 36, ['cl-04', 'cl-12', 'cl-20', 'cl-28'], 13]],
+      ver: [['2.15.0', 'v1.36.3', 78], ['2.14.1', 'v1.33.2', 41], ['2.13.2', 'v1.31.4', 18], ['2.12.1', 'v1.30.8', 9]] },
+    9: { total: 9, sub: '1 кластер управления · 8 клиентских', st: [1, 5, 1, 1, 1], ses: 14,
+      mgmt: [['shturval-mgmt', 'Shturval v2', 6]],
+      inf: [['VMware vSphere', 3, 5, ['vsphere-test', 'cert-check'], 0], ['oVirt', 5, 6, ['log-chk', 'ovirt-stage'], 0], ['Shturval v2', 6, 8, ['shturval-mgmt'], 0], ['Yandex Cloud', 1, 1, ['yandex-dev-1'], 0], ['Basis Dynamix', 1, 1, ['basis-prod'], 0], ['VK Cloud', 2, 3, ['vk-stage'], 0], ['vCloud Director', 1, 2, ['vcd-edge'], 0]],
+      ver: [['2.15.0', 'v1.36.3', 6], ['2.14.1', 'v1.33.2', 2], ['2.13.2', 'v1.31.4', 1]] }
+  };
+  function render(k) {
+    var d = D[k];
+    $('pv-total').textContent = d.total; $('pv-sub').textContent = d.sub; $('pv-ses').textContent = d.ses; $('pv-infn').textContent = d.total + ' кластеров';
+    pv.querySelectorAll('.pv-st b').forEach(function (b, i) { b.textContent = d.st[i]; });
+    $('pv-mgmt').innerHTML = d.mgmt.map(function (r) { return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td class="pv-ok">Работает</td></tr>'; }).join('');
+    $('pv-inf').innerHTML = d.inf.map(function (r) { return '<div class="pv-inf"><b>' + r[0] + '</b><span><em>' + r[1] + '</em> экз. · <em>' + r[2] + '</em> узл.</span><div class="pv-chips">' + r[3].map(function (c) { return '<i>' + c + '</i>'; }).join('') + (r[4] ? '<i class="more">ещё ' + r[4] + '</i>' : '') + '</div></div>'; }).join('');
+    $('pv-ver').innerHTML = d.ver.map(function (r) { return '<div class="pv-ver"><div><b>Штурвал ' + r[0] + '</b><small>Kubernetes ' + r[1] + '</small></div><em>' + r[2] + '</em></div>'; }).join('');
+  }
+  pv.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.v) { b.parentElement.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); render(b.dataset.v); return; }
+    if (b.classList.contains('pv-g')) { b.classList.toggle('closed'); var n = b.nextElementSibling; if (n && n.classList.contains('pv-items')) n.hidden = b.classList.contains('closed'); return; }
+    if (b.closest('.pv-kv')) { b.classList.add('done'); b.textContent = 'Готово ✓'; }
+  });
+  render(146);
+})();
+</script>
+<script>
+/* Отчёт по политикам в экране на слайде «Как устроена безопасность» */
+(function () {
+  var pr = document.querySelector('.pr'); if (!pr) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var POL = [['absence-of-cpu-requests', 'prod-cluster-01', 'ValidatingPolicy', 22], ['absence-of-cpu-requests', 'staging-02', 'ValidatingPolicy', 11], ['disallow-latest-tag', 'qa-04', 'ValidatingPolicy', 9], ['require-probes', 'edge-05', 'ValidatingPolicy', 8], ['require-app-label', 'prod-cluster-01', 'ClusterPolicy', 6], ['team-a-pod-limits', 'prod-cluster-01', 'NamespacedValidatingPolicy', 5], ['container-is-privileged', 'dev-03', 'ValidatingPolicy', 4], ['verify-signed-images', 'prod-cluster-01', 'ImageValidatingPolicy', 3]];
+  var CL = [['prod-cluster-01', 47], ['staging-02', 31], ['dev-03', 22], ['qa-04', 18], ['edge-05', 10]];
+  var CPU = ['Kubernetes обладает возможностью установки ограничений на потребление ресурсов CPU. Хорошей практикой считается установка параметров Request на CPU.', 'validation error: Параметр Requests для CPU не установлен у Container/InitContainer'];
+  var LBL = ['Все Pod должны иметь label app для идентификации приложения и согласованности с практиками эксплуатации.', 'validation error: required label app is missing'];
+  var ROWS = [
+    ['absence-of-cpu-requests', 'prod-cluster-01', 'team-a', 22, 'High', 'ValidatingPolicy', CPU, ['nginx-7d8f9', 'api-server-5fc74', 'worker-2k9lm', 'redis-0', 'redis-1', 'cron-daily', 'job-migrate', 'frontend-a']],
+    ['absence-of-cpu-requests', 'staging-02', 'apps', 11, 'High', 'ValidatingPolicy', CPU, ['web-0', 'web-1', 'api-staging', 'worker-stg', 'queue-0', 'queue-1']],
+    ['require-app-label', 'prod-cluster-01', 'team-b', 6, 'Medium', 'ClusterPolicy (legacy)', LBL, ['portal', 'billing-api', 'auth', 'notifier', 'reports', 'worker-pool']],
+    ['require-app-label', 'staging-02', 'default', 2, 'Medium', 'ValidatingPolicy', LBL, ['demo-app', 'playground']],
+    ['team-a-pod-limits', 'prod-cluster-01', 'team-a', 5, 'High', 'NamespacedValidatingPolicy', ['Kubernetes обладает возможностью ограничения на потребление ресурсов RAM. Рекомендуется установка Request и Limits на memory.', 'Лимиты memory не заданы для одного или нескольких контейнеров'], ['api-1', 'cache-0', 'mem-heavy', 'sidecar', 'gateway']],
+    ['verify-signed-images', 'prod-cluster-01', 'apps', 3, 'High', 'ImageValidatingPolicy', ['Проверка подписи и аттестаций образа снижает риск запуска неподтверждённых или изменённых контейнерных образов.', 'image verification failed: signature or attestation missing'], ['checkout', 'payment-worker', 'catalog-sync']],
+    ['container-is-privileged', 'dev-03', 'sandbox', 4, 'High', 'ValidatingPolicy', ['Привилегированный контейнер получает расширенные права на узле. Политика запрещает privileged: true, кроме явно разрешённых исключений.', 'validation error: privileged containers are not allowed'], ['debug-shell', 'net-tools', 'node-agent', 'host-check']]
+  ];
+  var cluster = '', open = -1;
+  function bars(el, data, max, cl) {
+    el.innerHTML = data.map(function (d) { var lbl = cl ? d[0] : d[0] + ' <small>' + d[1] + '</small>'; var v = cl ? d[1] : d[3]; return '<' + (cl ? 'button type="button" data-cl="' + d[0] + '"' : 'div') + ' class="pr-bar' + (cl && d[0] === cluster ? ' on' : '') + '"><span>' + lbl + '</span><i><u style="width:' + (v / max * 100).toFixed(0) + '%"></u></i><b>' + v + '</b></' + (cl ? 'button' : 'div') + '>'; }).join('');
+  }
+  function table() {
+    var h = '';
+    ROWS.forEach(function (r, i) {
+      if (cluster && r[1] !== cluster) return;
+      h += '<button type="button" class="pr-row' + (i === open ? ' open' : '') + '" data-i="' + i + '"><b>' + r[0] + '</b><span>' + r[1] + '</span><span>' + r[2] + '</span><span class="n">' + r[3] + '</span><span class="pr-sev ' + r[4] + '">' + r[4] + '</span><span class="ar">▶</span></button>';
+      if (i === open) h += '<div class="pr-det"><div><small>Kind</small>' + r[5] + '</div><div><small>Сообщение</small><code>' + r[6][1] + '</code></div><div style="grid-column:1 / -1"><small>Описание</small>' + r[6][0] + '</div><div class="pr-objs"><small style="width:100%">Затронуты объекты · ' + r[3] + '</small>' + r[7].map(function (o) { return '<i>' + o + '</i>'; }).join('') + (r[3] > r[7].length ? '<i>+ ещё ' + (r[3] - r[7].length) + '</i>' : '') + '</div></div>';
+    });
+    $('pr-rows').innerHTML = h || '<p class="pr-empty">Нарушений нет</p>';
+    $('pr-filter').textContent = cluster ? 'кластер ' + cluster + ' · сбросить' : 'все кластеры';
+  }
+  function render() { bars($('pr-pol'), POL, 22, false); bars($('pr-cls'), CL, 47, true); table(); }
+  var toast = pr.querySelector('.pr-toast'), tt = null;
+  pr.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.cl) { cluster = cluster === b.dataset.cl ? '' : b.dataset.cl; open = -1; render(); return; }
+    if (b.id === 'pr-filter') { cluster = ''; open = -1; render(); return; }
+    if (b.dataset.i) { var i = Number(b.dataset.i); open = open === i ? -1 : i; table(); return; }
+    if (b.parentElement.classList.contains('pr-seg')) { b.parentElement.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); return; }
+    if (b.classList.contains('pr-dl')) { toast.textContent = 'Отчёт выгружается в PDF и CSV…'; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('on'); }, 1500); }
+  });
+  open = 0; render();
+})();
+</script>
+<script>
+/* Безопасность по слоям: пояснения к меткам */
+(function () {
+  var s = document.getElementById('sec-layers'); if (!s) return;
+  var btns = s.querySelectorAll('.sl-tags button'), tips = s.querySelectorAll('.sl-tip');
+  function closeAll() { tips.forEach(function (t) { t.hidden = true; }); btns.forEach(function (b) { b.setAttribute('aria-expanded', 'false'); }); }
+  btns.forEach(function (b) { b.addEventListener('click', function (e) {
+    e.stopPropagation(); var open = b.getAttribute('aria-expanded') === 'true'; closeAll();
+    if (!open) { b.closest('.sl-layer').querySelector('.sl-tip[data-for="' + b.dataset.term + '"]').hidden = false; b.setAttribute('aria-expanded', 'true'); }
+  }); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.sl-tip')) closeAll(); }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 })();
 </script>
 </body>
