@@ -387,10 +387,11 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
 /* Панель приглушена, пока на неё не навели; кнопка «Скачать PDF» видна всегда */
 .ui > :not(.dl) { opacity: .25; transition: opacity .2s; }
 .ui:hover > *, .ui:focus-within > * { opacity: 1; }
-.ui .dl { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 10px; background: rgba(28,242,222,.16); box-shadow: inset 0 0 0 1px rgba(28,242,222,.45); color: var(--shturval); font: 700 14px var(--f-sans); text-decoration: none; white-space: nowrap; transition: background .15s; }
-.ui .dl:hover { background: rgba(28,242,222,.28); }
+.ui .dl { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 10px; background: rgba(255,255,255,.12); color: #fff; font: 700 14px var(--f-sans); text-decoration: none; white-space: nowrap; transition: background .15s; }
+.ui .dl:hover { background: var(--tint-2); }
 .ui .dl svg { width: 16px; height: 16px; flex: none; }
-.ui .dl.on-poster { background: #000; color: var(--shturval); box-shadow: none; }
+.ui .dl[aria-busy] { opacity: .6; cursor: progress; }
+.ui .dl.on-poster { background: rgba(0,0,0,.12); color: #000; }
 .ui button { width: 44px; height: 44px; border-radius: 10px; border: 0; background: rgba(255,255,255,.12); color: #fff; font: 700 18px var(--f-sans); cursor: pointer; }
 .ui button:hover { background: var(--tint-2); }
 .ui .cnt { font: 500 14px var(--f-sans); color: var(--muted); min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
@@ -771,7 +772,7 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
 .cv-eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 26px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; color: var(--shturval); }
 .cv-eyebrow::before { content: ""; width: 56px; height: 2px; background: var(--shturval); }
 .cv-h { margin-top: 26px; display: flex; flex-direction: column; font-size: 132px; line-height: .94; font-weight: 700; letter-spacing: -.01em; text-transform: uppercase; }
-.cv-h .cv-o { color: transparent; -webkit-text-stroke: 2.5px var(--shturval); text-shadow: 0 0 60px rgba(28,242,222,.35); }
+.cv-h .cv-o { color: transparent; -webkit-text-stroke: 2.5px var(--shturval); }
 .cv-facts { position: absolute; z-index: 2; left: 120px; right: 120px; bottom: 100px; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgba(28,242,222,.35); }
 .cv-facts li { padding: 22px 28px 0 0; } .cv-facts li + li { padding-left: 28px; border-left: 1px solid rgba(255,255,255,.12); }
 .cv-facts b { display: block; font-size: 30px; } .cv-facts span { display: block; margin-top: 6px; font-size: 17px; line-height: 1.4; color: var(--muted); }
@@ -1204,7 +1205,7 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 #notes .nt { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--shturval); margin-bottom: 6px; }
 .ui .tg { width: auto; padding: 0 14px; font-size: 14px; font-weight: 700; }
 .ui .tg[aria-pressed="true"] { background: var(--tint-2); color: var(--shturval); }
-/* Телефон: только стрелки, счётчик и логотипы – иначе панель не помещается в ширину */
+/* Телефон: только стрелки, счётчик, Private/Public и PDF – иначе панель не помещается в ширину */
 @media (max-width: 560px) { .ui { gap: 6px; bottom: max(12px, env(safe-area-inset-bottom)); } .ui > :not(.dl) { opacity: .6; } .ui .dl { padding: 0 12px; } .ui .dl .dl-w { display: none; } #nbtn, #fs, #hbtn, #notes, #help { display: none !important; } .ui .cnt { min-width: 48px; } }
 #help { position: fixed; z-index: 11; right: 16px; bottom: 68px; padding: 16px 20px; border-radius: 14px; background: rgba(12,12,12,.94); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); font: 500 15px/1.7 var(--f-sans); color: var(--muted); display: none; }
 #help.show { display: block; }
@@ -1212,6 +1213,8 @@ a.card.go:hover { background-color: rgba(52,52,52,.5); }
 
 @media print {
   .slide.off { display: none !important; }
+  .slide[data-print="no"] { display: none !important; } /* слайд 3 «Расскажите о себе» – только для показа, не для PDF */
+  .pg[data-pp] { position: relative; visibility: hidden; } .pg[data-pp]::after { content: attr(data-pp); position: absolute; right: 0; top: 0; visibility: visible; white-space: nowrap; }
   #notes, #help { display: none !important; }
   .logos .lg { background: #fff !important; }
 }
@@ -1695,7 +1698,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
-<section class="slide g-tl" id="questions" data-title="Расскажите о себе">
+<section class="slide g-tl" id="questions" data-title="Расскажите о себе" data-print="no">
   <div class="top"><div class="eyebrow">Сначала о&nbsp;вас</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
   <h2 class="h2 rv">Расскажите о&nbsp;себе, чтобы говорить о&nbsp;вашем, а&nbsp;не&nbsp;о&nbsp;нашем</h2>
   <ol class="qs">
@@ -2713,12 +2716,12 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <button id="prev" aria-label="Предыдущий слайд">←</button>
   <span class="cnt" id="cnt"></span>
   <button id="next" aria-label="Следующий слайд">→</button>
-  <button id="logos" class="tg" aria-pressed="true" title="Клавиша L">Логотипы</button>
+  <button id="logos" class="tg" aria-pressed="true" title="Private – со слайдом логотипов заказчиков, Public – без него. Клавиша L">Private</button>
   <button id="fs" aria-label="Во весь экран" title="Клавиша F">⤢</button>
   <button id="hbtn" aria-label="Подсказка по клавишам">?</button>
   <a class="dl" id="dl" href="shturval-presentation.pdf" download="Штурвал - презентация.pdf"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 13.5h11"/></svg><span><span class="dl-w">Скачать </span>PDF</span></a>
 </div>
-<div id="help"><b>← →</b> листать<br><b>L</b> показать / скрыть логотипы заказчиков<br><b>F</b> полный экран<br><b>Home / End</b> в начало / в конец<br><b>?</b> эта подсказка</div>
+<div id="help"><b>← →</b> листать<br><b>L</b> Private / Public: со слайдом логотипов заказчиков или без него<br><b>F</b> полный экран<br><b>Home / End</b> в начало / в конец<br><b>?</b> эта подсказка</div>
 
 <script>
 (function () {
@@ -2731,9 +2734,9 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   var all = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
   var slides = [], cur = 0;
 
-  // Состояние: логотипы. Хранится в адресе: ?nologos
+  // Состояние: Private (со слайдом логотипов) / Public (без него). Хранится в адресе: ?public, старый ?nologos тоже понимаем
   var q = new URLSearchParams(location.search);
-  var state = { logos: !q.has('nologos') };
+  var state = { logos: !q.has('public') && !q.has('nologos') };
 
   // Неразрывный пробел после коротких слов и перед тире
   var re = /(^|[\s(«])((?:[а-яёА-ЯЁ]{1,2})|и|в|с|к|о|у|а|на|не|по|за|от|до|из|для|без|при|над|под|про|что|как)[ \t\r\n]+/g;
@@ -2753,14 +2756,17 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       return !off;
     });
     slides.forEach(function (s, i) { var pg = s.querySelector('.pg'); if (pg) pg.textContent = (i + 1) + ' / ' + slides.length; });
+    // В PDF слайды с data-print="no" не попадают – номера страниц для печати считаются без них
+    var prn = slides.filter(function (s) { return s.getAttribute('data-print') !== 'no'; });
+    prn.forEach(function (s, i) { var pg = s.querySelector('.pg'); if (pg) pg.setAttribute('data-pp', (i + 1) + ' / ' + prn.length); });
     var i = slides.findIndex(function (s) { return s.id === keepId; });
     if (i < 0) { // текущий слайд скрыт – идём к ближайшему видимому перед ним
       var k = all.findIndex(function (s) { return s.id === keepId; });
       while (k > 0 && all[k].classList.contains('off')) k--;
       i = Math.max(0, slides.indexOf(all[k]));
     }
-    document.getElementById('logos').setAttribute('aria-pressed', state.logos);
-    var p = new URLSearchParams(); if (!state.logos) p.set('nologos', '');
+    var lb = document.getElementById('logos'); lb.setAttribute('aria-pressed', state.logos); lb.textContent = state.logos ? 'Private' : 'Public';
+    var p = new URLSearchParams(); if (!state.logos) p.set('public', '');
     var s = p.toString().replace(/=(&|$)/g, '$1');
     history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash);
     show(i);
@@ -2813,6 +2819,18 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   document.getElementById('next').onclick = function () { show(cur + 1); };
   document.getElementById('fs').onclick = toggleFs;
   document.getElementById('logos').onclick = function () { toggle('logos'); };
+  // «Скачать PDF»: GitHub Pages отдаёт PDF для просмотра, и браузеры (Safari, встроенный просмотрщик) открывают его вместо скачивания.
+  // Поэтому файл забираем сами и отдаём как вложение. Если не вышло (например, файл открыт с диска) – обычный переход по ссылке.
+  document.getElementById('dl').addEventListener('click', function (e) {
+    var a = this; if (!window.fetch || !window.URL || a.dataset.busy) return;
+    e.preventDefault(); a.dataset.busy = '1'; a.setAttribute('aria-busy', 'true');
+    fetch(a.href).then(function (r) { if (!r.ok) throw r; return r.arrayBuffer(); }).then(function (buf) {
+      var u = URL.createObjectURL(new Blob([buf], { type: 'application/octet-stream' }));
+      var t = document.createElement('a'); t.href = u; t.download = a.getAttribute('download') || 'presentation.pdf';
+      document.body.appendChild(t); t.click(); t.remove();
+      setTimeout(function () { URL.revokeObjectURL(u); }, 10000);
+    }).catch(function () { location.href = a.href; }).then(function () { delete a.dataset.busy; a.removeAttribute('aria-busy'); });
+  });
   document.getElementById('hbtn').onclick = function () { document.getElementById('help').classList.toggle('show'); };
   // Элементы, клик и свайп по которым не листают слайды
   var LIVE = 'a, button, .gui, .dev2, .pv, .pr, .cd, .sl-tip';
