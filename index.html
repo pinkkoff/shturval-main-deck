@@ -1628,6 +1628,16 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 /* Фон за краем слайда: на экранах не 16:9 (Mac 16:10) свечение и серый фон продолжаются в поля, без резкой границы по краю слайда */
 .deck-bg { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity .35s ease; }
 .deck-bg.on { opacity: 1; }
+/* Весь фон – и под слайдом, и в полях – рисует слой, слайд прозрачный: при смене слайда на краю нечему расходиться */
+.deck { z-index: 2; }
+.deck-bg { background: #000; box-shadow: 0 0 0 calc(var(--bx, 0px) + var(--by, 0px)) #000; }
+.deck-bg.band { background: var(--raised); }
+.deck-bg.poster { background: var(--shturval); }
+@media screen {
+  html.bgl .slide { background: transparent; }
+  html.bgl .slide::before, html.bgl .slide.oct-bg::after, html.bgl .slide > .cv-bg { display: none; }
+  html.bgl .slide.poster { overflow: visible; } /* знак на последнем слайде уходит в поле, а не обрезается краем слайда */
+}
 .deck-bg::before { content: ""; position: absolute; pointer-events: none; }
 /* Слой ровно на ширину полей экрана (--bx, --by считает fit()): большой слой на retina в полноэкранном режиме рисуется с задержкой */
 .deck-bg:not(.pp-poster)::before { --ox: var(--bx, 0px); --oy: var(--by, 0px); inset: calc(-1 * var(--oy)) calc(-1 * var(--ox)); }
@@ -2705,7 +2715,8 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 <script>
 (function () {
   document.documentElement.classList.add('js');
-  var deck = document.getElementById('deck'), stage = deck.parentNode, bgs = stage.querySelectorAll('.deck-bg'), bgi = 0, bgCls = null;
+  var deck = document.getElementById('deck'), stage = deck.parentNode, bgs = stage.querySelectorAll('.deck-bg'), bgi = 0, bgCls = null, bgT;
+  document.documentElement.classList.add('bgl');
   // рисунок обложки в фоновых слоях без обрезки по краю слайда; id переименованы, чтобы не путать ссылки слайда
   var cvbg = deck.querySelector('.cv-bg');
   if (cvbg) Array.prototype.forEach.call(bgs, function (b, k) { b.insertAdjacentHTML('beforeend', cvbg.outerHTML.replace(/(id="|#)(cv-p|cvf|cvg2)\b/g, '$1$2-x' + k)); });
@@ -2757,7 +2768,13 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     cur = Math.max(0, Math.min(slides.length - 1, i));
     // фон за краем слайда: два слоя по очереди, новый проявляется вместе со слайдом
     var cls = ['g-tl', 'g-br', 'g-r', 'g-blue', 'pp-poster', 'band', 'oct-bg', 'cv', 'poster'].filter(function (c) { return slides[cur].classList.contains(c); }).join(' ');
-    if (cls !== bgCls) { bgCls = cls; bgs[bgi].classList.remove('on'); bgi = 1 - bgi; bgs[bgi].className = 'deck-bg on ' + cls; }
+    // новый слой проявляется поверх, старый остаётся непрозрачным под ним – без провала яркости посередине
+    if (cls !== bgCls) {
+      bgCls = cls; var old = bgs[bgi]; bgi = 1 - bgi; var nb = bgs[bgi];
+      nb.className = 'deck-bg ' + cls; nb.style.zIndex = 1; old.style.zIndex = 0;
+      void nb.offsetWidth; nb.classList.add('on');
+      clearTimeout(bgT); bgT = setTimeout(function () { old.classList.remove('on'); }, 400);
+    }
     all.forEach(function (s) { var on = s === slides[cur]; s.classList.toggle('active', on); s.setAttribute('aria-hidden', on ? 'false' : 'true'); });
     document.getElementById('cnt').textContent = (cur + 1) + ' / ' + slides.length;
     document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
