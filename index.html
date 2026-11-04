@@ -1605,18 +1605,44 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 /* Обложка: у крупных букв боковой отступ ~11 px, сдвигаем заголовок, чтобы он стоял ровно под «Vendor Agnostic» */
 .cv-h { margin-left: -11px; }
 
+/* Слайд 30: постер-айсберг. Над линией воды только лицензия, под водой три статьи затрат уходят вглубь лесенкой */
+#costs { padding-bottom: 0; }
+.ib-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; }
+#costs .h2 { max-width: none; white-space: nowrap; padding-bottom: 34px; }
+.ib { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr) auto; column-gap: 56px; margin: 0 -120px; padding: 0 120px; border-top: 2px solid var(--shturval);
+  background: linear-gradient(180deg, rgba(28,242,222,.13) 0%, rgba(28,242,222,.06) 35%, rgba(28,242,222,.02) 70%, rgba(28,242,222,0) 100%); }
+.ib-c { position: relative; align-self: start; padding-left: 28px; border-left: 2px dashed rgba(28,242,222,.35); }
+.ib-c:nth-child(1) { margin-top: 56px; }
+.ib-c:nth-child(2) { margin-top: 166px; }
+.ib-c:nth-child(3) { margin-top: 276px; }
+.ib-c h3 { margin-top: -10px; font-size: 60px; line-height: 1.02; }
+.ib-c p { margin-top: 16px; max-width: 30ch; font-size: 21px; line-height: 1.4; color: var(--muted); }
+.ib-c p b { color: var(--ink); }
+.ib-foot { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; padding: 28px 0 124px; font-size: 20px; line-height: 1.4; color: var(--muted); }
+.ib-foot p:first-child { color: var(--ink); font-weight: 600; }
+@media print { .ib { background: linear-gradient(180deg, #082624 0%, #04110f 40%, #000 100%) !important; } }
+
+/* Слайд 32: сноска об ограничениях CE в левом нижнем углу, левее панели управления */
+.ce-note { align-self: flex-end; line-height: 1.4; transform: translateY(-60px); }
+
 /* Фон за краем слайда: на экранах не 16:9 (Mac 16:10) свечение и серый фон продолжаются в поля, без резкой границы по краю слайда */
-.deck-bg { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; transform: translate(-50%, -50%); pointer-events: none; }
+.deck-bg { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity .35s ease; }
+.deck-bg.on { opacity: 1; }
 .deck-bg::before { content: ""; position: absolute; pointer-events: none; }
-.deck-bg:not(.pp-poster)::before { inset: -2000px; --ox: 2000px; --oy: 2000px; }
-.deck-bg.band { box-shadow: 0 0 0 3000px var(--raised); }
+/* Слой ровно на ширину полей экрана (--bx, --by считает fit()): большой слой на retina в полноэкранном режиме рисуется с задержкой */
+.deck-bg:not(.pp-poster)::before { --ox: var(--bx, 0px); --oy: var(--by, 0px); inset: calc(-1 * var(--oy)) calc(-1 * var(--ox)); }
+.deck-bg.band { box-shadow: 0 0 0 calc(var(--bx, 0px) + var(--by, 0px)) var(--raised); }
+.deck-bg > .cv-bg { overflow: visible; }
+.deck-bg > .cv-bg::before, .deck-bg:not(.cv) > .cv-bg { display: none; }
+.deck-bg.poster { box-shadow: 0 0 0 calc(var(--bx, 0px) + var(--by, 0px)) var(--shturval); }
+.deck-bg.cv::before { background: radial-gradient(1100px 700px at var(--ox) var(--oy), rgba(28,242,222,.10), transparent 60%), radial-gradient(900px 900px at calc(var(--ox) + 1382px) calc(var(--oy) + 540px), rgba(28,242,222,.06), transparent 70%); }
 @media print { .deck-bg { display: none; } .pp-poster::before { left: 0; top: 0; width: 1920px; height: 1080px; transform: none; background: radial-gradient(circle 545px at 50% 58%, #0a2c29 0%, #061c1a 29%, #031110 60%, #000 100%) !important; } }
 </style>
 </head>
 <body>
 <div class="progress" id="progress"></div>
 <div class="stage">
-<div class="deck-bg" id="deckbg" aria-hidden="true"></div>
+<div class="deck-bg" aria-hidden="true"></div><div class="deck-bg" aria-hidden="true"></div>
 <main class="deck" id="deck">
 
 <section class="slide cv" id="cover" data-title="Обложка">
@@ -1673,12 +1699,12 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
     <div class="wh2-l">
       <h2 class="h2 rv">Собственный продукт на&nbsp;основе Kubernetes</h2>
       <p class="wh2-lead rv" style="--d:60ms">Enterprise-платформа для&nbsp;создания и&nbsp;управления кластерами Kubernetes из&nbsp;одной точки, от&nbsp;одного кластера до&nbsp;сотен. Как&nbsp;vCenter, только для&nbsp;Kubernetes.</p>
-      <div class="rv" style="--d:100ms"><p class="k" style="margin-bottom:14px">Что&nbsp;мы добавили к&nbsp;Kubernetes</p><ul class="plus2">
-        <li>Графический интерфейс управления</li>
+      <div class="rv" style="--d:100ms"><p class="k" style="margin-bottom:14px">Кратко что&nbsp;внутри</p><ul class="plus2">
+        <li>Централизованное управление кластерами K8s</li>
         <li>Протестированная и&nbsp;стабильная сборка</li>
-        <li>Простой установщик Kubernetes</li>
+        <li>Тотальная автоматизация</li>
         <li>Встроенные инструменты ИБ</li>
-        <li>Работа на&nbsp;отечественных ОС и&nbsp;виртуализации</li>
+        <li>ML/AI стек с&nbsp;управлением&nbsp;GPU</li>
         <li>Автоматизированные обновления</li>
       </ul></div>
       <ul class="wh2-facts rv" style="--d:160ms">
@@ -2513,15 +2539,17 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
-<section class="slide g-br" id="costs" data-title="Почему это дорого">
+<section class="slide" id="costs" data-title="Почему это дорого">
   <div class="top"><div class="eyebrow"><span class="n">03</span>TCO · дешевле своей сборки</div><img src="assets/shturval-horizontal-on-dark.svg" alt="Штурвал" class="logo"></div>
-  <h2 class="h2 rv">Деньги уходят не&nbsp;на&nbsp;«лицензию кубера», а&nbsp;на&nbsp;три вещи</h2>
-  <div class="grid cost3">
-    <div class="card rv" style="--d:80ms"><div class="oct-n">1</div><h3>Собрать</h3><p>Сеть, хранилище, мониторинг, доступы, ИБ, автоматизация. Это <b>2+ года</b> сильной платформенной команды.</p></div>
-    <div class="card rv" style="--d:140ms"><div class="oct-n">2</div><h3>Обновлять</h3><p>Совместимость всех компонентов на&nbsp;каждом релизе Kubernetes, ОС и&nbsp;модулей. Главная операционная боль.</p></div>
-    <div class="card rv" style="--d:200ms"><div class="oct-n">3</div><h3>Закрывать уязвимости</h3><p>Постоянный процесс и&nbsp;отдельная команда ИБ.</p></div>
+  <div class="ib-head">
+    <h2 class="h2 rv">Деньги уходят не&nbsp;на&nbsp;«лицензию кубера»,<br>а&nbsp;на&nbsp;три вещи</h2>
   </div>
-  <div class="rule rv" style="--d:260ms;margin-top:auto;margin-bottom:40px"><p>Ванильный Kubernetes состоит из&nbsp;API и&nbsp;оркестратора. В&nbsp;проде на&nbsp;нём одном никто не&nbsp;живёт.</p><p>Поэтому сравнивать имеет смысл со&nbsp;своей сборкой или&nbsp;с&nbsp;платформой, причём по&nbsp;всем трём статьям сразу.</p></div>
+  <div class="ib">
+    <div class="ib-c rv" style="--d:120ms"><h3>Собрать</h3><p>Сеть, хранилище, мониторинг, доступы, ИБ, автоматизация. Это <b>2+&nbsp;года</b> сильной платформенной команды.</p></div>
+    <div class="ib-c rv" style="--d:200ms"><h3>Обновлять</h3><p>Совместимость всех компонентов на&nbsp;каждом релизе Kubernetes, ОС и&nbsp;модулей. Главная операционная боль.</p></div>
+    <div class="ib-c rv" style="--d:280ms"><h3>Закрывать уязвимости</h3><p>Постоянный процесс и&nbsp;отдельная команда&nbsp;ИБ.</p></div>
+    <div class="ib-foot rv" style="--d:360ms"><p>Ванильный Kubernetes состоит из&nbsp;API и&nbsp;оркестратора. В&nbsp;проде на&nbsp;нём одном никто не&nbsp;живёт.</p><p>Поэтому сравнивать имеет смысл со&nbsp;своей сборкой или&nbsp;с&nbsp;платформой, причём по&nbsp;всем трём статьям сразу.</p></div>
+  </div>
   <div class="foot"><span></span><span class="pg"></span></div>
 </section>
 
@@ -2567,7 +2595,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
       <div class="card t ce-wide rv" style="--d:300ms"><b>Кадры</b><span>инженеры, которые уже знают Штурвал</span></div>
     </div>
   </div>
-  <div class="foot"><span></span><span class="pg"></span></div>
+  <div class="foot"><span class="ce-note">Штурвал Community Edition требует подключения к&nbsp;интернету<br>и&nbsp;не&nbsp;входит в&nbsp;реестр российского&nbsp;ПО.</span><span class="pg"></span></div>
 </section>
 
 
@@ -2677,7 +2705,10 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 <script>
 (function () {
   document.documentElement.classList.add('js');
-  var deck = document.getElementById('deck'), deckbg = document.getElementById('deckbg');
+  var deck = document.getElementById('deck'), stage = deck.parentNode, bgs = stage.querySelectorAll('.deck-bg'), bgi = 0, bgCls = null;
+  // рисунок обложки в фоновых слоях без обрезки по краю слайда; id переименованы, чтобы не путать ссылки слайда
+  var cvbg = deck.querySelector('.cv-bg');
+  if (cvbg) Array.prototype.forEach.call(bgs, function (b, k) { b.insertAdjacentHTML('beforeend', cvbg.outerHTML.replace(/(id="|#)(cv-p|cvf|cvg2)\b/g, '$1$2-x' + k)); });
   var all = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
   var slides = [], cur = 0;
 
@@ -2718,11 +2749,15 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 
   function fit() {
     var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-    deck.style.transform = deckbg.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+    deck.style.transform = bgs[0].style.transform = bgs[1].style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+    stage.style.setProperty('--bx', Math.ceil(Math.max(0, (window.innerWidth / s - 1920) / 2)) + 2 + 'px');
+    stage.style.setProperty('--by', Math.ceil(Math.max(0, (window.innerHeight / s - 1080) / 2)) + 2 + 'px');
   }
   function show(i) {
     cur = Math.max(0, Math.min(slides.length - 1, i));
-    deckbg.className = 'deck-bg ' + ['g-tl', 'g-br', 'g-r', 'g-blue', 'pp-poster', 'band'].filter(function (c) { return slides[cur].classList.contains(c); }).join(' ');
+    // фон за краем слайда: два слоя по очереди, новый проявляется вместе со слайдом
+    var cls = ['g-tl', 'g-br', 'g-r', 'g-blue', 'pp-poster', 'band', 'oct-bg', 'cv', 'poster'].filter(function (c) { return slides[cur].classList.contains(c); }).join(' ');
+    if (cls !== bgCls) { bgCls = cls; bgs[bgi].classList.remove('on'); bgi = 1 - bgi; bgs[bgi].className = 'deck-bg on ' + cls; }
     all.forEach(function (s) { var on = s === slides[cur]; s.classList.toggle('active', on); s.setAttribute('aria-hidden', on ? 'false' : 'true'); });
     document.getElementById('cnt').textContent = (cur + 1) + ' / ' + slides.length;
     document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
