@@ -1635,7 +1635,8 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
 .deck-bg.poster { background: var(--shturval); }
 @media screen {
   html.bgl .slide { background: transparent; }
-  html.bgl .slide::before, html.bgl .slide.oct-bg::after, html.bgl .slide > .cv-bg { display: none; }
+  html.bgl .slide::before, html.bgl .slide.oct-bg::after { display: none; }
+  html.bgl .slide > .cv-bg { visibility: hidden; } /* не display:none – из неё берётся градиент логотипа (#cvf) для копии в слое */
   html.bgl .slide.poster { overflow: visible; } /* знак на последнем слайде уходит в поле, а не обрезается краем слайда */
 }
 .deck-bg::before { content: ""; position: absolute; pointer-events: none; }
