@@ -392,6 +392,10 @@ html.js .slide:not(.active) .bars .b i { transform: scaleY(0); }
 .ui .dl svg { width: 16px; height: 16px; flex: none; }
 .ui .dl[aria-busy] { opacity: .6; cursor: progress; }
 .ui .dl.on-poster { background: rgba(0,0,0,.12); color: #000; }
+/* пока панель приглушена, у «Скачать PDF» горит только надпись, а подложка в тени вместе с остальными кнопками и проявляется при наведении */
+.ui .dl { transition: background .2s; }
+.ui:not(:hover):not(:focus-within) .dl { background: rgba(255,255,255,.03); }
+.ui:not(:hover):not(:focus-within) .dl.on-poster { background: rgba(0,0,0,.03); }
 .ui button { width: 44px; height: 44px; border-radius: 10px; border: 0; background: rgba(255,255,255,.12); color: #fff; font: 700 18px var(--f-sans); cursor: pointer; }
 .ui button:hover { background: var(--tint-2); }
 .ui .cnt { font: 500 14px var(--f-sans); color: var(--muted); min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
@@ -1811,7 +1815,7 @@ a.go:focus-visible, .ip > div:focus-visible { outline-color: var(--shturval); ou
   <div class="sm2">
     <div class="sm2-l">
       <h2 class="h2 rv">Когда вам нужен именно Штурвал:</h2>
-      <ul class="sm2-list rv" style="--d:80ms"><li>Дорого делать свою платформу</li><li>Надо освободить людей для&nbsp;полезной работы</li><li>Нужен ML стек на&nbsp;Kubernetes</li><li>Хотите сделать мультисайтовую DR конфигурацию</li><li>Не&nbsp;любите экосистем и&nbsp;vendor-lock</li><li>Ваша инсталляция растёт</li></ul>
+      <ul class="sm2-list rv" style="--d:80ms"><li>Дорого делать свою платформу</li><li>Надо освободить людей для&nbsp;полезной работы</li><li>Нужен ML стек на&nbsp;Kubernetes</li><li>Хотите сделать мультисайтовую DR конфигурацию</li><li>Не&nbsp;любите экосистемы и&nbsp;vendor-lock</li><li>Ваша инсталляция растёт</li></ul>
       <div class="sm2-facts rv" style="--d:160ms">
         <div class="card"><b>Реестр</b><span>№ 13933 в&nbsp;реестре российского ПО с&nbsp;2022 года</span></div>
         <div class="card t"><b>ФСТЭК</b><span>сертификат № 5045 от&nbsp;24.02.2026</span></div>
